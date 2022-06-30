@@ -1,4 +1,4 @@
-import { matchRoute } from "../utils";
+import { matchRoute } from "../utils.js";
 export default function matchPathToRegisteredRoutes(context, done) {
   for (var i = 0; i < context.instance.routes.length; i++) {
     var route = context.instance.routes[i];

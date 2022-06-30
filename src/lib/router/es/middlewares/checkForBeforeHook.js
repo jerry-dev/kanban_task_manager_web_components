@@ -1,5 +1,5 @@
-import Q from "../Q";
-import { undefinedOrTrue } from "../utils";
+import Q from "../Q.js";
+import { undefinedOrTrue } from "../utils.js";
 export default function checkForBeforeHook(context, done) {
   if (context.match.route.hooks && context.match.route.hooks.before && undefinedOrTrue(context.navigateOptions, "callHooks")) {
     Q(context.match.route.hooks.before.map(function (f) {
