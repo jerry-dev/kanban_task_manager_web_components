@@ -1,0 +1,41 @@
+:root {
+    /* Solid colors */
+    --Main-Purple: #635FC7;
+    --Main-Purple-Hover: #A8A4FF;
+    --Black: #000112;
+    --Dark-Grey: #2B2C37;
+    --Lines-Dark: #3E3F4E;
+    --Medium-Grey: #828FA3;
+    --Light-Grey-Light-BG: #F4F7FD;
+    --Lines-Light: #E4EBFA;
+    --Red: #EA5555;
+    /* Headings */
+    --Heading-XL: 1.5rem;
+    --Heading-L: 1.125rem;
+    --Heading-M: 0.9375rem;
+    --Heading-S: 0.75rem;
+    /* Container widths */
+    --application-width: 90rem;
+}
+
+html {
+	height: 100%;
+	box-sizing: border-box;
+	font-size: 16px;
+}
+
+*, *::before, *::after {
+	box-sizing: inherit;
+	margin: 0;
+	padding: 0;
+}
+
+body {
+	min-height: 100%;
+}
+
+kanban-app {
+	margin-left: auto;
+	margin-right: auto;
+    max-width: var(--application-width);
+}
