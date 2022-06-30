@@ -12,7 +12,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "lit-html": "^2.2.6",
     "navigo": "^8.11.1"
   }
 }
