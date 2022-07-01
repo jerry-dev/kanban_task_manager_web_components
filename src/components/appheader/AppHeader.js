@@ -1,4 +1,5 @@
 import appHeaderStylesheet from './appheader.css' assert { type: 'css' };
+import AddNewTaskButton from '../addnewtaskbutton/AddNewTaskButton.js';
 
 export default class AppHeader extends HTMLElement {
     constructor() {
@@ -31,6 +32,7 @@ export default class AppHeader extends HTMLElement {
             </div id="sectionTitleSection">
                 <div id="sectionTitleSectionInnerContainer">
                     <h2>Platform Launch</h2>
+                    <add-new-task-button></add-new-task-button>
                 </div>
             </div>
         </div>`;
