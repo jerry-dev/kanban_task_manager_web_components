@@ -19,6 +19,14 @@
     --Heading-S: 0.75rem;
     /* Container widths */
     --application-width: 90rem;
+    /* Font sizes */
+    --font-size-15: 0.9375rem;
+    /* Font weight */
+    --font-weight-7: 700;
+    /* Line height */
+    --line-height-19: 1.1875rem;
+    /* border radius */
+    --border-radius-24: 1.5rem;
 }
 
 html {

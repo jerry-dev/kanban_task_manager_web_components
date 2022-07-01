@@ -1,0 +1,24 @@
+:host {
+    align-items: center;
+    background-color: var(--Main-Purple);
+    border-radius: var(--border-radius-24);
+    display: flex;
+    height: 3rem;
+    justify-content: center;
+    max-width: 12.03875rem;
+}
+
+#innerContainer {
+    color: var(--White);
+    font-size: var(--font-size-15);
+    font-weight: var(--font-weight-7);
+    line-height: var(--line-height-19);
+}
+
+:host(:hover) {
+    cursor: pointer;
+}
+
+:host(:active) {
+    transform: scale(0.95);
+}
