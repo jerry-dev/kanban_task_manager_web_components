@@ -22,20 +22,18 @@ export default class AppHeader extends HTMLElement {
 
     HTML() {
         const markup = /*html*/
-        `<div>
-            <div id="logoOuterContainer">
-                <div id="logoInnerContainer">
-                    <h2>KANBAN</h2>
-                </div>
+        `<section id="logoOuterContainer">
+            <div id="logoInnerContainer">
+                <h2>KANBAN</h2>
             </div>
+        </section>
             
-            </div id="sectionTitleSection">
-                <div id="sectionTitleSectionInnerContainer">
-                    <h2>Platform Launch</h2>
-                    <add-new-task-button></add-new-task-button>
-                </div>
+        <section id="sectionTitleSection">
+            <div id="sectionTitleSectionInnerContainer">
+                <h2>Platform Launch</h2>
+                <add-new-task-button></add-new-task-button>
             </div>
-        </div>`;
+        </section>`;
 
         this.shadowRoot.innerHTML = markup;
     }
