@@ -24,7 +24,12 @@ export default class AppHeader extends HTMLElement {
         const markup = /*html*/
         `<section id="logoOuterContainer">
             <div id="logoInnerContainer">
-                <h2>KANBAN</h2>
+                <div id="logoBarsContainer">
+                    <span class="logoBars" id="logoBarOne"></span>
+                    <span class="logoBars" id="logoBarTwo"></span>
+                    <span class="logoBars" id="logoBarThree"></span>
+                </div>
+                <h2>Kanban</h2>
             </div>
         </section>
             
