@@ -1,4 +1,5 @@
 import router from './lib/router/index.js';
+import AppHeader from './components/appheader/AppHeader.js';
 
 export default class App extends HTMLElement {
     constructor() {
@@ -17,7 +18,8 @@ export default class App extends HTMLElement {
 
     HTML() {
         const markup = /*html*/
-        `<div id="outer">
+        `<app-header></app-header>
+        <div id="outer">
             <a href="#/" data-navigo>Link One</a>
             <a href="#/two" data-navigo>Link Two</a>
             <div>

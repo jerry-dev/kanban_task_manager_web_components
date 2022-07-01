@@ -1,0 +1,43 @@
+:host {
+    align-items: center;
+    background-color: var(--White);
+    display: flex;
+    height: 6.0625rem;
+    margin: 0;
+    padding: 0;
+}
+
+#logoOuterContainer {
+    border-right: 0.0625rem solid var(--Lines-Light);
+    display: flex;
+    justify-content: center;
+    height: 100%;
+    width: 13.0625rem;
+}
+
+#logoInnerContainer {
+    align-items: center;
+    display: flex;
+    height: 6.0625rem;
+}
+
+/* Swop the h2 for a icon */
+#logoInnerContainer h2 {
+    font-size: var(--Heading-XL);
+}
+
+#sectionTitleSection {
+    /* height: 6.0625rem; */
+    height: 100%;
+    width: 100%;
+    
+
+    OUTLINE: 2PX SOLID RED;
+}
+
+#sectionTitleSectionInnerContainer {
+    width: 94.7967%;
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 72.875rem;
+}
