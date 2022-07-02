@@ -1,6 +1,7 @@
 import router from './lib/router/index.js';
 import AppHeader from './components/appheader/AppHeader.js';
 import Sidebar from './components/sidebar/Sidebar.js';
+import Tasksboard from './components/tasksboard/Tasksboard.js';
 
 export default class App extends HTMLElement {
     constructor() {
@@ -21,10 +22,10 @@ export default class App extends HTMLElement {
         const markup = /*html*/
         `<app-header></app-header>
         <div id="outer">
-            <div>
-                <side-bar></side-bar>
+            <side-bar></side-bar>
+            <tasks-board>
                 <output id="mainRoute"></output>
-            </div>
+            </tasks-board>
         </div>`;
 
         this.shadowRoot.innerHTML = markup;
