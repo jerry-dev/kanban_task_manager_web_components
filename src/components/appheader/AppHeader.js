@@ -37,6 +37,11 @@ export default class AppHeader extends HTMLElement {
             <div id="sectionTitleSectionInnerContainer">
                 <h2>Platform Launch</h2>
                 <add-new-task-button></add-new-task-button>
+                <div id="kebabMenu">
+                   <span class="dots"></span>
+                   <span class="dots"></span>
+                   <span class="dots"></span>
+                </div>
             </div>
         </section>`;
 
