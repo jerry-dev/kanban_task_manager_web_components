@@ -1,3 +1,5 @@
+import sidebarStyleSheet from './sidebar.css' assert { type: 'css' };
+
 export default class Sidebar extends HTMLElement {
     constructor() {
         super();
@@ -13,7 +15,9 @@ export default class Sidebar extends HTMLElement {
         this.HTML();
     }
 
-    CSS() {}
+    CSS() {
+        this.shadowRoot.adoptedStyleSheets = [ sidebarStyleSheet ];
+    }
 
     HTML() {
         const markup = /*html*/

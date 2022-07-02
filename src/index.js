@@ -20,9 +20,9 @@ export default class App extends HTMLElement {
 
     HTML() {
         const markup = /*html*/
-        `<app-header></app-header>
+        `<side-bar></side-bar>
         <div id="outer">
-            <side-bar></side-bar>
+            <app-header></app-header>
             <tasks-board>
                 <output id="mainRoute"></output>
             </tasks-board>
