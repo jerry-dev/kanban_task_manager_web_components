@@ -1,0 +1,26 @@
+:host {
+    display: block;
+    overflow: hidden;
+    position: relative;
+}
+
+#canvas {
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+    position: relative;
+    transition-property: transform;
+    transition-duration: .3s;
+    transition-timing-function: ease;
+    width: 100%;
+    
+    BACKGROUND-COLOR: LIGHTBLUE;
+}
+
+#canvas[data-menu="off-screen"] {
+	transform: translateX(0);
+}
+
+#canvas[data-menu="on-screen"] {
+	transform: translateX(300px);
+}

@@ -1,7 +1,7 @@
-import router from './lib/router/index.js';
-import AppHeader from './components/appheader/AppHeader.js';
-import Sidebar from './components/sidebar/Sidebar.js';
-import Tasksboard from './components/tasksboard/Tasksboard.js';
+import appStyleSheet from './app.css' assert { type: 'css' };
+import router from '../../lib/router/index.js';
+import Sidebar from '../sidebar/Sidebar.js';
+import Tasksboard from '../tasksboard/Tasksboard.js';
 
 export default class App extends HTMLElement {
     constructor() {
@@ -15,18 +15,23 @@ export default class App extends HTMLElement {
     }
 
     render() {
+        this.CSS();
         this.HTML();
+    }
+
+    CSS() {
+        this.shadowRoot.adoptedStyleSheets = [ appStyleSheet ];
     }
 
     HTML() {
         const markup = /*html*/
-        `<side-bar></side-bar>
-        <div id="outer">
-            <app-header></app-header>
+        
+        `<main id="canvas" data-menu="on-screen">
+            <side-bar></side-bar>
             <tasks-board>
                 <output id="mainRoute"></output>
             </tasks-board>
-        </div>`;
+        </main>`;
 
         this.shadowRoot.innerHTML = markup;
     }

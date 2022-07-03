@@ -1,4 +1,5 @@
 import tasksBoardStyleSheet from './tasksboard.css' assert {type: 'css'};
+import AppHeader from '../appheader/AppHeader.js';
 
 export default class Tasksboard extends HTMLElement {
     constructor() {
@@ -21,7 +22,8 @@ export default class Tasksboard extends HTMLElement {
 
     HTML() {
         const markup = /*html*/
-        `<div id="componentInnerContainer">
+        `<app-header></app-header>    
+        <div id="componentInnerContainer">
             <slot></slot>
         </div>`;
 

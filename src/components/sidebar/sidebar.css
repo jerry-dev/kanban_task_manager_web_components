@@ -1,5 +1,9 @@
 :host {
+    background-color: var(--White);
     display: block;
     height: 100%;
-    width: 18.75rem;
+    min-width: 18.75rem;
+    position: absolute;
+    top: 0;
+    left: -18.75rem;
 }
