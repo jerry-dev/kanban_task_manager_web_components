@@ -26,7 +26,7 @@ export default class App extends HTMLElement {
     HTML() {
         const markup = /*html*/
         
-        `<main id="canvas" data-menu="on-screen">
+        `<main id="canvas" data-menu="off-screen">
             <side-bar></side-bar>
             <tasks-board>
                 <output id="mainRoute"></output>
