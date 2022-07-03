@@ -13,8 +13,6 @@
     transition-duration: .3s;
     transition-timing-function: ease;
     width: 100%;
-    
-    BACKGROUND-COLOR: LIGHTBLUE;
 }
 
 #canvas[data-menu="off-screen"] {
