@@ -27,3 +27,7 @@
 #sideBarControl:hover {
     background-color: var(--Main-Purple-Hover);
 }
+
+#sideBarControl > * {
+    pointer-events: none;
+}

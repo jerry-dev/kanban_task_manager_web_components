@@ -108,6 +108,7 @@ export default class App extends HTMLElement {
     clickManager() {
         this.shadowRoot.addEventListener('click', (event) => {
             this.sideBarControl(event);
+            this.closeSideBarButtonLogic(event);
         });
     }
 
@@ -115,6 +116,14 @@ export default class App extends HTMLElement {
         if (event.composedPath()[0].id === 'sideBarControl') {
             if (!this.isSideBarOnScreen()) {
                 return this.revealSidebar();
+            }
+        }
+    }
+
+    closeSideBarButtonLogic(event) {
+        if (event.composedPath()[0].tagName === "HIDE-SIDEBAR-BUTTON") {
+            if (this.isSideBarOnScreen()) {
+                return this.hideSidebar();
             }
         }
     }
@@ -129,12 +138,12 @@ export default class App extends HTMLElement {
     }
 
     hideSidebar() {
-        this.shadowRoot.getElementById('canvas').setAttribute('data-menu', "on-screen");
+        this.shadowRoot.getElementById('canvas').setAttribute('data-menu', "off-screen");
         this.revealSidebarControl();
     }
 
     revealSidebarControl() {
-        this.shadowRoot.getElementsByTagName('tasks-board')[0].setAttribute('data-sidebar-control', "on-screen");
+        this.shadowRoot.getElementById('canvas').getElementsByTagName('tasks-board')[0].setAttribute('data-sidebar-control', "on-screen");
     }
 
     hideSidebarControl() {
