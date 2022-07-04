@@ -17,6 +17,7 @@ export default class App extends HTMLElement {
     render() {
         this.CSS();
         this.HTML();
+        this.SCRIPTS();
     }
 
     CSS() {
@@ -28,7 +29,7 @@ export default class App extends HTMLElement {
         
         `<main id="canvas" data-menu="off-screen">
             <side-bar></side-bar>
-            <tasks-board>
+            <tasks-board data-sidebar-control="on-screen">
                 <output id="mainRoute"></output>
             </tasks-board>
         </main>`;
@@ -98,6 +99,46 @@ export default class App extends HTMLElement {
 
     beforeNewViewRenderedOperations() {
         this.clearRoute(this.getMainRoute());
+    }
+
+    SCRIPTS() {
+        this.clickManager();
+    }
+
+    clickManager() {
+        this.shadowRoot.addEventListener('click', (event) => {
+            this.sidebarManager(event);
+        });
+    }
+
+    sidebarManager(event) {
+        if (event.composedPath()[0].id === 'sideBarControl') {
+            if (!this.isSideBarOnScreen()) {
+                return this.revealSidebar();
+            }
+        }
+    }
+
+    isSideBarOnScreen() {
+        return this.shadowRoot.getElementById('canvas').getAttribute('data-menu') === "on-screen";
+    }
+
+    revealSidebar() {
+        this.shadowRoot.getElementById('canvas').setAttribute('data-menu', "on-screen");
+        this.hideSidebarControl();
+    }
+
+    hideSidebar() {
+        this.shadowRoot.getElementById('canvas').setAttribute('data-menu', "on-screen");
+        this.revealSidebarControl();
+    }
+
+    revealSidebarControl() {
+        document.getElementsByTagName('kanban-app')[0].setAttribute('data-sidebar-control', "on-screen");
+    }
+
+    hideSidebarControl() {
+        document.getElementsByTagName('kanban-app')[0].setAttribute('data-sidebar-control', "off-screen");
     }
 }
 

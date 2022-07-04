@@ -20,5 +20,5 @@
 }
 
 #canvas[data-menu="on-screen"] {
-	transform: translateX(300px);
+	transform: translateX(18.75rem);
 }

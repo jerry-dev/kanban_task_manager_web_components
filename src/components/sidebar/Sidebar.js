@@ -1,4 +1,5 @@
 import sidebarStyleSheet from './sidebar.css' assert { type: 'css' };
+import AppLogo from '../applogo/AppLogo.js';
 
 export default class Sidebar extends HTMLElement {
     constructor() {
@@ -21,7 +22,9 @@ export default class Sidebar extends HTMLElement {
 
     HTML() {
         const markup = /*html*/
-        `<nav>
+        `<app-logo></app-logo>
+        <label for="sideBarNav">ALL BOARDS (3)</label>
+        <nav id="sideBarNav">
             <ul>
                 <li>
                     <a href="#/">Platform Launch</a>

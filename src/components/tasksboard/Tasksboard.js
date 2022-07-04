@@ -25,6 +25,7 @@ export default class Tasksboard extends HTMLElement {
         `<app-header></app-header>    
         <div id="componentInnerContainer">
             <slot></slot>
+            <button type="button" id="sideBarControl">X</button>
         </div>`;
 
         this.shadowRoot.innerHTML = markup;
