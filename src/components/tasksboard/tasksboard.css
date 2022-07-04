@@ -15,7 +15,6 @@
 #sideBarControl {
     background-color: var(--Main-Purple);
     border-radius: 0 6.25rem 6.25rem 0;
-    color: var(--White);
     cursor: pointer;
     height: 3rem;
     position: absolute;
