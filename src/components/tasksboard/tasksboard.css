@@ -23,3 +23,7 @@
     width: 3.5rem;
     z-index: 99;
 }
+
+#sideBarControl:hover {
+    background-color: var(--Main-Purple-Hover);
+}
