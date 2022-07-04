@@ -3,3 +3,23 @@
     height: 100%;
     width: var(--application-width);
 }
+
+:host([data-sidebar-control="on-screen"]) #sideBarControl {
+    display: block;
+}
+
+:host([data-sidebar-control="off-screen"]) #sideBarControl {
+    display: none;
+}
+
+#sideBarControl {
+    background-color: var(--Main-Purple);
+    border-radius: 0 6.25rem 6.25rem 0;
+    color: var(--White);
+    cursor: pointer;
+    height: 3rem;
+    position: absolute;
+    top: 95vh;
+    width: 3.5rem;
+    z-index: 99;
+}

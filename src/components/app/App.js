@@ -134,11 +134,12 @@ export default class App extends HTMLElement {
     }
 
     revealSidebarControl() {
-        document.getElementsByTagName('kanban-app')[0].setAttribute('data-sidebar-control', "on-screen");
+        this.shadowRoot.getElementsByTagName('tasks-board')[0].setAttribute('data-sidebar-control', "on-screen");
     }
 
     hideSidebarControl() {
-        document.getElementsByTagName('kanban-app')[0].setAttribute('data-sidebar-control', "off-screen");
+        this.shadowRoot.getElementById('canvas')
+            .getElementsByTagName('tasks-board')[0].setAttribute('data-sidebar-control', "off-screen");
     }
 }
 
