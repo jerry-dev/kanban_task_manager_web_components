@@ -107,11 +107,11 @@ export default class App extends HTMLElement {
 
     clickManager() {
         this.shadowRoot.addEventListener('click', (event) => {
-            this.sidebarManager(event);
+            this.sideBarControl(event);
         });
     }
 
-    sidebarManager(event) {
+    sideBarControl(event) {
         if (event.composedPath()[0].id === 'sideBarControl') {
             if (!this.isSideBarOnScreen()) {
                 return this.revealSidebar();
