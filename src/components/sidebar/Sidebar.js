@@ -1,5 +1,7 @@
 import sidebarStyleSheet from './sidebar.css' assert { type: 'css' };
 import AppLogo from '../applogo/AppLogo.js';
+import HideSidebarButton from '../hidesidebarbutton/HideSidebarButton.js'
+
 
 export default class Sidebar extends HTMLElement {
     constructor() {
@@ -36,7 +38,9 @@ export default class Sidebar extends HTMLElement {
                     <a href="#/two">Roadmap</a>
                 </li>
             </ul>
-        </nav>`;
+        </nav>
+        
+        <hide-sidebar-button></hide-sidebar-button>`;
 
         this.shadowRoot.innerHTML = markup;
     }

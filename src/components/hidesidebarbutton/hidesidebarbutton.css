@@ -1,0 +1,23 @@
+:host {
+    align-items: center;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    margin-top: auto;
+    max-width: 7.9375rem;
+}
+
+:host img {
+    margin-right: 0.9375rem;
+}
+
+:host p {
+    color: var(--Medium-Grey);
+    font-size: var(--font-size-15);
+    font-weight: var(--font-weight-7);
+    line-height: var(--line-height-19);
+}
+
+:host > * {
+    pointer-events: none;
+}

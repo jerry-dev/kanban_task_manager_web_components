@@ -1,6 +1,7 @@
 :host {
     background-color: var(--White);
-    display: block;
+    display: flex;
+    flex-direction: column;
     height: 100%;
     min-width: 18.75rem;
     position: absolute;
@@ -37,4 +38,11 @@ label {
 
 #sideBarNav > ul li:active {
     background-color: var(--Main-Purple);
+}
+
+hide-sidebar-button {
+    align-self: end;
+    margin-bottom: 2rem;
+    margin-left: 1.9375rem;
+    margin-right: auto;
 }
