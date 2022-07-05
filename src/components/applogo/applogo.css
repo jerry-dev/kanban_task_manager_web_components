@@ -4,7 +4,7 @@
 }
 
 #logoOuterContainer {
-    border-right: 0.0625rem solid var(--Lines-Light);
+    border-right: 0.0625rem solid var(--Border-Color);
     display: flex;
     justify-content: center;
     height: 100%;
@@ -111,6 +111,7 @@
 }
 
 #logoInnerContainer h2 {
+    color: var(--Main-Text-Color);
     font-size: 1.896875rem;
     font-weight: 800;
     line-height: 1.57625rem;

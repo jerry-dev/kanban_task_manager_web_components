@@ -1,6 +1,6 @@
 :host {
     align-items: center;
-    background-color: var(--White);
+    background-color: var(--Header-Background-Color);
     display: flex;
     height: 6.0625rem;
     margin: 0;
@@ -9,7 +9,7 @@
 }
 
 #logoOuterContainer {
-    border-right: 0.0625rem solid var(--Lines-Light);
+    border-right: 0.0625rem solid var(--Border-Color);
     display: flex;
     justify-content: center;
     height: 100%;
@@ -113,12 +113,6 @@
     }
 }
 
-#logoInnerContainer h2 {
-    font-size: var(--Heading-XL);
-    font-weight: 800;
-    line-height: 1.57625rem;
-}
-
 #sectionTitleSection {
     align-items: center;
     display: flex;
@@ -128,6 +122,7 @@
 
 #sectionTitleSectionInnerContainer {
     align-items: center;
+    color: var(--Main-Text-Color);
     display: flex;
     margin-left: auto;
     margin-right: auto;

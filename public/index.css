@@ -5,12 +5,14 @@
     --Main-Purple: #635FC7;
     --Main-Purple-Hover: #A8A4FF;
     --Black: #000112;
+    --Very-Dark-Grey-Dark-BG: #20212C;
     --Dark-Grey: #2B2C37;
     --Lines-Dark: #3E3F4E;
     --Medium-Grey: #828FA3;
     --Light-Grey-Light-BG: #F4F7FD;
     --Lines-Light: #E4EBFA;
     --Red: #EA5555;
+    --Red-Hover: #FF9898;
     --White: #FFFFFF;
     /* Headings */
     --Heading-XL: 1.5rem;
@@ -48,7 +50,6 @@ body {
 }
 
 kanban-app {
-    background-color: var(--Light-Grey-Light-BG);
     display: block;
     height: 100vh;
 	margin-left: auto;

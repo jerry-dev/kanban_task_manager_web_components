@@ -2,6 +2,23 @@
     display: block;
     overflow: hidden;
     position: relative;
+
+    /* Specific Elements Default Colors */
+    --Border-Color: var(--Lines-Light);
+    --Dark-Light-Mode-Switch-Background-Color: var(--Light-Grey-Light-BG);
+    --Header-Background-Color: var(--White);
+    --Main-Text-Color: var(--Black);
+    --Sidebar-Background-Color: var(--White);
+    --Taskboard-Background-Color: var(--Light-Grey-Light-BG);
+}
+
+:host(.darkTheme) {
+    --Border-Color: var(--Lines-Dark);
+    --Dark-Light-Mode-Switch-Background-Color: var(--Very-Dark-Grey-Dark-BG);
+    --Header-Background-Color: var(--Dark-Grey);
+    --Main-Text-Color: var(--White);
+    --Sidebar-Background-Color: var(--Dark-Grey);
+    --Taskboard-Background-Color: var(--Very-Dark-Grey-Dark-BG);
 }
 
 #canvas {

@@ -20,6 +20,10 @@ label {
     width: 100%;
 }
 
+label > * {
+	pointer-events: none;
+}
+
 span {
 	position: relative;
 	width: 100%;

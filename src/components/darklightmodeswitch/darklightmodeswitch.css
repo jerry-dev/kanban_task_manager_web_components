@@ -1,6 +1,6 @@
 :host {
     align-items: center;
-    background-color: var(--Light-Grey-Light-BG);
+    background-color: var(--Dark-Light-Mode-Switch-Background-Color);
     border-radius: 0.375rem;
     display: flex;
     height: 3rem;

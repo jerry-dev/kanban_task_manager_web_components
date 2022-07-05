@@ -109,6 +109,7 @@ export default class App extends HTMLElement {
         this.shadowRoot.addEventListener('click', (event) => {
             this.sideBarControl(event);
             this.closeSideBarButtonLogic(event);
+            this.darkThemeToggle(event);
         });
     }
 
@@ -126,6 +127,28 @@ export default class App extends HTMLElement {
                 return this.hideSidebar();
             }
         }
+    }
+
+    darkThemeToggle(event) {
+        if (event.composedPath()[0].id === "toggleSwitch") {
+            const toggleInput = event.composedPath()[0];
+
+            if (!toggleInput.checked) {
+                toggleInput.setAttribute("checked", "");
+                this.deactivateDarkTheme();
+            } else {
+                toggleInput.removeAttribute("checked");
+                this.activateDarkTheme();
+            }
+        }
+    }
+
+    activateDarkTheme() {
+        this.classList.add('darkTheme');
+    }
+
+    deactivateDarkTheme() {
+        this.classList.remove('darkTheme');
     }
 
     isSideBarOnScreen() {

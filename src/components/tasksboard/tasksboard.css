@@ -1,4 +1,5 @@
 :host {
+    background-color: var(--Taskboard-Background-Color);
     display: block;
     height: 100%;
     width: var(--application-width);
