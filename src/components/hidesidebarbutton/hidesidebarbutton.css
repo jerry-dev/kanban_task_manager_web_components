@@ -3,7 +3,6 @@
     cursor: pointer;
     display: flex;
     justify-content: space-between;
-    margin-top: auto;
     max-width: 7.9375rem;
 }
 

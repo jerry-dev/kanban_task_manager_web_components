@@ -13,5 +13,9 @@
     align-items: center;
     display: flex;
     justify-content: space-between;
-    min-width: 5.458125rem;
+}
+
+toggle-switch {
+    margin-left: 1.479375rem;
+    margin-right: 1.479375rem;
 }

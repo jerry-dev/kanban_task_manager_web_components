@@ -1,7 +1,7 @@
 import sidebarStyleSheet from './sidebar.css' assert { type: 'css' };
 import AppLogo from '../applogo/AppLogo.js';
-import HideSidebarButton from '../hidesidebarbutton/HideSidebarButton.js'
-
+import HideSidebarButton from '../hidesidebarbutton/HideSidebarButton.js';
+import DarkLightModeSwitch from '../darklightmodeswitch/DarkLightModeSwitch.js';
 
 export default class Sidebar extends HTMLElement {
     constructor() {
@@ -39,7 +39,8 @@ export default class Sidebar extends HTMLElement {
                 </li>
             </ul>
         </nav>
-        
+
+        <dark-light-mode-switch></dark-light-mode-switch>
         <hide-sidebar-button></hide-sidebar-button>`;
 
         this.shadowRoot.innerHTML = markup;

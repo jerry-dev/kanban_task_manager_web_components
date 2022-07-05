@@ -40,6 +40,13 @@ label {
     background-color: var(--Main-Purple);
 }
 
+dark-light-mode-switch {
+    align-self: end;
+    margin-bottom: 0.5rem;
+    margin-right: auto;
+    margin-top: auto;
+}
+
 hide-sidebar-button {
     align-self: end;
     margin-bottom: 2rem;
