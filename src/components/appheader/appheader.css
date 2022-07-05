@@ -17,6 +17,11 @@
     width: 14.513888%;
 }
 
+#logoOuterContainer[data-behavior="hide"],
+#logoOuterContainer[data-behavior="hide"] > * {
+    display: none;
+}
+
 #logoInnerContainer {
     align-items: center;
     display: flex;
@@ -128,6 +133,11 @@
     margin-right: auto;
     max-width: 72.875rem;
     width: 94.7967%;
+}
+
+#logoOuterContainer[data-behavior="hide"] + #sectionTitleSection  > #sectionTitleSectionInnerContainer {
+    max-width: 87rem;
+    width: 100%;
 }
 
 add-new-task-button {

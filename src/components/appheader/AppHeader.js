@@ -23,7 +23,7 @@ export default class AppHeader extends HTMLElement {
 
     HTML() {
         const markup = /*html*/
-        `<section id="logoOuterContainer">
+        `<section id="logoOuterContainer" data-behavior>
             <app-logo></app-logo>
         </section>
             

@@ -116,7 +116,8 @@ export default class App extends HTMLElement {
     sideBarControl(event) {
         if (event.composedPath()[0].id === 'sideBarControl') {
             if (!this.isSideBarOnScreen()) {
-                return this.revealSidebar();
+                this.revealSidebar();
+                return this.hideAppHeaderLogo();
             }
         }
     }
@@ -124,7 +125,8 @@ export default class App extends HTMLElement {
     closeSideBarButtonLogic(event) {
         if (event.composedPath()[0].tagName === "HIDE-SIDEBAR-BUTTON") {
             if (this.isSideBarOnScreen()) {
-                return this.hideSidebar();
+                this.hideSidebar();
+                return this.unhideAppHeaderLogo();
             }
         }
     }
@@ -141,6 +143,20 @@ export default class App extends HTMLElement {
                 this.activateDarkTheme();
             }
         }
+    }
+
+    hideAppHeaderLogo() {
+        this.shadowRoot.getElementById('canvas')
+            .getElementsByTagName('tasks-board')[0]
+            .shadowRoot.querySelector('app-header')
+            .shadowRoot.getElementById('logoOuterContainer').setAttribute('data-behavior', 'hide');
+    }
+
+    unhideAppHeaderLogo() {
+        this.shadowRoot.getElementById('canvas')
+            .getElementsByTagName('tasks-board')[0]
+            .shadowRoot.querySelector('app-header')
+            .shadowRoot.getElementById('logoOuterContainer').setAttribute('data-behavior', 'show');
     }
 
     activateDarkTheme() {
