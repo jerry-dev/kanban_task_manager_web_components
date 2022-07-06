@@ -11,13 +11,13 @@ export default class App extends HTMLElement {
     }
 
     connectedCallback() {
+        this.store = store;
+        this.store.observer.subscribe('stateChange', this.render);
         this.render();
         this.routerInit();
     }
 
     render() {
-        this.store = store;
-        this.store.observer.subscribe('stateChange', this.render);
         this.CSS();
         this.HTML();
         this.SCRIPTS();

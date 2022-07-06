@@ -31,30 +31,36 @@ export default class Store {
                 return true;
             }
         });
+
+        this.dispatch = this.dispatch.bind(this);
     }
 
     dispatch(action) {
-        if (typeof this.actions[action.type] !== 'function') {
+        const self = this;
+
+        if (typeof self.actions[action.type] !== 'function') {
             console.error(`Action "${action.type}" doesn't exist.`);
             return false;
         }
 
         console.groupCollapsed(`ACTION: "${action.type}"`);
-        this.status = 'action';
-        this.actions[action.type](this, action.payload);
+        self.status = 'action';
+        self.actions[action.type](self, action.payload);
         console.groupEnd();
         return true;
     }
 
     commit(mutation) {
-        if (typeof this.mutations[mutation.type] !== 'function') {
+        const self = this;
+
+        if (typeof self.mutations[mutation.type] !== 'function') {
             console.log(`Mutation "${mutation.type}" doesn't exist.`);
 			return false;
         }
 
-        this.status = `mutation`;
-        let newState = this.mutations[mutation.type](this.state, mutation.payload);
-        this.state = Object.assign({}, this.state, newState);
+        self.status = `mutation`;
+        let newState = self.mutations[mutation.type](self.state, mutation.payload);
+        self.state = Object.assign({}, self.state, newState);
         return true;
     }
 }
