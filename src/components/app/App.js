@@ -3,6 +3,7 @@ import router from '../../lib/router/index.js';
 import Sidebar from '../sidebar/Sidebar.js';
 import Tasksboard from '../tasksboard/Tasksboard.js';
 import store from '../../lib/store/index.js';
+import fetchLocalData from '../../lib/fetchLocalData.js';
 
 export default class App extends HTMLElement {
     constructor() {
@@ -13,6 +14,7 @@ export default class App extends HTMLElement {
     connectedCallback() {
         this.store = store;
         this.store.observer.subscribe('stateChange', this.render);
+        fetchLocalData(this.store.dispatch, this.store.state.isApplicationDataReady);
         this.render();
         this.routerInit();
     }
