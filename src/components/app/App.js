@@ -2,6 +2,7 @@ import appStyleSheet from './app.css' assert { type: 'css' };
 import router from '../../lib/router/index.js';
 import Sidebar from '../sidebar/Sidebar.js';
 import Tasksboard from '../tasksboard/Tasksboard.js';
+import store from '../../lib/store/index.js';
 
 export default class App extends HTMLElement {
     constructor() {
