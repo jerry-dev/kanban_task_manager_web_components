@@ -6,7 +6,7 @@ export default class Store {
         self.actions = {};
         self.mutations = {};
         self.state = {};
-        self.status `default state`;
+        self.status = `default state`;
         self.observer = new PubSub();
 
         if (params.hasOwnProperty('actions')) {
