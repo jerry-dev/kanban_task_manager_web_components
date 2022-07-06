@@ -16,6 +16,8 @@ export default class App extends HTMLElement {
     }
 
     render() {
+        this.store = store;
+        this.store.observer.subscribe('stateChange', this.render);
         this.CSS();
         this.HTML();
         this.SCRIPTS();
