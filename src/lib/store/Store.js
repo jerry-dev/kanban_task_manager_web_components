@@ -47,12 +47,11 @@ export default class Store {
         self.status = 'action';
         self.actions[action.type](self, action.payload);
         console.groupEnd();
-        return true;
     }
 
     commit(mutation) {
         const self = this;
-
+        
         if (typeof self.mutations[mutation.type] !== 'function') {
             console.log(`Mutation "${mutation.type}" doesn't exist.`);
 			return false;
