@@ -2,6 +2,7 @@ import sidebarStyleSheet from './sidebar.css' assert { type: 'css' };
 import AppLogo from '../applogo/AppLogo.js';
 import HideSidebarButton from '../hidesidebarbutton/HideSidebarButton.js';
 import DarkLightModeSwitch from '../darklightmodeswitch/DarkLightModeSwitch.js';
+import store from '../../lib/store/index.js';
 
 export default class Sidebar extends HTMLElement {
     constructor() {
@@ -10,6 +11,7 @@ export default class Sidebar extends HTMLElement {
     }
 
     connectedCallback() {
+        this.store = store;
         this.render();
     }
 
@@ -25,18 +27,10 @@ export default class Sidebar extends HTMLElement {
     HTML() {
         const markup = /*html*/
         `<app-logo></app-logo>
-        <label for="sideBarNav">ALL BOARDS (3)</label>
+        <label for="sideBarNav">ALL BOARDS (${this.getNumberOfBoards()})</label>
         <nav id="sideBarNav">
             <ul>
-                <li>
-                    <a href="#/">Platform Launch</a>
-                </li>
-                <li>
-                    <a href="#/two">Marketing Plan</a>
-                </li>
-                <li>
-                    <a href="#/two">Roadmap</a>
-                </li>
+                ${this.generateBoardNavListElements()}
             </ul>
         </nav>
 
@@ -44,6 +38,22 @@ export default class Sidebar extends HTMLElement {
         <hide-sidebar-button></hide-sidebar-button>`;
 
         this.shadowRoot.innerHTML = markup;
+    }
+
+    getNumberOfBoards() {
+        return this.store.state.boards.length;
+    }
+
+    generateBoardNavListElements() {
+        let collection = '';
+
+        this.store.state.boards.forEach((item) => {
+            const reformattedLink = item.name.replace(" ", "").toLowerCase();
+
+            collection += `<li><a href="#/${reformattedLink}">${item.name}</a></li>`;
+        });
+
+        return collection;
     }
 }
 
