@@ -118,7 +118,7 @@ export default class App extends HTMLElement {
             `<section>
                 <h4>${columnName}</h4>
                 <ul>${observedColumns[columnName].map((taskInstances) => {
-                    return /*html*/ `<li><h3>${taskInstances.title}</h3></li>`;
+                    return /*html*/ `<li><span><h3>${taskInstances.title}</h3></span></li>`;
                 }).join('')}</ul>
             </section>`;
         });
