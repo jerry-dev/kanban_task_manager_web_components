@@ -49,13 +49,13 @@ export default class App extends HTMLElement {
     routerInit() {
         router.on({
             '/': {
-                as: 'home',
                 uses: () => {
                     if (!router.lastResolved()) {
                         this.beforeNewViewRenderedOperations();
                     }
 
                     this.renderOneView();
+                    //Navigate to the first board
                 },
                 hooks: {
                     before: (done) => {
@@ -67,13 +67,13 @@ export default class App extends HTMLElement {
                     }
                 }
             },
-            '/two': {
-                as: 'two',
-                uses: () => {
+            '/:board': {
+                uses: ({ data }) => {
                     if (!router.lastResolved()) {
                         this.beforeNewViewRenderedOperations();
                     }
-                    this.renderTwoView();
+
+                    this.renderBoardColumns(data);
                 },
                 hooks: {
                     before: (done) => {
@@ -90,16 +90,48 @@ export default class App extends HTMLElement {
         router.resolve();
     }
 
+    renderBoardColumns(data) {
+        const observedColumns = {};
+
+        for (let i = 0; i < this.store.state.boards.length; i++) {
+            const reformattedBoardName = this.store.state.boards[i].name.replace(" ", "").toLowerCase();
+            if (reformattedBoardName === data.board) {
+                for (let j = 0; j < this.store.state.boards[i].columns.length; j++) {
+                    // For each distinct column name, we create a array property for it within
+                    // the observedColumns object. We'll inject/push the associated tasks in it later.
+                    if (!observedColumns[this.store.state.boards[i].columns[j].name]) {
+                        observedColumns[this.store.state.boards[i].columns[j].name] = [];
+
+                        // Pushing the individual tasks objects into the associated column array
+                        this.store.state.boards[i].columns[j].tasks.forEach((taskInstance) => {
+                            observedColumns[this.store.state.boards[i].columns[j].name].push(taskInstance);
+                        });
+                    }
+                }
+            }
+        }
+
+        let markup = ``;
+
+        Object.keys(observedColumns).forEach((columnName) => {
+            markup += /*html*/
+            `<section>
+                <h4>${columnName}</h4>
+                <ul>${observedColumns[columnName].map((taskInstances) => {
+                    return /*html*/ `<li><h3>${taskInstances.title}</h3></li>`;
+                }).join('')}</ul>
+            </section>`;
+        });
+
+        this.getMainRoute().innerHTML = markup;
+    }
+
     getMainRoute() {
         return this.shadowRoot.getElementById('mainRoute');
     }
 
     renderOneView() {
         this.getMainRoute().innerHTML = /*html*/ `<div>ONE</div>`;
-    }
-
-    renderTwoView() {
-        this.getMainRoute().innerHTML = /*html*/ `<div>Two</div>`;
     }
 
     beforeNewViewRenderedOperations() {
