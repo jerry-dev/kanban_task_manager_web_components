@@ -48,7 +48,7 @@ export default class Sidebar extends HTMLElement {
         let collection = '';
 
         this.store.state.boards.forEach((item) => {
-            const reformattedLink = item.name.replace(" ", "").toLowerCase();
+            const reformattedLink = item.name.replace(" ", "-").toLowerCase();
 
             collection += `<li><a href="#/${reformattedLink}">${item.name}</a></li>`;
         });
