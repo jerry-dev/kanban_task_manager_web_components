@@ -15,6 +15,7 @@ export default class AppHeader extends HTMLElement {
     render() {
         this.CSS();
         this.HTML();
+        this.SCRIPTS();
     }
 
     CSS() {
@@ -22,6 +23,20 @@ export default class AppHeader extends HTMLElement {
     }
 
     HTML() {
+        let boardName = window.location.hash.replace("#/", "");
+        boardName = boardName.split("");
+        boardName[0] = boardName[0].toUpperCase();
+
+        for (let i = 0; i < boardName.length; i++) {
+            if (boardName[i] === "-") {
+                boardName[i] = " "
+                boardName[i+1] = boardName[i+1].toUpperCase();
+                break;
+            }
+        }
+        
+        boardName = boardName.join("");
+
         const markup = /*html*/
         `<section id="logoOuterContainer" data-behavior>
             <app-logo></app-logo>
@@ -29,7 +44,7 @@ export default class AppHeader extends HTMLElement {
             
         <section id="sectionTitleSection">
             <div id="sectionTitleSectionInnerContainer">
-                <h2>Platform Launch</h2>
+                <h2>${boardName}</h2>
                 <add-new-task-button></add-new-task-button>
                 <div id="kebabMenu">
                    <span class="dots"></span>
@@ -40,6 +55,16 @@ export default class AppHeader extends HTMLElement {
         </section>`;
 
         this.shadowRoot.innerHTML = markup;
+    }
+
+    SCRIPTS() {
+        this.updateBoardName();
+    }
+
+    updateBoardName() {
+        window.addEventListener('popstate', () => {
+            this.HTML();
+        });
     }
 }
 
