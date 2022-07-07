@@ -118,7 +118,21 @@ export default class App extends HTMLElement {
             `<section>
                 <h4>${columnName}</h4>
                 <ul>${observedColumns[columnName].map((taskInstances) => {
-                    return /*html*/ `<li><span><h3>${taskInstances.title}</h3></span></li>`;
+                    const totalSubtasks = taskInstances.subtasks.length;
+                    let completedSubtasks = 0;
+
+                    taskInstances.subtasks.forEach((item) => {
+                        if (item.isCompleted) {
+                            completedSubtasks++;
+                        }
+                    });
+
+                    return /*html*/ `<li>
+                        <span>
+                            <h3>${taskInstances.title}</h3>
+                            <small>${completedSubtasks} of ${totalSubtasks} subtasks</small>
+                        </span>
+                    </li>`;
                 }).join('')}</ul>
             </section>`;
         });
