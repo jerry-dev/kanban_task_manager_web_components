@@ -94,7 +94,7 @@ export default class App extends HTMLElement {
         const observedColumns = {};
 
         for (let i = 0; i < this.store.state.boards.length; i++) {
-            const reformattedBoardName = this.store.state.boards[i].name.replace(" ", "").toLowerCase();
+            const reformattedBoardName = this.store.state.boards[i].name.replace(" ", "-").toLowerCase();
             if (reformattedBoardName === data.board) {
                 for (let j = 0; j < this.store.state.boards[i].columns.length; j++) {
                     // For each distinct column name, we create a array property for it within
