@@ -113,10 +113,23 @@ export default class App extends HTMLElement {
 
         let markup = ``;
 
+        // There are currently 6 colors to choose from.
+        // The colors are positioned like arrays: 0, 1, 2, 3, 4, 5
+        let colorIndex = null;
+
         Object.keys(observedColumns).forEach((columnName) => {
+
+            // Keeping the color choice in range
+            if (colorIndex !== null && colorIndex < 5) {
+                colorIndex++;
+            } else {
+                colorIndex = 0;
+            }
+            
+            const numberOfTasks = observedColumns[columnName].length;
             markup += /*html*/
             `<section>
-                <h4>${columnName}</h4>
+                <h4 class="sectionTitle"><span class="circle" data-color=${colorIndex}></span>${columnName} (${numberOfTasks})</h4>
                 <ul>${observedColumns[columnName].map((taskInstances) => {
                     const totalSubtasks = taskInstances.subtasks.length;
                     let completedSubtasks = 0;
