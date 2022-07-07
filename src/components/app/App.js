@@ -3,7 +3,6 @@ import router from '../../lib/router/index.js';
 import Sidebar from '../sidebar/Sidebar.js';
 import Tasksboard from '../tasksboard/Tasksboard.js';
 import TasksboardColumn from '../tasksboardcolumn/TasksboardColumn.js';
-// import TaskPreview from '../taskpreview/TaskPreview.js';
 import store from '../../lib/store/index.js';
 import fetchLocalData from '../../lib/fetchLocalData.js';
 
