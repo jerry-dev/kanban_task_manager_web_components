@@ -2,7 +2,8 @@ import appStyleSheet from './app.css' assert { type: 'css' };
 import router from '../../lib/router/index.js';
 import Sidebar from '../sidebar/Sidebar.js';
 import Tasksboard from '../tasksboard/Tasksboard.js';
-import TaskPreview from '../taskpreview/TaskPreview.js';
+import TasksboardColumn from '../tasksboardcolumn/TasksboardColumn.js';
+// import TaskPreview from '../taskpreview/TaskPreview.js';
 import store from '../../lib/store/index.js';
 import fetchLocalData from '../../lib/fetchLocalData.js';
 
@@ -74,7 +75,7 @@ export default class App extends HTMLElement {
                         this.beforeNewViewRenderedOperations();
                     }
 
-                    this.renderBoardColumns(data);
+                    this.renderBoardColumns2(data);
                 },
                 hooks: {
                     before: (done) => {
@@ -91,7 +92,55 @@ export default class App extends HTMLElement {
         router.resolve();
     }
 
-    renderBoardColumns(data) {
+    // renderBoardColumns(data) {
+    //     const reformattedColumnData = this.getReformattedData(data);
+
+    //     let markup = ``;
+
+    //     // There are currently 6 colors to choose from.
+    //     // The colors are positioned like arrays: 0, 1, 2, 3, 4, 5
+    //     let colorIndex = null;
+
+    //     Object.keys(reformattedColumnData).forEach((columnName) => {
+
+    //         // Keeping the color choice in range
+    //         if (colorIndex !== null && colorIndex < 5) {
+    //             colorIndex++;
+    //         } else {
+    //             colorIndex = 0;
+    //         }
+
+    //         const numberOfTasks = reformattedColumnData[columnName].length;
+    //         markup += /*html*/
+    //         `<section>
+    //             <h4 class="sectionTitle"><span class="circle" data-color=${colorIndex}></span>${columnName} (${numberOfTasks})</h4>
+    //             <ul>${reformattedColumnData[columnName].map((taskInstances) => {
+    //                 const totalSubtasks = taskInstances.subtasks.length;
+    //                 let completedSubtasks = 0;
+
+    //                 taskInstances.subtasks.forEach((item) => {
+    //                     if (item.isCompleted) {
+    //                         completedSubtasks++;
+    //                     }
+    //                 });
+
+    //                 return /*html*/ `
+    //                 <li>
+    //                     <task-preview
+    //                         title=${JSON.stringify(taskInstances.title)}
+    //                         completedSubtasks=${completedSubtasks}
+    //                         totalSubtasks=${totalSubtasks}
+    //                     ></task-preview>
+    //                 </li>`;
+    //             }).join('')}</ul>
+    //         </section>`;
+    //     });
+
+    //     this.getMainRoute().innerHTML = markup;
+    // }
+
+    // NEW - WIP
+    renderBoardColumns2(data) {
         const reformattedColumnData = this.getReformattedData(data);
 
         let markup = ``;
@@ -110,33 +159,21 @@ export default class App extends HTMLElement {
             }
 
             const numberOfTasks = reformattedColumnData[columnName].length;
+
+            const colData = JSON.stringify(reformattedColumnData).replace(/ /g, "__");
+
             markup += /*html*/
-            `<section>
-                <h4 class="sectionTitle"><span class="circle" data-color=${colorIndex}></span>${columnName} (${numberOfTasks})</h4>
-                <ul>${reformattedColumnData[columnName].map((taskInstances) => {
-                    const totalSubtasks = taskInstances.subtasks.length;
-                    let completedSubtasks = 0;
-
-                    taskInstances.subtasks.forEach((item) => {
-                        if (item.isCompleted) {
-                            completedSubtasks++;
-                        }
-                    });
-
-                    return /*html*/ `
-                    <li>
-                        <task-preview
-                            title=${JSON.stringify(taskInstances.title)}
-                            completedSubtasks=${completedSubtasks}
-                            totalSubtasks=${totalSubtasks}
-                        ></task-preview>
-                    </li>`;
-                }).join('')}</ul>
-            </section>`;
+            `<tasksboard-column
+                colorindex=${colorIndex}
+                columnname=${columnName}
+                numberoftasks=${numberOfTasks}
+                columndata=${colData}
+            ></tasksboard-column>`;
         });
 
         this.getMainRoute().innerHTML = markup;
     }
+
 
     getReformattedData(data) {
         const observedColumns = {};
