@@ -50,7 +50,12 @@ export default class Sidebar extends HTMLElement {
         this.store.state.boards.forEach((item) => {
             const reformattedLink = item.name.replace(" ", "-").toLowerCase();
 
-            collection += `<li><a href="#/${reformattedLink}">${item.name}</a></li>`;
+            collection += /*html*/
+            `<li>
+                <a href="#/${reformattedLink}">
+                    <img src="./src/assets/icons/fluent_board-split-24-regular.svg"/>${item.name}
+                </a>
+            </li>`;
         });
 
         return collection;
