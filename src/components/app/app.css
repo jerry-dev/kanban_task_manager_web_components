@@ -9,7 +9,7 @@
     --Header-Background-Color: var(--White);
     --Main-Text-Color: var(--Black);
     --Sidebar-Background-Color: var(--White);
-    --Task-Background-Color:  var(--White);
+    --Task-Preview-Background-Color:  var(--White);
     --Taskboard-Background-Color: var(--Light-Grey-Light-BG);
 }
 
@@ -19,7 +19,7 @@
     --Header-Background-Color: var(--Dark-Grey);
     --Main-Text-Color: var(--White);
     --Sidebar-Background-Color: var(--Dark-Grey);
-    --Task-Background-Color:  var(--Dark-Grey);
+    --Task-Preview-Background-Color:  var(--Dark-Grey);
     --Taskboard-Background-Color: var(--Very-Dark-Grey-Dark-BG);
 }
 
@@ -99,41 +99,8 @@
     padding: 0;
 }
 
-#mainRoute section ul li {
-    background-color: var(--Task-Background-Color);
-    border-radius: 0.5rem;
-    box-shadow: 0px 0.25rem 0.375rem rgba(54, 78, 126, 0.101545);
-    padding-bottom: 1.4375rem;
-    padding-top: 1.4375rem;
-}
-
 #mainRoute section ul li:not(:last-child) {
     margin-bottom: 1.25rem;
-}
-
-#mainRoute section ul li span {
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-    width: 88.57%;
-}
-
-#mainRoute section ul li h3 {
-    color: var(--Main-Text-Color);
-    font-weight: var(--font-weight-7);
-    font-style: normal;
-    font-size: var(--font-size-15);
-    line-height: var(--line-height-19);
-    margin: 0;
-}
-
-#mainRoute section ul li small {
-    color: var(--Medium-Grey);
-    font-size: var(--font-size-12);
-    font-style: normal;
-    font-weight: var(--font-weight-7);
-    line-height: var(--line-height-15);
-    margin: 0;
 }
 
 #mainRoute section ul li {
