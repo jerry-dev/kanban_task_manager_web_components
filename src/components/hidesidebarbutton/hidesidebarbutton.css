@@ -1,8 +1,19 @@
 :host {
+    border-radius: 0 6.25rem 6.25rem 0;
+    cursor: pointer;
+    width: 17.25rem;
+}
+
+:host(:hover) {
+    background-color: var(--Light-Grey-Light-BG);
+}
+
+:host div {
     align-items: center;
     cursor: pointer;
     display: flex;
     justify-content: space-between;
+    margin-left: 1.9375rem;
     max-width: 7.9375rem;
 }
 

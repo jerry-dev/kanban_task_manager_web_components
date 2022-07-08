@@ -21,8 +21,8 @@ export default class HideSidebarButton extends HTMLElement {
 
     HTML() {
         const markup = /*HTML*/
-        `<img src="../../src/assets/icons/eye-slash.1.svg"/>
-        <p>Hide Sidebar</p>`;
+        `<div><img src="../../src/assets/icons/eye-slash.1.svg"/>
+        <p>Hide Sidebar</p></div>`;
 
         this.shadowRoot.innerHTML = markup;
     }
