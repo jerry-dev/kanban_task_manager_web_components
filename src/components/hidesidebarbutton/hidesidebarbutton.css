@@ -28,6 +28,17 @@
     line-height: var(--line-height-19);
 }
 
+:host(:hover) p {
+    filter:
+        invert(41%)
+        sepia(28%)
+        saturate(1238%)
+        hue-rotate(203deg)
+        brightness(91%)
+        contrast(93%);
+}
+
+
 :host > * {
     pointer-events: none;
 }
