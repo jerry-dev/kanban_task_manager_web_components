@@ -18,6 +18,7 @@ export default class Sidebar extends HTMLElement {
     render() {
         this.CSS();
         this.HTML();
+        this.SCRIPTS();
     }
 
     CSS() {
@@ -40,6 +41,10 @@ export default class Sidebar extends HTMLElement {
         this.shadowRoot.innerHTML = markup;
     }
 
+    SCRIPTS() {
+        this.refresh();
+    }
+
     getNumberOfBoards() {
         return this.store.state.boards.length;
     }
@@ -49,9 +54,12 @@ export default class Sidebar extends HTMLElement {
 
         this.store.state.boards.forEach((item) => {
             const reformattedLink = item.name.replace(" ", "-").toLowerCase();
+            const hashReformatted = window.location.hash.replace(" ", "-").toLowerCase().replace("#/", "");
+
+            const isCurrentClassCheck = (hashReformatted === reformattedLink) ? `class="current"` : null; 
 
             collection += /*html*/
-            `<li>
+            `<li ${isCurrentClassCheck}>
                 <a href="#/${reformattedLink}">
                     <img src="./src/assets/icons/fluent_board-split-24-regular.svg"/>${item.name}
                 </a>
@@ -59,6 +67,12 @@ export default class Sidebar extends HTMLElement {
         });
 
         return collection;
+    }
+
+    refresh() {
+        window.addEventListener('popstate', () => {
+            this.HTML();
+        });
     }
 }
 
