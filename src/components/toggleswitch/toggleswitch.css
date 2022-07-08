@@ -6,6 +6,10 @@
     width: 2.5rem;
 }
 
+:host(:hover) {
+    background-color: var(--Main-Purple-Hover);
+}
+
 input[type="checkbox"] {
 	position: absolute;
 	left: -624.9375rem;
