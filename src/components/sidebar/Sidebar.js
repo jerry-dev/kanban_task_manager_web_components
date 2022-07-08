@@ -2,6 +2,7 @@ import sidebarStyleSheet from './sidebar.css' assert { type: 'css' };
 import AppLogo from '../applogo/AppLogo.js';
 import HideSidebarButton from '../hidesidebarbutton/HideSidebarButton.js';
 import DarkLightModeSwitch from '../darklightmodeswitch/DarkLightModeSwitch.js';
+import BoardNavigationButton from '../boardnavigationbutton/BoardNavigationButton.js';
 import store from '../../lib/store/index.js';
 
 export default class Sidebar extends HTMLElement {
@@ -18,7 +19,7 @@ export default class Sidebar extends HTMLElement {
     render() {
         this.CSS();
         this.HTML();
-        this.SCRIPTS();
+        this.SCRIPTS()
     }
 
     CSS() {
@@ -41,13 +42,37 @@ export default class Sidebar extends HTMLElement {
         this.shadowRoot.innerHTML = markup;
     }
 
-    SCRIPTS() {
-        this.refresh();
-    }
-
     getNumberOfBoards() {
         return this.store.state.boards.length;
     }
+
+    SCRIPTS() {
+        this.refresh()
+    }
+
+    // generateBoardNavListElements() {
+    //     let collection = '';
+
+    //     this.store.state.boards.forEach((item) => {
+    //         const reformattedLink = item.name.replace(" ", "-").toLowerCase();
+    //         const hashReformatted = window.location.hash.replace(" ", "-").toLowerCase().replace("#/", "");
+
+    //         const isCurrentClassCheck = (hashReformatted === reformattedLink) ? `class="current"` : null; 
+
+    //         collection += /*html*/
+    //         `<li ${isCurrentClassCheck}>
+    //             <a href="#/${reformattedLink}">
+    //                 <img src="./src/assets/icons/fluent_board-split-24-regular.svg"/>${item.name}
+    //             </a>
+    //         </li>`;
+    //     });
+
+    //     return collection;
+    // }
+
+    // `<a href="#/${this.getAttribute('boardname')}">
+    //         <img src="./src/assets/icons/fluent_board-split-24-regular.svg"/>${this.getAttribute('boardname')}
+    //     </a>`;
 
     generateBoardNavListElements() {
         let collection = '';
@@ -56,13 +81,15 @@ export default class Sidebar extends HTMLElement {
             const reformattedLink = item.name.replace(" ", "-").toLowerCase();
             const hashReformatted = window.location.hash.replace(" ", "-").toLowerCase().replace("#/", "");
 
-            const isCurrentClassCheck = (hashReformatted === reformattedLink) ? `class="current"` : null; 
+            const isCurrent = (hashReformatted === reformattedLink) ? true : false; 
 
             collection += /*html*/
-            `<li ${isCurrentClassCheck}>
-                <a href="#/${reformattedLink}">
-                    <img src="./src/assets/icons/fluent_board-split-24-regular.svg"/>${item.name}
-                </a>
+            `<li ${(isCurrent) ? 'class="current"': ""} id=${reformattedLink}>
+                <board-navigation-button
+                    link=${reformattedLink}
+                    boardname=${JSON.stringify(item.name).replace(" ", "__")}
+                    isCurrent=${(isCurrent) ? true: false}
+                ></board-navigation-button>
             </li>`;
         });
 
@@ -71,7 +98,17 @@ export default class Sidebar extends HTMLElement {
 
     refresh() {
         window.addEventListener('popstate', () => {
-            this.HTML();
+            const currentLocation = window.location.hash.replace(" ", "-").toLowerCase().replace("#/", "");
+            const liCollection = this.shadowRoot.querySelectorAll('li');
+            liCollection.forEach((li) => {
+                if (currentLocation === li.id) {
+                    li.classList.add('current');
+                    li.getElementsByTagName('board-navigation-button')[0].classList.add('current');
+                } else {
+                    li.classList.remove('current');
+                    li.getElementsByTagName('board-navigation-button')[0].classList.remove('current');
+                }
+            })
         });
     }
 }
