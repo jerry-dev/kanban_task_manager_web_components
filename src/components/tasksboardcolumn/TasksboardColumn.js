@@ -39,9 +39,13 @@ export default class TasksboardColumn extends HTMLElement {
             return /*html*/ `
             <li>
                 <task-preview
+                    role="button"
                     title=${JSON.stringify(taskInstances.title)}
-                    completedSubtasks=${completedSubtasks}
-                    totalSubtasks=${totalSubtasks}
+                    description=${JSON.stringify(taskInstances.description)}
+                    completedsubtasks=${completedSubtasks}
+                    totalsubtasks=${totalSubtasks}
+                    columnname=${columnName}
+                    subtasks=${JSON.stringify(taskInstances.subtasks).replace(/ /g, "__")}
                 ></task-preview>
             </li>`;
             }).join('')}</ul>`;

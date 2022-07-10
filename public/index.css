@@ -23,12 +23,16 @@
     --application-width: 90rem;
     /* Font sizes */
     --font-size-12: 0.75rem;
+    --font-size-13: 0.8125rem;
     --font-size-15: 0.9375rem;
+    --font-size-18: 1.125rem;
     /* Font weight */
+    --font-weight-5: 500;
     --font-weight-7: 700;
     /* Line height */
     --line-height-15: 0.9375rem;
     --line-height-19: 1.1875rem;
+    --line-height-23: 1.4375rem;
     /* border radius */
     --border-radius-24: 1.5rem;
 }
