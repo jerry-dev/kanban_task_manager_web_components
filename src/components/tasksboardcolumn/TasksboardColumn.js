@@ -1,5 +1,6 @@
 import tasksboardColumnStyleSheet from './tasksboardcolumn.css' assert { type: 'css' };
 import TaskPreview from '../taskpreview/TaskPreview.js';
+import store from '../../lib/store/index.js';
 
 export default class TasksboardColumn extends HTMLElement {
     constructor() {
@@ -8,6 +9,8 @@ export default class TasksboardColumn extends HTMLElement {
     }
 
     connectedCallback() {
+        this.store = store;
+        this.store.observer.subscribe('stateChange', this.HTML);
         this.render();
     }
 

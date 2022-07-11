@@ -78,6 +78,7 @@ export default class TaskPreview extends HTMLElement {
             const action = {
                 type: 'UPDATE_TASK',
                 payload: {
+                    boardName: this.getAttribute('board'),
                     columnName: this.getAttribute('columnname'),
                     taskTitle: this.getAttribute('title'),
                     newStatus: this.shadowRoot.getElementById('currentStatus').value,
