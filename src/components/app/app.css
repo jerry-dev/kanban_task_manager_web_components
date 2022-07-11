@@ -6,6 +6,7 @@
     /* Specific Elements Default Colors */
     --Border-Color: var(--Lines-Light);
     --Dark-Light-Mode-Switch-Background-Color: var(--Light-Grey-Light-BG);
+    --Dialog-Text-1-Color: var(--Medium-Grey);
     --Header-Background-Color: var(--White);
     --Main-Text-Color: var(--Black);
     --Sidebar-Background-Color: var(--White);
@@ -16,6 +17,7 @@
 :host(.darkTheme) {
     --Border-Color: var(--Lines-Dark);
     --Dark-Light-Mode-Switch-Background-Color: var(--Very-Dark-Grey-Dark-BG);
+    --Dialog-Text-1-Color: var(--White);
     --Header-Background-Color: var(--Dark-Grey);
     --Main-Text-Color: var(--White);
     --Sidebar-Background-Color: var(--Dark-Grey);

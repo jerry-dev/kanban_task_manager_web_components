@@ -119,6 +119,7 @@ export default class App extends HTMLElement {
                 columnname=${columnName}
                 numberoftasks=${numberOfTasks}
                 columndata=${colData}
+                board=${data.board}
             ></tasksboard-column>`;
         });
 

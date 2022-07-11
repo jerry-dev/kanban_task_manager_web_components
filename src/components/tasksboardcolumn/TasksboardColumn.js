@@ -40,6 +40,7 @@ export default class TasksboardColumn extends HTMLElement {
             <li>
                 <task-preview
                     role="button"
+                    board=${this.getAttribute('board')}
                     title=${JSON.stringify(taskInstances.title)}
                     description=${JSON.stringify(taskInstances.description)}
                     completedsubtasks=${completedSubtasks}

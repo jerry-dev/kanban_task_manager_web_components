@@ -80,7 +80,7 @@ dialog::backdrop {
     display: block;
     margin-left: auto;
     margin-right: auto;
-    width: 88.57%;
+    width: 86.666666%;
 }
 
 :host .dialogTaskTitle {
@@ -102,7 +102,7 @@ dialog::backdrop {
 }
 
 :host .dialogCompletionStats {
-    color: var(--Main-Text-Color);
+    color: var(--Dialog-Text-1-Color);
     margin-top: 1.4375rem;
 }
 
@@ -114,11 +114,16 @@ dialog::backdrop {
 :host dialog .taskCheckboxList li {
     align-items: center;
     background-color: var(--Taskboard-Background-Color);
+    border-radius: 0.25rem;
     display: flex;
     height: 2.5rem;
     padding-bottom: 0.75rem;
     padding-top: 0.8125rem;
     width: 100%;
+}
+
+:host dialog .taskCheckboxList li:hover {
+    background-color: var(--Main-Purple-Hover);
 }
 
 :host dialog .taskCheckboxList li:not(:last-child) {
@@ -140,10 +145,16 @@ dialog::backdrop {
     width: 24.25rem;
 }
 
+:host dialog .taskCheckboxList li label.crossOut {
+    color: var(--Medium-Grey);
+    text-decoration: line-through var(--Medium-Grey);
+}
+
 :host dialog .taskCheckboxList li label input {
     accent-color: var(--Main-Purple);
     border-color: var(--Medium-Grey);
     border-radius: 0.125rem;
+    cursor: pointer;
     margin-right: 1rem;
     width: 1rem;
     height: 1rem;
@@ -151,10 +162,47 @@ dialog::backdrop {
 
 :host dialog .taskCheckboxList li label input:not(:checked)::after {
     background-color: var(--Task-Preview-Background-Color);
-    content: "";
     border-color: var(--Medium-Grey);
     border-radius: 0.125rem;
+    content: "";
+    height: 1rem;
+    margin-bottom: 1.5rem;
     position: absolute;
     width: 1rem;
-    height: 1rem;
+}
+
+:host dialog .currentStatusLabel {
+    color: var(--Dialog-Text-1-Color);
+    display: block;
+    font-size: var(--font-size-12);
+    font-style: normal;
+    font-weight: var(--font-weight-7);
+    line-height: var(--line-height-15);
+    margin-bottom: 0.5rem;
+}
+
+/* GOING TO MOVE THIS INTO A COMPONENT */
+:host dialog #currentStatus {
+    background-color: var(--Task-Preview-Background-Color);
+    border: 0.0625rem solid var(--Border-Color);
+    color: var(--Main-Text-Color);
+    display: block;
+    height: 2.5rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    width: 100%;
+}
+
+/* GOING TO MOVE THIS INTO A COMPONENT */
+:host dialog #currentStatus > option {
+    /* background-color: red; */
+    color: var(--Medium-Grey);
+    /* cursor: pointer; */
+    display: block;
+    font-size: var(--font-size-13);
+    font-style: normal;
+    font-weight: var(--font-weight-5);
+    height: 1.4375rem;
+    line-height: var(--line-height-23);
+    width: 10rem;
 }
