@@ -97,7 +97,7 @@ export default class TasksboardColumn extends HTMLElement {
 
                         this.updateNewNumberOfTasks(this.store.state.boards[i].columns[j].tasks.length);
                         const markup = /*html*/
-                        `<h4 class="columnTitle"><span class="circle" data-color=${this.getAttribute('colorindex')}></span>${columnName} (${this.store.state.boards[i].columns[j].tasks.length})</h4>
+                        `<h4 class="columnTitle"><span class="circle" data-color=${this.getAttribute('colorindex')}></span>${columnName.toUpperCase()} (${this.store.state.boards[i].columns[j].tasks.length})</h4>
                         <ul>${this.store.state.boards[i].columns[j].tasks.map((taskInstances, index) => {
                             const totalSubtasks = taskInstances.subtasks.length;
                             let completedSubtasks = 0;
