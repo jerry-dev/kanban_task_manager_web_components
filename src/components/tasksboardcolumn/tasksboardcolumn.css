@@ -54,7 +54,7 @@
     margin-bottom: 1.25rem;
 }
 
-:host ul li {
+:host ul li.initialLoad {
     animation-name: staggerIn;
     animation-duration: 0.4s;
     animation-iteration-count: 1;
@@ -63,47 +63,47 @@
     opacity: 0;
 }
 
-:host ul li:nth-child(1) {
+:host ul li.initialLoad:nth-child(1) {
     animation-delay: 0.0;
 }
 
-:host ul li:nth-child(2) {
+:host ul li.initialLoad:nth-child(2) {
     animation-delay: 0.1s;
 }
 
-:host ul li:nth-child(3) {
+:host ul li.initialLoad:nth-child(3) {
     animation-delay: 0.2s;
 }
 
-:host ul li:nth-child(4) {
+:host ul li.initialLoad:nth-child(4) {
     animation-delay: 0.3s;
 }
 
-:host ul li:nth-child(5) {
+:host ul li.initialLoad:nth-child(5) {
     animation-delay: 0.4s;
 }
 
-:host ul li:nth-child(6) {
+:host ul li.initialLoad:nth-child(6) {
     animation-delay: 0.5s;
 }
 
-:host ul li:nth-child(7) {
+:host ul li.initialLoad:nth-child(7) {
     animation-delay: 0.6s;
 }
 
-:host ul li:nth-child(8) {
+:host ul li.initialLoad:nth-child(8) {
     animation-delay: 0.7s;
 }
 
-:host ul li:nth-child(9) {
+:host ul li.initialLoad:nth-child(9) {
     animation-delay: 0.8s;
 }
 
-:host ul li:nth-child(10) {
+:host ul li.initialLoad:nth-child(10) {
     animation-delay: 0.9s;
 }
 
-:host ul li:nth-child(11) {
+:host ul li.initialLoad:nth-child(11) {
     animation-delay: 1s;
 }
 
@@ -114,5 +114,25 @@
     100% {
         transform: translateY(0);
         opacity: 1;
+    }
+}
+
+.rehydrate {
+    animation-name: fadeIn;
+    animation-duration: 0.35s;
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;
+    /* opacity: 0; */
+    transform: scale(0);
+}
+
+@keyframes fadeIn {
+    0% {
+        /* opacity: 0; */
+        transform: scale(0);
+    }
+    100% {
+        /* opacity: 1; */
+        transform: scale(1);
     }
 }

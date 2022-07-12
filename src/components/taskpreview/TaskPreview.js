@@ -49,11 +49,17 @@ export default class TaskPreview extends HTMLElement {
         </dialog>`;
 
         this.shadowRoot.innerHTML = markup;
+        this.state = {
+
+            currentStatus: this.shadowRoot.getElementById('currentStatus').value
+        }
     }
 
     SCRIPTS() {
         this.clickManager();
-        this.formChangeManager();
+        this.shadowRoot.querySelector('form').addEventListener('change', () => {
+            this.crossOutCompletedTask();
+        });
     }
 
     clickManager() {
@@ -62,32 +68,41 @@ export default class TaskPreview extends HTMLElement {
         });
     }
 
-    formChangeManager() {
-        this.shadowRoot.querySelector('form').addEventListener('change', () => {
-            const subtasksArray = [];
+    currentStatusChanged() {
+        if (this.state.currentStatus !== this.shadowRoot.getElementById('currentStatus').value) {
+            this.setAttribute('changed', '');
+            this.updateDefaultStateValues();
+        }
+    }
 
-            this.shadowRoot.querySelectorAll('li').forEach((item) => {
-                this.crossOutCompletedTask();
+    updateDefaultStateValues() {
+        this.state.currentStatus = this.shadowRoot.getElementById('currentStatus').value
+    }
 
-                subtasksArray[subtasksArray.length] = {
-                    isCompleted: item.getElementsByTagName('input')[0].checked,
-                    title: item.getElementsByTagName('label')[0].innerText
-                }
-            });
+    dispatchFormDataIfChangesMade() {
+        const subtasksArray = [];
 
-            const action = {
-                type: 'UPDATE_TASK',
-                payload: {
-                    boardName: this.getAttribute('board'),
-                    columnName: this.getAttribute('columnname'),
-                    taskTitle: this.getAttribute('title'),
-                    newStatus: this.shadowRoot.getElementById('currentStatus').value,
-                    subtasks: subtasksArray
-                }
+        this.shadowRoot.querySelectorAll('li').forEach((item) => {
+            this.crossOutCompletedTask();
+
+            subtasksArray[subtasksArray.length] = {
+                isCompleted: item.getElementsByTagName('input')[0].checked,
+                title: item.getElementsByTagName('label')[0].innerText
             }
-
-            this.store.dispatch(action);
         });
+
+        const action = {
+            type: 'UPDATE_TASK',
+            payload: {
+                boardName: this.getAttribute('board'),
+                columnName: this.getAttribute('columnname'),
+                taskTitle: this.getAttribute('title'),
+                newStatus: this.shadowRoot.getElementById('currentStatus').value,
+                subtasks: subtasksArray
+            }
+        }
+
+        this.store.dispatch(action);
     }
 
     crossOutCompletedTask() {
@@ -100,6 +115,7 @@ export default class TaskPreview extends HTMLElement {
             }
         });
     }
+
 
     generateListElements(subtasks) {
         let subtasksListElementsMarkup = ``;
@@ -173,7 +189,13 @@ export default class TaskPreview extends HTMLElement {
 
         if (event.composedPath()[0].nodeName === "DIALOG") {
             theDialog.close();
-        }        
+            this.dispatchFormDataIfChangesMade();
+            this.currentStatusChanged();
+        }
+    }
+
+    dialogStatus() {
+        return this.dialogStatus;
     }
 }
 

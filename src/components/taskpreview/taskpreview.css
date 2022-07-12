@@ -8,6 +8,22 @@
     padding-top: 1.4375rem;
 }
 
+:host([changed]) {
+    animation-duration: 0.4s;
+    animation-name: fadeOut;
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;
+}
+
+@keyframes fadeOut {
+    0% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}
+
 :host .taskInnerContainer {
     display: block;
     margin-left: auto;
