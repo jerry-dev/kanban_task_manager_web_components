@@ -50,30 +50,6 @@ export default class Sidebar extends HTMLElement {
         this.refresh()
     }
 
-    // generateBoardNavListElements() {
-    //     let collection = '';
-
-    //     this.store.state.boards.forEach((item) => {
-    //         const reformattedLink = item.name.replace(" ", "-").toLowerCase();
-    //         const hashReformatted = window.location.hash.replace(" ", "-").toLowerCase().replace("#/", "");
-
-    //         const isCurrentClassCheck = (hashReformatted === reformattedLink) ? `class="current"` : null; 
-
-    //         collection += /*html*/
-    //         `<li ${isCurrentClassCheck}>
-    //             <a href="#/${reformattedLink}">
-    //                 <img src="./src/assets/icons/fluent_board-split-24-regular.svg"/>${item.name}
-    //             </a>
-    //         </li>`;
-    //     });
-
-    //     return collection;
-    // }
-
-    // `<a href="#/${this.getAttribute('boardname')}">
-    //         <img src="./src/assets/icons/fluent_board-split-24-regular.svg"/>${this.getAttribute('boardname')}
-    //     </a>`;
-
     generateBoardNavListElements() {
         let collection = '';
 
