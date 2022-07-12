@@ -92,6 +92,19 @@ dialog::backdrop {
     width: 100%;
 }
 
+:host .dialogForm .formHeader {
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+}
+
+:host .dialogForm .formHeader kebab-menu-button {
+    margin-left: 1.5rem;
+}
+
+
 :host .dialogFormInnerContainer {
     display: block;
     margin-left: auto;
@@ -114,7 +127,8 @@ dialog::backdrop {
     font-style: normal;
     font-weight: var(--font-weight-5);
     line-height: var(--line-height-23);
-    margin-top: 1.5rem;
+    margin: 0;
+    margin-bottom: 1.5rem;
 }
 
 :host .dialogCompletionStats {
@@ -132,7 +146,8 @@ dialog::backdrop {
     background-color: var(--Taskboard-Background-Color);
     border-radius: 0.25rem;
     display: flex;
-    height: 2.5rem;
+    margin: 0;
+    padding: 0;
     padding-bottom: 0.75rem;
     padding-top: 0.8125rem;
     width: 100%;

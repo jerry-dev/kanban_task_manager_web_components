@@ -1,5 +1,6 @@
 import taskPreviewStyleSheet from './taskpreview.css' assert { type: 'css' };
 import store from '../../lib/store/index.js';
+import KebabMenuButton from '../kebabmenubutton/KebabMenuButton.js';
 
 export default class TaskPreview extends HTMLElement {
     constructor() {
@@ -33,7 +34,10 @@ export default class TaskPreview extends HTMLElement {
         <dialog>
             <form class="dialogForm">
                 <span class="dialogFormInnerContainer">
-                    <h3 class="dialogTaskTitle">${this.getAttribute('title')}</h3>
+                    <header class="formHeader">
+                        <h3 class="dialogTaskTitle">${this.getAttribute('title')}</h3>
+                        <kebab-menu-button></kebab-menu-button>
+                    </header>
                     <p class="dialogTaskDescription">${this.getAttribute('description')}</p>
                     <small class="dialogCompletionStats">Subtasks (${this.getAttribute('completedsubtasks')} of ${this.getAttribute('totalsubtasks')})</small>
                     <ul class="taskCheckboxList">
