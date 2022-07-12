@@ -144,19 +144,6 @@ add-new-task-button {
     margin-left: auto;
 }
 
-#kebabMenu {
-    display: flex;
-    flex-direction: column;
-    height: 1.25rem;
-    justify-content: space-between;
+kebab-menu-button {
     margin-left: 1.5rem;
-    width: 0.28875rem;
-}
-
-#kebabMenu span {
-    background-color: var(--Medium-Grey);
-    border-radius: 3.125rem;
-    display: block;
-    height: 0.28875rem;
-    width: 0.28875rem;
 }

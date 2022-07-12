@@ -1,6 +1,7 @@
 import appHeaderStylesheet from './appheader.css' assert { type: 'css' };
 import AddNewTaskButton from '../addnewtaskbutton/AddNewTaskButton.js';
 import AppLogo from '../applogo/AppLogo.js';
+import KebabMenuButton from '../kebabmenubutton/KebabMenuButton.js';
 
 export default class AppHeader extends HTMLElement {
     constructor() {
@@ -46,11 +47,7 @@ export default class AppHeader extends HTMLElement {
             <div id="sectionTitleSectionInnerContainer">
                 <h2>${boardName}</h2>
                 <add-new-task-button></add-new-task-button>
-                <div id="kebabMenu">
-                   <span class="dots"></span>
-                   <span class="dots"></span>
-                   <span class="dots"></span>
-                </div>
+                <kebab-menu-button></kebab-menu-button>
             </div>
         </section>`;
 
