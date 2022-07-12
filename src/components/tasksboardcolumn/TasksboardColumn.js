@@ -10,7 +10,7 @@ export default class TasksboardColumn extends HTMLElement {
 
     connectedCallback() {
         this.store = store;
-        this.store.observer.subscribe('stateChange', this.HTML);
+        // this.store.observer.subscribe('stateChange', this.render); //NO use here
         this.render();
     }
 

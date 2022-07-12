@@ -14,7 +14,7 @@ export default class App extends HTMLElement {
 
     connectedCallback() {
         this.store = store;
-        this.store.observer.subscribe('stateChange', this.HTML);
+        // this.store.observer.subscribe('stateChange', this.test);
         fetchLocalData(this.store.dispatch, this.store.state.isApplicationDataReady);
         this.render();
         this.routerInit();
@@ -24,6 +24,10 @@ export default class App extends HTMLElement {
         this.CSS();
         this.HTML();
         this.SCRIPTS();
+    }
+
+    test() {
+        console.log(`TESTING! @ App.js`);
     }
 
     CSS() {
