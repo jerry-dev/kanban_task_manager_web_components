@@ -1,0 +1,25 @@
+:host {
+    cursor: pointer;
+    display: block;
+}
+
+:host > * {
+    pointer-events: none;
+}
+
+#kebabMenuButtonInnerContainer {
+    display: flex;
+    flex-direction: column;
+    height: 1.25rem;
+    justify-content: space-between;
+    margin-left: 1.5rem;
+    width: 0.28875rem;
+}
+
+#kebabMenuButtonInnerContainer span {
+    background-color: var(--Medium-Grey);
+    border-radius: 3.125rem;
+    display: block;
+    height: 0.28875rem;
+    width: 0.28875rem;
+}
