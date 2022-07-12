@@ -31,7 +31,7 @@ export default class TasksboardColumn extends HTMLElement {
         const columnName = this.getAttribute('columnname');
 
         const markup = /*html*/
-        `<h4 class="columnTitle"><span class="circle" data-color=${this.getAttribute('colorindex')}></span>${this.getAttribute('columnname')} (${this.getAttribute('numberoftasks')})</h4>
+        `<h4 class="columnTitle"><span class="circle" data-color=${this.getAttribute('colorindex')}></span>${this.getAttribute('columnname').toUpperCase()} (${this.getAttribute('numberoftasks')})</h4>
         <ul>${columnData[columnName].map((taskInstances) => {
             const totalSubtasks = taskInstances.subtasks.length;
             let completedSubtasks = 0;
