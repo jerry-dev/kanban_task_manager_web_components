@@ -36,7 +36,7 @@ export default class TaskPreview extends HTMLElement {
                 <span class="dialogFormInnerContainer">
                     <header class="formHeader">
                         <h3 class="dialogTaskTitle">${this.getAttribute('title')}</h3>
-                        <kebab-menu-button></kebab-menu-button>
+                        <kebab-menu-button altering="Task"></kebab-menu-button>
                     </header>
                     <p class="dialogTaskDescription">${this.getAttribute('description')}</p>
                     <small class="dialogCompletionStats">Subtasks (${this.getAttribute('completedsubtasks')} of ${this.getAttribute('totalsubtasks')})</small>
@@ -182,10 +182,32 @@ export default class TaskPreview extends HTMLElement {
             theDialog.showModal();
             this.crossOutCompletedTask();
             this.addEventListener('click', (event) => {
-                this.closeDialog(event, theDialog);
+                this.kebabMenuManager(event, theDialog);
+                this.closeDialog(event, theDialog);                
             })
         }
-        
+    }
+
+    kebabMenuManager(event, theDialog) {
+        if (!theDialog.open) return;
+
+        if (event.composedPath()[0].id === "kebabMenuButtonInnerContainer") {
+            const popupMenu = this.shadowRoot.querySelector('kebab-menu-button').shadowRoot.querySelector('dialog');
+
+            popupMenu.addEventListener('click', (event) => {
+                event.preventDefault();
+
+                if (event.composedPath()[0].className === "kebabEditMenuButton") {
+                    console.log('kebabEditMenuButton');
+                    popupMenu.close();
+                }
+
+                if (event.composedPath()[0].className === "kebabDeleteMenuButton") {
+                    console.log('kebabDeleteMenuButton');
+                    popupMenu.close();
+                }
+            })
+        }
     }
 
     closeDialog(event, theDialog) {
@@ -196,10 +218,6 @@ export default class TaskPreview extends HTMLElement {
             this.dispatchFormDataIfChangesMade();
             this.currentStatusChanged();
         }
-    }
-
-    dialogStatus() {
-        return this.dialogStatus;
     }
 }
 

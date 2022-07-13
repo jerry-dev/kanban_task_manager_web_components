@@ -4,6 +4,8 @@ export default class KebabMenuButton extends HTMLElement {
     constructor() {
         super();
         this.attachShadow({mode: 'open'});
+        this.menuManager = this.menuManager.bind(this);
+        this.toggleMenu = this.toggleMenu.bind(this);
     }
 
     connectedCallback() {
@@ -13,6 +15,7 @@ export default class KebabMenuButton extends HTMLElement {
     render() {
         this.CSS();
         this.HTML();
+        this.SCRIPTS();
     }
 
     CSS() {
@@ -25,9 +28,41 @@ export default class KebabMenuButton extends HTMLElement {
             <span></span>
             <span></span>
             <span></span>
-        </div>`
+        </div>
+        <dialog class="popupMenu">
+            <span class="popupMenuInnerContainer">
+                <button class="kebabEditMenuButton" type="button">Edit ${this.getAttribute('altering')}</button>
+                <button class="kebabDeleteMenuButton" type="button">Delete ${this.getAttribute('altering')}</button>
+            </span>
+        </dialog>`;
 
         this.shadowRoot.innerHTML = markup;
+    }
+
+    SCRIPTS() {
+        this.menuManager();
+    }
+
+    menuManager() {
+        this.shadowRoot.addEventListener('click', (event) => {
+            if (event.composedPath()[0].id === 'kebabMenuButtonInnerContainer') {
+                this.toggleMenu();
+            }
+        });
+    }
+
+    toggleMenu() {
+        const theDialog = this.shadowRoot.querySelector('dialog');
+
+        if (!theDialog.open) {
+            theDialog.showModal();
+        } else {
+            theDialog.close();
+        }
+    }
+
+    isMenuShowing() {
+        return this.shadowRoot.querySelector('dialog').open === true;
     }
 }
 
