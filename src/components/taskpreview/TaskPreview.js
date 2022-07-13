@@ -29,18 +29,18 @@ export default class TaskPreview extends HTMLElement {
         const markup = /*html*/
         `<span class="taskInnerContainer">
             <h3 class="taskTitle">${this.getAttribute('title')}</h3>
-            <small>${this.getAttribute('completedsubtasks')} of ${this.getAttribute('totalsubtasks')} subtasks</small>
+            <small class="detail">${this.getAttribute('completedsubtasks')} of ${this.getAttribute('totalsubtasks')} subtasks</small>
         </span>
-        <dialog>
-            <form class="dialogForm">
-                <span class="dialogFormInnerContainer">
+        <dialog class="expandedTaskDialog">
+            <form class="expandedTaskDialogForm">
+                <span class="expandedTaskDialogFormInnerContainer">
                     <header class="formHeader">
                         <h3 class="dialogTaskTitle">${this.getAttribute('title')}</h3>
                         <kebab-menu-button altering="Task"></kebab-menu-button>
                     </header>
                     <p class="dialogTaskDescription">${this.getAttribute('description')}</p>
-                    <small class="dialogCompletionStats">Subtasks (${this.getAttribute('completedsubtasks')} of ${this.getAttribute('totalsubtasks')})</small>
-                    <ul class="taskCheckboxList">
+                    <label for="taskCheckboxList" class="dialogCompletionStats detail">Subtasks (${this.getAttribute('completedsubtasks')} of ${this.getAttribute('totalsubtasks')})</label>
+                    <ul class="taskCheckboxList" name="taskCheckboxList">
                         ${this.generateListElements(JSON.parse(this.getAttribute('subtasks').replace(/__/g, " ")))}
                     </ul>
 
@@ -48,6 +48,44 @@ export default class TaskPreview extends HTMLElement {
                     <select id="currentStatus" name="currentStatus">
                         ${this.generateOptionsElements()}
                     </select>
+                </span>
+            </form>
+        </dialog>
+        <dialog class="editTaskDialog">
+            <form class="editTaskDialogForm">
+                <span class="editTaskDialogFormInnerContainer">
+                    <header class="formHeader">
+                        <h3 class="dialogTaskTitle">Edit Task</h3>
+                    </header>
+                    <label class="editTaskLabelContainer detail">
+                        Title
+                        <input type="text" class="formInput" placeholder="e.g. Take coffee break"/>
+                    </label>
+                    <label class="editTaskLabelContainer detail">
+                        Description
+                        <textarea type="text" class="formInput descriptionTextarea" cols="30" rows="8" placeholder="e.g. It’s always good to take a break. This 15 minute break will recharge the batteries a little."></textarea>
+                    </label>
+                    <label class="editTaskLabelContainer detail">
+                        Subtasks
+                        <ul class="editTaskSubtaskList">
+                            <li>
+                                <input type="text" class="formInput" placeholder="e.g. Make coffee"/>
+                                <button type="button"><img alt="Delete subtask symbol" src="./src/assets/icons/cross.svg"/></button>
+                            </li>
+                            <li>
+                                <input type="text" class="formInput" placeholder="e.g. Drink coffee & smile"/>
+                                <button type="button"><img alt="Delete subtask symbol" src="./src/assets/icons/cross.svg"/></button>
+                            </li>
+                        </ul>
+                        <button type="button" class="newSubtaskButton">+ Add New Subtask</button>
+                    </label>
+                    <label class="editTaskLabelContainer detail">
+                        Status
+                        <select class="formInput" id="currentStatus" name="currentStatus">
+                            ${this.generateOptionsElements()}
+                        </select>
+                    </label>
+                    <button type="button" class="editTaskSaveChanges">Save Changes</button>
                 </span>
             </form>
         </dialog>`;
@@ -68,7 +106,9 @@ export default class TaskPreview extends HTMLElement {
 
     clickManager() {
         this.addEventListener('click', () => {
-            this.dialogManager();
+            if (this.dialogsAreNotShowing()) {
+                this.dialogManager();
+            }
         });
     }
 
@@ -84,9 +124,10 @@ export default class TaskPreview extends HTMLElement {
     }
 
     dispatchFormDataIfChangesMade() {
+        const taskCheckboxList = this.shadowRoot.querySelector('.taskCheckboxList');
         const subtasksArray = [];
 
-        this.shadowRoot.querySelectorAll('li').forEach((item) => {
+        taskCheckboxList.querySelectorAll('li').forEach((item) => {
             this.crossOutCompletedTask();
 
             subtasksArray[subtasksArray.length] = {
@@ -110,7 +151,9 @@ export default class TaskPreview extends HTMLElement {
     }
 
     crossOutCompletedTask() {
-        this.shadowRoot.querySelectorAll('li').forEach((item) => {
+        const taskCheckboxList = this.shadowRoot.querySelector('.taskCheckboxList');
+
+        taskCheckboxList.querySelectorAll('li').forEach((item) => {
 
             if (item.getElementsByTagName('input')[0].checked) {
                 item.getElementsByTagName('label')[0].classList.add('crossOut');
@@ -176,47 +219,94 @@ export default class TaskPreview extends HTMLElement {
     }
 
     dialogManager() {
-        const theDialog = this.shadowRoot.querySelector('dialog');
+        const expandedTaskDialog = this.shadowRoot.querySelector('.expandedTaskDialog');
 
-        if (!theDialog.open) {
-            theDialog.showModal();
+        if (!expandedTaskDialog.open) {
+            expandedTaskDialog.showModal();
             this.crossOutCompletedTask();
             this.addEventListener('click', (event) => {
-                this.kebabMenuManager(event, theDialog);
-                this.closeDialog(event, theDialog);                
+                this.kebabMenuManager(event, expandedTaskDialog);
+                this.submitEditTaskDialogForm(event)
+                this.closeDialog(event, expandedTaskDialog);
             })
         }
     }
 
-    kebabMenuManager(event, theDialog) {
-        if (!theDialog.open) return;
+    kebabMenuManager(event, expandedTaskDialog) {
+        if (!expandedTaskDialog.open) return;
 
         if (event.composedPath()[0].id === "kebabMenuButtonInnerContainer") {
-            const popupMenu = this.shadowRoot.querySelector('kebab-menu-button').shadowRoot.querySelector('dialog');
+            const kebabPopupMenu = this.getKebabPopupMenu();
 
-            popupMenu.addEventListener('click', (event) => {
+            kebabPopupMenu.addEventListener('click', (event) => {
                 event.preventDefault();
 
                 if (event.composedPath()[0].className === "kebabEditMenuButton") {
-                    console.log('kebabEditMenuButton');
-                    popupMenu.close();
+                    this.closeExpandedTaskDialog();
+                    this.launchTaskEditDialog();
+                    kebabPopupMenu.close();
                 }
 
                 if (event.composedPath()[0].className === "kebabDeleteMenuButton") {
-                    console.log('kebabDeleteMenuButton');
-                    popupMenu.close();
+                    kebabPopupMenu.close();
                 }
             })
         }
     }
 
-    closeDialog(event, theDialog) {
-        if (!theDialog.open) return;
+    getKebabPopupMenu() {
+        return this.shadowRoot.querySelector('kebab-menu-button').shadowRoot.querySelector('.popupMenu');
+    }
+
+    closeExpandedTaskDialog() {
+        const expandedTaskDialog = this.shadowRoot.querySelector('.expandedTaskDialog');
+        if (expandedTaskDialog.open) expandedTaskDialog.close();
+    }
+
+    isExpandedTaskDialogShowing() {
+        return this.shadowRoot.querySelector('.expandedTaskDialog').open === true;
+    }
+
+    launchTaskEditDialog() {
+        const editTaskDialog = this.shadowRoot.querySelector('.editTaskDialog');
+        if (!editTaskDialog.open) editTaskDialog.showModal();
+    }
+
+    closeTaskEditDialog() {
+        const editTaskDialogForm = this.getEditTaskDialogForm();
+        if (editTaskDialogForm.open) editTaskDialogForm.close();
+    }
+
+    submitEditTaskDialogForm(event) {
+        if (!this.isTaskEditDialogShowing()) return;
+
+        if (event.composedPath()[0].className === "editTaskSaveChanges") {
+            // this.store.dispatch({});
+            this.closeTaskEditDialog();
+        }
+    }
+
+    getEditTaskDialogForm() {
+        return this.shadowRoot.querySelector('.editTaskDialog');
+    }
+
+    isTaskEditDialogShowing() {
+        return this.shadowRoot.querySelector('.editTaskDialog').open === true;
+    }
+
+    closeDialog(event, expandedTaskDialog) {
+        if (!expandedTaskDialog.open) return;
 
         if (event.composedPath()[0].nodeName === "DIALOG") {
-            theDialog.close();
+            expandedTaskDialog.close();
             this.dispatchFormDataIfChangesMade();
             this.currentStatusChanged();
+        }
+    }
+
+    dialogsAreNotShowing() {
+        if (!this.isExpandedTaskDialogShowing() && !this.isTaskEditDialogShowing()) {
+            return true;
         }
     }
 }

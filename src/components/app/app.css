@@ -4,22 +4,26 @@
     position: relative;
 
     /* Specific Elements Default Colors */
+    --Add-New-Subtask-Background-Color: var(--Main-Purple-Hover);
     --Border-Color: var(--Lines-Light);
     --Dark-Light-Mode-Switch-Background-Color: var(--Light-Grey-Light-BG);
     --Dialog-Text-1-Color: var(--Medium-Grey);
     --Header-Background-Color: var(--White);
     --Main-Text-Color: var(--Black);
+    --Placeholder-Text-Color: hsla(237, 100%, 4%, 1);
     --Sidebar-Background-Color: var(--White);
     --Task-Preview-Background-Color:  var(--White);
     --Taskboard-Background-Color: var(--Light-Grey-Light-BG);
 }
 
 :host(.darkTheme) {
+    --Add-New-Subtask-Background-Color: var(--White);
     --Border-Color: var(--Lines-Dark);
     --Dark-Light-Mode-Switch-Background-Color: var(--Very-Dark-Grey-Dark-BG);
     --Dialog-Text-1-Color: var(--White);
     --Header-Background-Color: var(--Dark-Grey);
     --Main-Text-Color: var(--White);
+    --Placeholder-Text-Color: hsla(0, 0%, 100%, 1);
     --Sidebar-Background-Color: var(--Dark-Grey);
     --Task-Preview-Background-Color:  var(--Dark-Grey);
     --Taskboard-Background-Color: var(--Very-Dark-Grey-Dark-BG);
