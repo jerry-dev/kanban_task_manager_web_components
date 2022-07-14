@@ -243,7 +243,7 @@ export default class TaskPreview extends HTMLElement {
 
                 if (event.composedPath()[0].className === "kebabEditMenuButton") {
                     this.closeExpandedTaskDialog();
-                    this.launchTaskEditDialog();
+                    this.launchTaskEditDialog(event);
                     kebabPopupMenu.close();
                 }
 
@@ -268,8 +268,18 @@ export default class TaskPreview extends HTMLElement {
     }
 
     launchTaskEditDialog() {
-        const editTaskDialog = this.shadowRoot.querySelector('.editTaskDialog');
-        if (!editTaskDialog.open) editTaskDialog.showModal();
+        const editTaskDialog = this.getEditTaskDialogForm();
+        
+        if (!editTaskDialog.open) {
+            editTaskDialog.showModal();
+            // listen for Dialog clicks
+
+            editTaskDialog.addEventListener('click', (event) => {
+                if (event.composedPath()[0].nodeName === "DIALOG") {
+                    this.closeTaskEditDialog();
+                }
+            });
+        }
     }
 
     closeTaskEditDialog() {
@@ -284,6 +294,21 @@ export default class TaskPreview extends HTMLElement {
             // this.store.dispatch({});
             this.closeTaskEditDialog();
         }
+    }
+
+    NEW() {
+        if (!this.isTaskEditDialogShowing()) return;
+
+        const editTaskDialog = this.getEditTaskDialogForm();
+
+        editTaskDialog.addEventListener('click', (event) => {
+            console.log('submitEditTaskDialogForm listening for click on "DIALOG"');
+            if (event.composedPath()[0].nodeName === "DIALOG") {
+                console.log('closing editTaskDialog');
+                // this.store.dispatch({});
+                this.closeTaskEditDialog();
+            }
+        });
     }
 
     getEditTaskDialogForm() {
