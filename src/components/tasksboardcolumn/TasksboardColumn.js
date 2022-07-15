@@ -11,28 +11,67 @@ export default class TasksboardColumn extends HTMLElement {
     connectedCallback() {
         this.store = store;
         this.store.observer.subscribe('stateChange', () => {
-            this.refresh();
+            this.rehydrate();
         });
+        this.state = {};
         this.render();
     }
 
     render() {
+        this.initializeComponentState();
         this.CSS();
-        this.HTML();
-        this.SCRIPTS();
+        this.HTML("initialLoad");
+    }
+
+    initializeComponentState() {
+        let reformattedBoardName = this.getAttribute('board').split("");
+        reformattedBoardName[0] = reformattedBoardName[0].toUpperCase();
+
+        for (let i = 0; i < reformattedBoardName.length; i++) {
+            if (reformattedBoardName[i] === "-") {
+                reformattedBoardName[i] = " "
+                reformattedBoardName[i+1] = reformattedBoardName[i+1].toUpperCase();
+                break;
+            }
+        }
+
+        this.state.board = reformattedBoardName.join("");
+        this.state.columnName = this.getAttribute('columnname');
+        this.state.columnData = [];
+        this.state.title = this.getAttribute('title');
+        this.state.colorIndex = this.getAttribute('colorindex');
+        
+
+        // Searching for the component's associated data based on the title and column name
+        // Once found, hydrate the this.state.x and this.state.y
+        // First loop: Iterating through the boards array
+        for (let i = 0; i < this.store.state.boards.length; i++) {
+            // Checking if the loop is at the board the component is in using the boards name
+            if (this.store.state.boards[i].name === this.state.board) {
+                // Second loop: While in the matched board, iterating over the array columns
+                for (let j = 0; j < this.store.state.boards[i].columns.length; j++) {
+                    // Checking if the second loop is at the column the component is in using the column name
+                    if (this.store.state.boards[i].columns[j].name === this.state.columnName) {
+                        this.state.columnData = this.store.state.boards[i].columns[j];
+                    }
+                }
+            }
+        }
     }
 
     CSS() {
         this.shadowRoot.adoptedStyleSheets = [ tasksboardColumnStyleSheet ];
     }
 
-    HTML() {
-        const columnData = JSON.parse(this.getAttribute('columndata').replace(/__/g, " "));
-        const columnName = this.getAttribute('columnname');
+    rehydrate() {
+        this.initializeComponentState();
+        this.HTML("rehydrate");
+    }
 
+    HTML(renderState) {
         const markup = /*html*/
-        `<h4 class="columnTitle"><span class="circle" data-color=${this.getAttribute('colorindex')}></span>${this.getAttribute('columnname').toUpperCase()} (${this.getAttribute('numberoftasks')})</h4>
-        <ul>${columnData[columnName].map((taskInstances) => {
+        `<h4 class="columnTitle"><span class="circle" data-color=${this.state.colorIndex}></span>${this.state.columnName.toUpperCase()} (${this.getAttribute('numberoftasks')})</h4>
+        <ul>${this.state.columnData.tasks.map((taskInstances) => {
             const totalSubtasks = taskInstances.subtasks.length;
             let completedSubtasks = 0;
 
@@ -42,100 +81,50 @@ export default class TasksboardColumn extends HTMLElement {
                 }
             });
 
-            return /*html*/ `
-            <li class="initialLoad">
-                <task-preview
-                    role="button"
-                    board=${this.getAttribute('board')}
-                    title=${JSON.stringify(taskInstances.title)}
-                    description=${JSON.stringify(taskInstances.description)}
-                    completedsubtasks=${completedSubtasks}
-                    totalsubtasks=${totalSubtasks}
-                    columnname=${columnName}
-                    subtasks=${JSON.stringify(taskInstances.subtasks).replace(/ /g, "__")}
-                ></task-preview>
-            </li>`;
-            }).join('')}</ul>`;
+            if (renderState === "initialLoad") {
+                return /*html*/ `
+                <li class="initialLoad">
+                    <task-preview
+                        role="button"
+                        board=${JSON.stringify(this.state.board)}
+                        title=${JSON.stringify(taskInstances.title)}
+                        completedsubtasks=${completedSubtasks}
+                        totalsubtasks=${totalSubtasks}
+                        columnname=${this.state.columnName}
+                    ></task-preview>
+                </li>`;
+            } else if (renderState === "rehydrate") {
+                let hydrationClass = '';
+                if (this.numberOfElementsHasGrown()) {
+                    if (index === this.store.state.boards[i].columns[j].tasks.length - 1) {
+                        hydrationClass = 'class="rehydrate"'
+                    }
+                }
 
-        this.shadowRoot.innerHTML = markup;
-    }
+                return /*html*/ `
+                <li ${hydrationClass}>
+                    <task-preview
+                        role="button"
+                        board=${JSON.stringify(this.state.board)}
+                        title=${JSON.stringify(taskInstances.title)}
+                        completedsubtasks=${completedSubtasks}
+                        totalsubtasks=${totalSubtasks}
+                        columnname=${this.state.columnName}
+                    ></task-preview>
+                </li>`;
+            }
+        }).join('')}</ul>`;
 
-    SCRIPTS() {
-        this.setDefaultStateValues();
-    }
-
-    setDefaultStateValues() {
-        this.state = {
-            numberoftasks: Number(this.getAttribute('numberoftasks')),
-            newNumberOfTasks: 0
+        if (renderState === "initialLoad") {
+            this.shadowRoot.innerHTML = markup;
+        } else {
+            setTimeout(() => {this.shadowRoot.innerHTML = markup;}, 400);
         }
     }
 
     numberOfElementsHasGrown() {
         if ((this.state.numberoftasks + 1) === this.state.newNumberOfTasks) {
-            // console.log(`Column ${this.getAttribute('columnname')} has grown`);
             return true;
-        }
-    }
-
-    updateDefaultStateValues() {
-        this.state.numberoftasks = this.state.newNumberOfTasks
-    }
-
-    updateNewNumberOfTasks(count) {
-        this.state.newNumberOfTasks = count;
-    }
-
-    refresh() {
-        const theBoard = this.getAttribute('board');
-        const columnName = this.getAttribute('columnname');
-
-        for (let i = 0; i < this.store.state.boards.length; ++i) {
-            if (this.store.state.boards[i].name.toLowerCase().replace(/ /g, "-") === theBoard) {
-                for (let j = 0; j < this.store.state.boards.length; ++j) {
-                    if (this.store.state.boards[i].columns[j].name === columnName) {
-
-                        this.updateNewNumberOfTasks(this.store.state.boards[i].columns[j].tasks.length);
-                        const markup = /*html*/
-                        `<h4 class="columnTitle"><span class="circle" data-color=${this.getAttribute('colorindex')}></span>${columnName.toUpperCase()} (${this.store.state.boards[i].columns[j].tasks.length})</h4>
-                        <ul>${this.store.state.boards[i].columns[j].tasks.map((taskInstances, index) => {
-                            const totalSubtasks = taskInstances.subtasks.length;
-                            let completedSubtasks = 0;
-
-                            taskInstances.subtasks.forEach((item) => {
-                                if (item.isCompleted) {
-                                    completedSubtasks++;
-                                }
-                            });
-
-                            let hydrationClass = '';
-                            if (this.numberOfElementsHasGrown()) {
-                                if (index === this.store.state.boards[i].columns[j].tasks.length - 1) {
-                                    hydrationClass = 'class="rehydrate"'
-                                }
-                            }
-                            
-                            return /*html*/ `
-                            <li ${hydrationClass}>
-                                <task-preview
-                                    role="button"
-                                    board=${theBoard}
-                                    title=${JSON.stringify(taskInstances.title)}
-                                    description=${JSON.stringify(taskInstances.description)}
-                                    completedsubtasks=${completedSubtasks}
-                                    totalsubtasks=${totalSubtasks}
-                                    columnname=${columnName}
-                                    subtasks=${JSON.stringify(taskInstances.subtasks).replace(/ /g, "__")}
-                                ></task-preview>
-                            </li>`;
-                            }).join('')}</ul>`;
-
-                            this.updateDefaultStateValues();
-                            setTimeout(() => {this.shadowRoot.innerHTML = markup;}, 400);
-                            
-                    }
-                }
-            }
         }
     }
 }

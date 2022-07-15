@@ -10,13 +10,56 @@ export default class TaskPreview extends HTMLElement {
 
     connectedCallback() {
         this.store = store;
+        this.state = {};
         this.render();
     }
 
     render() {
+        this.initializeComponentState();
         this.CSS();
         this.HTML();
         this.SCRIPTS();
+    }
+
+    initializeComponentState() {
+        let reformattedBoardName = this.getAttribute('board').split("");
+        reformattedBoardName[0] = reformattedBoardName[0].toUpperCase();
+
+        for (let i = 0; i < reformattedBoardName.length; i++) {
+            if (reformattedBoardName[i] === "-") {
+                reformattedBoardName[i] = " "
+                reformattedBoardName[i+1] = reformattedBoardName[i+1].toUpperCase();
+                break;
+            }
+        }
+
+        this.state.board = reformattedBoardName.join("");
+        this.state.column = this.getAttribute('columnname');
+        this.state.title = this.getAttribute('title');
+        this.state.description = '';
+        this.state.subtasks = [];
+
+        // Searching for the component's associated data based on the title and column name
+        // Once found, hydrate the this.state.description and this.state.subtasks
+        // First loop: Iterating through the boards array
+        for (let i = 0; i < this.store.state.boards.length; i++) {
+            // Checking if the loop is at the board the component is in using the boards name
+            if (this.store.state.boards[i].name === this.state.board) {
+                // Second loop: While in the matched board, iterating over the array columns
+                for (let j = 0; j < this.store.state.boards[i].columns.length; j++) {
+                    // Checking if the second loop is at the column the component is in using the column name
+                    if (this.store.state.boards[i].columns[j].name === this.state.column) {
+                        // Third loop: While in the matched column of the matched board, iterating over the array tasks
+                        for (let y = 0; y < this.store.state.boards[i].columns[j].tasks.length; y++) {
+                            if (this.store.state.boards[i].columns[j].tasks[y].title === this.state.title) {
+                                this.state.description = this.store.state.boards[i].columns[j].tasks[y].description;
+                                this.state.subtasks = this.store.state.boards[i].columns[j].tasks[y].subtasks;
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 
     CSS() {
@@ -25,23 +68,23 @@ export default class TaskPreview extends HTMLElement {
 
     HTML() {
         /*WILL NEED TO REPLACE THE BELOW SELECT DROPDOWN WITH A CUSTOM ELEMENT*/
-        /*THE NATIVE SELECT DROPDOWN DOES NOT ALL ONE TO STYLE THE OPTION ELEMENT OUTSIDE OF FONT STUFF*/
+        /*THE NATIVE SELECT DROPDOWN DOES NOT ALLOW ONE TO STYLE THE OPTION ELEMENT OUTSIDE OF FONT STUFF*/
         const markup = /*html*/
         `<span class="taskInnerContainer">
-            <h3 class="taskTitle">${this.getAttribute('title')}</h3>
+            <h3 class="taskTitle">${this.state.title}</h3>
             <small class="detail">${this.getAttribute('completedsubtasks')} of ${this.getAttribute('totalsubtasks')} subtasks</small>
         </span>
         <dialog class="expandedTaskDialog">
             <form class="expandedTaskDialogForm">
                 <span class="expandedTaskDialogFormInnerContainer">
                     <header class="formHeader">
-                        <h3 class="dialogTaskTitle">${this.getAttribute('title')}</h3>
+                        <h3 class="dialogTaskTitle">${this.state.title}</h3>
                         <kebab-menu-button altering="Task"></kebab-menu-button>
                     </header>
-                    <p class="dialogTaskDescription">${this.getAttribute('description')}</p>
+                    <p class="dialogTaskDescription">${this.state.description}</p>
                     <label for="taskCheckboxList" class="dialogCompletionStats detail">Subtasks (${this.getAttribute('completedsubtasks')} of ${this.getAttribute('totalsubtasks')})</label>
                     <ul class="taskCheckboxList" name="taskCheckboxList">
-                        ${this.generateListElements(JSON.parse(this.getAttribute('subtasks').replace(/__/g, " ")))}
+                        ${this.generateListElements(this.state.subtasks)}
                     </ul>
 
                     <label class="currentStatusLabel" for="currentStatus">Current Status</label>
@@ -59,23 +102,16 @@ export default class TaskPreview extends HTMLElement {
                     </header>
                     <label class="editTaskLabelContainer detail">
                         Title
-                        <input type="text" class="formInput" placeholder="e.g. Take coffee break"/>
+                        <input type="text" class="formInput" placeholder="e.g. Take coffee break" value=${JSON.stringify(this.state.title)}/>
                     </label>
                     <label class="editTaskLabelContainer detail">
                         Description
-                        <textarea type="text" class="formInput descriptionTextarea" cols="30" rows="8" placeholder="e.g. It’s always good to take a break. This 15 minute break will recharge the batteries a little."></textarea>
+                        <textarea type="text" class="formInput descriptionTextarea" cols="30" rows="8" placeholder="e.g. It’s always good to take a break. This 15 minute break will recharge the batteries a little.">${this.state.description}</textarea>
                     </label>
                     <label class="editTaskLabelContainer detail">
                         Subtasks
                         <ul class="editTaskSubtaskList">
-                            <li>
-                                <input type="text" class="formInput" placeholder="e.g. Make coffee"/>
-                                <button type="button"><img alt="Delete subtask symbol" src="./src/assets/icons/cross.svg"/></button>
-                            </li>
-                            <li>
-                                <input type="text" class="formInput" placeholder="e.g. Drink coffee & smile"/>
-                                <button type="button"><img alt="Delete subtask symbol" src="./src/assets/icons/cross.svg"/></button>
-                            </li>
+                            ${this.generateEditTaskSubtaskList(this.state.subtasks)}
                         </ul>
                         <button type="button" class="newSubtaskButton">+ Add New Subtask</button>
                     </label>
@@ -91,10 +127,7 @@ export default class TaskPreview extends HTMLElement {
         </dialog>`;
 
         this.shadowRoot.innerHTML = markup;
-        this.state = {
-
-            currentStatus: this.shadowRoot.getElementById('currentStatus').value
-        }
+        this.state.currentStatus = this.shadowRoot.getElementById('currentStatus').value
     }
 
     SCRIPTS() {
@@ -132,16 +165,16 @@ export default class TaskPreview extends HTMLElement {
 
             subtasksArray[subtasksArray.length] = {
                 isCompleted: item.getElementsByTagName('input')[0].checked,
-                title: item.getElementsByTagName('label')[0].innerText
+                title: item.getElementsByTagName('label')[0].getElementsByTagName('span')[0].innerText
             }
         });
 
         const action = {
             type: 'UPDATE_TASK',
             payload: {
-                boardName: this.getAttribute('board'),
-                columnName: this.getAttribute('columnname'),
-                taskTitle: this.getAttribute('title'),
+                boardName: this.state.board,
+                columnName: this.state.column,
+                taskTitle: this.state.title,
                 newStatus: this.shadowRoot.getElementById('currentStatus').value,
                 subtasks: subtasksArray
             }
@@ -168,11 +201,25 @@ export default class TaskPreview extends HTMLElement {
         let subtasksListElementsMarkup = ``;
 
         subtasks.forEach((task) => {
-            subtasksListElementsMarkup += /*html*/ `
-            <li>
+            subtasksListElementsMarkup += /*html*/
+            `<li>
                 <label>
-                    <input type="checkbox" ${(task.isCompleted ? "checked" : "")}/> ${task.title}
+                    <input type="checkbox" ${(task.isCompleted ? "checked" : "")}/> <span>${task.title}</span>
                 </label>
+            </li>`;
+        });
+
+        return subtasksListElementsMarkup;
+    }
+
+    generateEditTaskSubtaskList(subtasks) {
+        let subtasksListElementsMarkup = ``;
+        
+        subtasks.forEach((task) => {
+            subtasksListElementsMarkup += /*html*/
+            `<li>
+                <input type="text" class="formInput" data-iscompleted=${task.isCompleted} placeholder="e.g. Make coffee" value="${task.title}"/>
+                <button type="button"><img alt="Delete subtask symbol" src="./src/assets/icons/cross.svg"/></button>
             </li>`;
         });
 
@@ -181,21 +228,11 @@ export default class TaskPreview extends HTMLElement {
 
     getCurrentBoardColumnNames() {
         let theColumns = [];
-        let currentBoard = this.getAttribute('board').split("");
-        currentBoard[0] = currentBoard[0].toUpperCase();
-
-        currentBoard.forEach((item, index) => {
-            if (item === "-") {
-                currentBoard[index + 1] = currentBoard[index + 1].toUpperCase();
-            }
-        });
-
-        currentBoard = currentBoard.join("").replace(/-/g, " ");
 
         let numberOfBoards = this.store.state.boards.length;
 
         for (let i = 0; i < numberOfBoards; i++) {
-            if (this.store.state.boards[i].name === currentBoard) {
+            if (this.store.state.boards[i].name === this.state.board) {
                 this.store.state.boards[i].columns.forEach((column) => {
                     theColumns[theColumns.length] = column.name;
                 });
@@ -210,7 +247,7 @@ export default class TaskPreview extends HTMLElement {
         const theColumns = this.getCurrentBoardColumnNames();
 
         theColumns.forEach((item) => {
-            const selected = (item === this.getAttribute('columnname')) ? 'selected' : '';
+            const selected = (item === this.state.column) ? 'selected' : '';
 
             markup += /*html*/ `<option class="statusOption" value="${item}" ${selected}>${item}</option>`;
         });
@@ -286,13 +323,46 @@ export default class TaskPreview extends HTMLElement {
         if (editTaskDialogForm.open) editTaskDialogForm.close();
     }
 
+    // CURRENT 1 of 1 ------------------------------------------------------------------
     submitEditTaskDialogForm(event) {
         if (!this.isTaskEditDialogShowing()) return;
 
         if (event.composedPath()[0].className === "editTaskSaveChanges") {
+            const editTaskDialogForm = this.getEditTaskDialogForm();
+
+            const action = {
+                type: 'EDIT_TASK',
+                payload: {
+                    identifier: {
+                        board: this.state.board,
+                        column: this.state.column,
+                        title: this.state.title
+                    },
+                    newState: {
+                        newTitle: editTaskDialogForm.querySelectorAll('label')[0].querySelector('input').value,
+                        newDescription: editTaskDialogForm.querySelectorAll('label')[1].querySelector('textarea').value,
+                        newColumn: editTaskDialogForm.querySelectorAll('label')[3].querySelector('select').value,
+                        newSubtasks: this.getEditTaskDialogFormSubtasks(editTaskDialogForm)
+                    }
+                }
+            };
+
+            console.log( action );
             // this.store.dispatch({});
             this.closeTaskEditDialog();
         }
+    }
+
+    getEditTaskDialogFormSubtasks(editTaskDialogForm) {
+        const subtasks = [];
+
+        const subtasksListElement = editTaskDialogForm.querySelectorAll('label')[2].querySelector('ul');
+        subtasksListElement.querySelectorAll('li').forEach((item) => {
+            const completedStatus = (item.querySelector('input').dataset.iscompleted === 'true') ? true : false;
+            subtasks[subtasks.length] = {title: item.querySelector('input').value, isCompleted: completedStatus}
+        });
+
+        return subtasks;
     }
 
     getEditTaskDialogForm() {
