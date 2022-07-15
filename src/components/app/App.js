@@ -90,41 +90,6 @@ export default class App extends HTMLElement {
         router.resolve();
     }
 
-    // renderBoardColumns(data) {
-    //     const reformattedColumnData = this.getReformattedData(data);
-
-    //     let markup = ``;
-
-    //     // There are currently 6 colors to choose from.
-    //     // The colors are positioned like arrays: 0, 1, 2, 3, 4, 5
-    //     let colorIndex = null;
-
-    //     Object.keys(reformattedColumnData).forEach((columnName) => {
-
-    //         // Keeping the color choice in range
-    //         if (colorIndex !== null && colorIndex < 5) {
-    //             colorIndex++;
-    //         } else {
-    //             colorIndex = 0;
-    //         }
-
-    //         const numberOfTasks = reformattedColumnData[columnName].length;
-
-    //         const colData = JSON.stringify(reformattedColumnData).replace(/ /g, "__");
-
-    //         markup += /*html*/
-    //         `<tasksboard-column
-    //             colorindex=${colorIndex}
-    //             columnname=${columnName}
-    //             numberoftasks=${numberOfTasks}
-    //             columndata=${colData}
-    //             board=${data.board}
-    //         ></tasksboard-column>`;
-    //     });
-
-    //     this.getMainRoute().innerHTML = markup;
-    // }
-
     renderBoardColumns(data) {
         const reformattedColumnData = this.getReformattedData(data);
 
