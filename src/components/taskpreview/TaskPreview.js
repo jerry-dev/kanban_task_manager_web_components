@@ -314,8 +314,24 @@ export default class TaskPreview extends HTMLElement {
                 if (event.composedPath()[0].nodeName === "DIALOG") {
                     this.closeTaskEditDialog();
                 }
+
+                if (event.target.className === "newSubtaskButton") {
+                    this.addNewSubtask();
+                }
             });
         }
+    }
+
+    addNewSubtask() {
+        const editTaskDialogForm = this.getEditTaskDialogForm();
+
+        const markup = /*html*/
+            `<li>
+                <input type="text" class="formInput" data-iscompleted="false" placeholder="e.g. Make coffee" value=""/>
+                <button type="button"><img alt="Delete subtask symbol" src="./src/assets/icons/cross.svg"/></button>
+            </li>`;
+
+        editTaskDialogForm.querySelector('.editTaskSubtaskList').innerHTML += markup;
     }
 
     closeTaskEditDialog() {
