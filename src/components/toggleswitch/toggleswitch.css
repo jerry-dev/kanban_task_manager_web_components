@@ -7,7 +7,7 @@
 }
 
 :host(:hover) {
-    background-color: var(--Main-Purple-Hover-1);
+    background-color: var(--Main-Purple-Hover-3);
 }
 
 input[type="checkbox"] {
