@@ -280,11 +280,6 @@ dialog:not([open]) > * {
     width: 100%;
 }
 
-/* .formInput[data-isinvalid] {
-    position: relative;
-    OUTLINE: 1PX SOLID BLUE;
-}*/
-
 .error.active {
 	padding: 0.3em;
 }
@@ -355,7 +350,7 @@ dialog:not([open]) > * {
 
 /* The Edit Task Dialog Styles */
 
-:host .editTaskLabelContainer > .newSubtaskButton,
+:host .newSubtaskButton,
 :host .editTaskDialogFormInnerContainer > .editTaskSaveChanges {
     background: none;
     background-color: var(--Add-New-Subtask-Background-Color);
