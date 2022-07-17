@@ -3,7 +3,8 @@
 :root {
     /* Solid colors */
     --Main-Purple: #635FC7;
-    --Main-Purple-Hover: hsla(242, 100%, 82%, 0.25);
+    --Main-Purple-Hover-1: hsla(242, 100%, 82%, 0.1);
+    --Main-Purple-Hover-2: hsla(242, 100%, 82%, 0.25);
     --Black: #000112;
     --Very-Dark-Grey-Dark-BG: #20212C;
     --Dark-Grey: #2B2C37;

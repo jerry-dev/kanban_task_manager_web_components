@@ -157,7 +157,7 @@ dialog[open]::backdrop {
 }
 
 :host .expandedTaskDialog[open] .taskCheckboxList li:hover {
-    background-color: var(--Main-Purple-Hover);
+    background-color: var(--Main-Purple-Hover-1);
 }
 
 :host .expandedTaskDialog[open] .taskCheckboxList li:not(:last-child) {
@@ -343,7 +343,6 @@ dialog[open]::backdrop {
 :host .newSubtaskButton,
 :host .editTaskDialogFormInnerContainer > .editTaskSaveChanges {
     background: none;
-    background-color: var(--Add-New-Subtask-Background-Color);
     border: none;
     border-radius: 1.25rem;
     color: var(--Main-Purple);
@@ -356,13 +355,25 @@ dialog[open]::backdrop {
     width: 100%;
 }
 
+:host .newSubtaskButton {
+    background-color: var(--Add-New-Subtask-Background-Color);
+}
+
 :host .editTaskDialogFormInnerContainer > .editTaskSaveChanges {
     background-color: var(--Main-Purple);
     color: var(--White);
     margin-top: 1.5rem;
 }
 
-:host .editTaskLabelContainer > .newSubtaskButton:active,
+:host .editTaskDialogFormInnerContainer > .editTaskSaveChanges:hover {
+    background-color: hsla(242, 100%, 82%, 1);
+}
+
+:host .newSubtaskButton:hover {
+    background-color: var(--Add-New-Subtask-Background-Color-Hover);
+}
+
+:host .newSubtaskButton:active,
 :host .editTaskDialogFormInnerContainer > .editTaskSaveChanges:active {
     transform: scale(0.95);
 }

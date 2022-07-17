@@ -4,7 +4,8 @@
     position: relative;
 
     /* Specific Elements Default Colors */
-    --Add-New-Subtask-Background-Color: var(--Main-Purple-Hover);
+    --Add-New-Subtask-Background-Color: var(--Main-Purple-Hover-1);
+    --Add-New-Subtask-Background-Color-Hover: var(--Main-Purple-Hover-2);
     --Border-Color: var(--Lines-Light);
     --Dark-Light-Mode-Switch-Background-Color: var(--Light-Grey-Light-BG);
     --Dialog-Text-1-Color: var(--Medium-Grey);
@@ -18,6 +19,7 @@
 
 :host(.darkTheme) {
     --Add-New-Subtask-Background-Color: var(--White);
+    --Add-New-Subtask-Background-Color-Hover: var(--White);
     --Border-Color: var(--Lines-Dark);
     --Dark-Light-Mode-Switch-Background-Color: var(--Very-Dark-Grey-Dark-BG);
     --Dialog-Text-1-Color: var(--White);

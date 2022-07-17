@@ -26,7 +26,7 @@
 }
 
 #sideBarControl:hover {
-    background-color: var(--Main-Purple-Hover);
+    background-color: var(--Main-Purple-Hover-1);
 }
 
 #sideBarControl > * {
