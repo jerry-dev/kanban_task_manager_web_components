@@ -95,14 +95,14 @@ export default class TaskPreview extends HTMLElement {
             </form>
         </dialog>
         <dialog class="editTaskDialog">
-            <form class="editTaskDialogForm">
+            <form class="editTaskDialogForm" novalidate>
                 <span class="editTaskDialogFormInnerContainer">
                     <header class="formHeader">
                         <h3 class="dialogTaskTitle">Edit Task</h3>
                     </header>
                     <label class="editTaskLabelContainer detail">
                         Title
-                        <input type="text" class="formInput" placeholder="e.g. Take coffee break" value=${JSON.stringify(this.state.title)}/>
+                        <input type="text" class="formInput" placeholder="e.g. Take coffee break" value=${JSON.stringify(this.state.title)} required/>
                     </label>
                     <label class="editTaskLabelContainer detail">
                         Description
@@ -121,7 +121,7 @@ export default class TaskPreview extends HTMLElement {
                             ${this.generateOptionsElements()}
                         </select>
                     </label>
-                    <button type="button" class="editTaskSaveChanges">Save Changes</button>
+                    <button type="submit" class="editTaskSaveChanges">Save Changes</button>
                 </span>
             </form>
         </dialog>`;
@@ -263,7 +263,7 @@ export default class TaskPreview extends HTMLElement {
             this.crossOutCompletedTask();
             this.addEventListener('click', (event) => {
                 this.kebabMenuManager(event, expandedTaskDialog);
-                this.submitEditTaskDialogForm(event)
+                // this.submitEditTaskDialogForm(event)
                 this.closeDialog(event, expandedTaskDialog);
             })
         }
@@ -304,11 +304,15 @@ export default class TaskPreview extends HTMLElement {
         return this.shadowRoot.querySelector('.expandedTaskDialog').open === true;
     }
 
+
+    // FORM VALIDATION SETUP ---------------------------------------------------------------------------------
     launchTaskEditDialog() {
         const editTaskDialog = this.getEditTaskDialogForm();
 
         if (!editTaskDialog.open) {
             editTaskDialog.showModal();
+
+            this.submitEditTaskDialogForm();
 
             editTaskDialog.addEventListener('click', (event) => {
                 if (event.composedPath()[0].nodeName === "DIALOG") {
@@ -320,6 +324,18 @@ export default class TaskPreview extends HTMLElement {
                 }
             });
         }
+    }
+
+    // FORM VALIDATION SETUP (The title) ---------------------------------------------------------------------------------
+    titleInputValidation(titleInput) {
+        titleInput.addEventListener('input', () => {
+            if (titleInput.validity.valid) {
+                titleInput.className = "formInput";
+                titleInput.placeholder = "e.g. Take coffee break";
+            } else {
+                this.showErrorMessage(titleInput);
+            }
+        })
     }
 
     addNewSubtask() {
@@ -339,34 +355,66 @@ export default class TaskPreview extends HTMLElement {
         if (editTaskDialogForm.open) editTaskDialogForm.close();
     }
 
-    // CURRENT 1 of 1 ------------------------------------------------------------------
-    submitEditTaskDialogForm(event) {
+    // NEW VERSION--------------------
+    submitEditTaskDialogForm() {
         if (!this.isTaskEditDialogShowing()) return;
 
-        if (event.composedPath()[0].className === "editTaskSaveChanges") {
-            const editTaskDialogForm = this.getEditTaskDialogForm();
+        let isWatchingTitleInput = false;
+        const getEditTaskDialogFormElement = this.getEditTaskDialogForm().querySelector('form');
 
-            const action = {
-                type: 'EDIT_TASK',
-                payload: {
-                    identifier: {
-                        board: this.state.board,
-                        column: this.state.column,
-                        title: this.state.title
-                    },
-                    newState: {
-                        newTitle: editTaskDialogForm.querySelectorAll('label')[0].querySelector('input').value,
-                        newDescription: editTaskDialogForm.querySelectorAll('label')[1].querySelector('textarea').value,
-                        newColumn: editTaskDialogForm.querySelectorAll('label')[3].querySelector('select').value,
-                        newSubtasks: this.getEditTaskDialogFormSubtasks(editTaskDialogForm)
-                    }
+        getEditTaskDialogFormElement.addEventListener('submit', (event) => {
+            event.preventDefault();
+
+            const titleInput = getEditTaskDialogFormElement.querySelectorAll('label')[0].querySelector('input');
+            const descriptionTextarea = getEditTaskDialogFormElement.querySelectorAll('label')[1].querySelector('textarea');
+            const columnSelect = getEditTaskDialogFormElement.querySelectorAll('label')[3].querySelector('select');
+
+            let formIsValid = false;
+
+            if (titleInput.validity.valid) {
+                // Iterate through the list of subtask inputs
+                // Check that 100% of the inputs are valie (required, min and max)
+                // Check to see that each list element
+            } else {
+                formIsValid = false;
+                this.showErrorMessage(titleInput);
+                if (!isWatchingTitleInput) {
+                    this.titleInputValidation(titleInput);
+                    isWatchingTitleInput = true;
                 }
-            };
+            }
 
-            console.log( action );
-            // this.store.dispatch({});
-            this.closeTaskEditDialog();
+            if (formIsValid) {
+                const action = {
+                    type: 'EDIT_TASK',
+                    payload: {
+                        identifier: {
+                            board: this.state.board,
+                            column: this.state.column,
+                            title: this.state.title
+                        },
+                        newState: {
+                            newTitle: titleInput.value,
+                            newDescription: descriptionTextarea.value,
+                            newColumn: columnSelect.value,
+                            newSubtasks: this.getEditTaskDialogFormSubtasks(getEditTaskDialogFormElement)
+                        }
+                    }
+                };
+    
+                console.log( action );
+                // this.store.dispatch({});
+                this.closeTaskEditDialog();
+            }
+        });
+    }
+
+    showErrorMessage(element) {
+        if (element.validity.valueMissing) {
+            element.placeholder = "Can't be empty";
         }
+
+        element.className = "formInput errorFormInput";
     }
 
     getEditTaskDialogFormSubtasks(editTaskDialogForm) {

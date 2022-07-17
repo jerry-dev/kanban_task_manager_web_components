@@ -280,6 +280,19 @@ dialog:not([open]) > * {
     width: 100%;
 }
 
+/* .formInput[data-isinvalid] {
+    position: relative;
+    OUTLINE: 1PX SOLID BLUE;
+}*/
+
+.error.active {
+	padding: 0.3em;
+}
+
+.editTaskDialogFormInnerContainer {
+    position: relative;
+}
+
 :host .editTaskLabelContainer > .descriptionTextarea {
     min-height: 7rem;
     padding-top: 0.5rem;
@@ -294,6 +307,16 @@ dialog:not([open]) > * {
     line-height: var(--line-height-23);
     opacity: 0.25;
     white-space: pre-line; 
+}
+
+.errorFormInput {
+    border: 0.0625rem solid var(--Error-Color);
+}
+
+.errorFormInput::placeholder {
+    color: var(--Error-Color);
+    opacity: 1;
+    text-align: right;
 }
 
 :host .editTaskLabelContainer > .editTaskSubtaskList {
