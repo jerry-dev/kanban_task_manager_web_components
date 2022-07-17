@@ -257,6 +257,7 @@ dialog[open]::backdrop {
     border-radius: 0.25rem;
     box-sizing: border-box;
     color: var(--Main-Text-Color);
+    cursor: pointer;
     font-style: normal;
     font-size: var(--font-size-13);
     font-weight: var(--font-weight-5);
@@ -269,9 +270,6 @@ dialog[open]::backdrop {
     width: 100%;
 }
 
-input:target {
-    border: none;
-}
 .formInput:hover {
     border: 0.0625rem solid var(--Main-Purple);
 }
