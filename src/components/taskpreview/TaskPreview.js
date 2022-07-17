@@ -382,7 +382,6 @@ export default class TaskPreview extends HTMLElement {
 
         getEditTaskDialogFormElement.addEventListener('submit', (event) => {
             event.preventDefault();
-            console.log('submit event invoked');
 
             const titleInput = getEditTaskDialogFormElement.querySelectorAll('label')[0].querySelector('input');
             const descriptionTextarea = getEditTaskDialogFormElement.querySelectorAll('label')[1].querySelector('textarea');
@@ -447,7 +446,7 @@ export default class TaskPreview extends HTMLElement {
                     }
                 };
     
-                this.store.dispatch({});
+                this.store.dispatch(action);
                 this.closeTaskEditDialog();
             }
         });
