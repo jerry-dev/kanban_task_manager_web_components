@@ -110,9 +110,7 @@ export default class TaskPreview extends HTMLElement {
                     </label>
                     <label class="editTaskLabelContainer detail">
                         Subtasks
-                        <ul class="editTaskSubtaskList">
-                            ${this.generateEditTaskSubtaskList(this.state.subtasks)}
-                        </ul>
+                        <ul class="editTaskSubtaskList"></ul>
                     </label>
                     <button type="button" class="newSubtaskButton">+ Add New Subtask</button>
                     <label class="editTaskLabelContainer detail">
@@ -196,7 +194,6 @@ export default class TaskPreview extends HTMLElement {
         });
     }
 
-
     generateListElements(subtasks) {
         let subtasksListElementsMarkup = ``;
 
@@ -205,7 +202,7 @@ export default class TaskPreview extends HTMLElement {
             subtasksListElementsMarkup += /*html*/
             `<li>
                 <label>
-                    <input type="checkbox" ${(task.isCompleted ? "checked" : "")}/> <span>${task.title}</span>
+                    <input type="checkbox" ${(task.isCompleted ? "checked" : "")} data-title="${task.title}"/> <span>${task.title}</span>
                 </label>
             </li>`;
         });
@@ -213,18 +210,18 @@ export default class TaskPreview extends HTMLElement {
         return subtasksListElementsMarkup;
     }
 
-    generateEditTaskSubtaskList(subtasks) {
+    generateEditTaskSubtaskList() {
         let subtasksListElementsMarkup = ``;
         
-        subtasks.forEach((task) => {
+        this.state.subtasks.forEach((task) => {
             subtasksListElementsMarkup += /*html*/
             `<li>
-                <input type="text" class="formInput" data-iscompleted=${task.isCompleted} placeholder="e.g. Make coffee" value="${task.title}" required/>
+                <input type="text" class="formInput" data-iscompleted=${task.isCompleted} placeholder="e.g. Make coffee" value="${task.title}" required data-title="${task.title}"/>
                 <button class="deleteSubtask" type="button"><img alt="Delete subtask symbol" src="./src/assets/icons/cross.svg"/></button>
             </li>`;
         });
 
-        return subtasksListElementsMarkup;
+        this.shadowRoot.querySelector('.editTaskSubtaskList').innerHTML = subtasksListElementsMarkup
     }
 
     getCurrentBoardColumnNames() {
@@ -261,6 +258,8 @@ export default class TaskPreview extends HTMLElement {
 
         if (!expandedTaskDialog.open) {
             expandedTaskDialog.showModal();
+            this.checkBoxManager();
+
             this.crossOutCompletedTask();
             this.addEventListener('click', (event) => {
                 this.kebabMenuManager(event, expandedTaskDialog);
@@ -291,6 +290,35 @@ export default class TaskPreview extends HTMLElement {
         }
     }
 
+    // NEW
+    checkBoxManager() {
+        const taskCheckboxList = this.shadowRoot.querySelector('.expandedTaskDialog').querySelector('.taskCheckboxList');
+
+        taskCheckboxList.querySelectorAll('li').forEach((item) => {
+
+            const theInput = item.querySelector('input');
+
+            theInput.addEventListener('click', () => {
+                if (theInput.checked) {
+                    theInput.setAttribute('checked', "");
+                } else {
+                    theInput.removeAttribute('checked');
+                }
+
+                this.updateLocalSubTaskIsComplete(theInput);
+            });
+        })
+    }
+
+    updateLocalSubTaskIsComplete(inputElement) {
+        this.state.subtasks.forEach((item) => {
+            if (item.title === inputElement.dataset.title) {
+                item.isCompleted = inputElement.checked
+            }
+        })
+    }
+
+
     getKebabPopupMenu() {
         return this.shadowRoot.querySelector('kebab-menu-button').shadowRoot.querySelector('.popupMenu');
     }
@@ -304,13 +332,12 @@ export default class TaskPreview extends HTMLElement {
         return this.shadowRoot.querySelector('.expandedTaskDialog').open === true;
     }
 
-
-    // FORM VALIDATION SETUP ---------------------------------------------------------------------------------
     launchTaskEditDialog() {
         const editTaskDialog = this.getEditTaskDialogForm();
 
         if (!editTaskDialog.open) {
             editTaskDialog.showModal();
+            this.generateEditTaskSubtaskList()
 
             this.submitEditTaskDialogFormManager();
 
@@ -324,14 +351,12 @@ export default class TaskPreview extends HTMLElement {
                 }
 
                 if (event.target.className === "deleteSubtask") {
-                    console.log('parent node of delete button:', event.target.parentNode);
                     return event.target.parentNode.remove();
                 }
             });
         }
     }
 
-    // FORM VALIDATION SETUP (The title) ---------------------------------------------------------------------------------
     dynamicInputValidation(elementInput, defaultMessage) {
         elementInput.addEventListener('input', () => {
             if (elementInput.validity.valid) {
@@ -344,17 +369,33 @@ export default class TaskPreview extends HTMLElement {
     }
 
     addNewSubtask() {
-        console.log('addNewSubtask invoked');
-        const editTaskDialogForm = this.getEditTaskDialogForm();
+        const editTaskDialogFormElement = this.getEditTaskDialogForm().querySelector('form');
+
+        let markup = '';
+
+        const subtaskListElements = editTaskDialogFormElement.querySelectorAll('label')[2].querySelector('ul').querySelectorAll('li');
+
+        subtaskListElements.forEach((item) => {
+            const currenttitle = item.querySelector('input').dataset.title;
+            const currentValue = item.querySelector('input').value;
+            const isCompleted = item.querySelector('input').getAttribute('data-iscompleted');
+
+            // MAKE SURE THE MARKUP MATCHES THE MARKUP GENERATED BY generateListElements
+            markup += /*html*/
+            `<li>
+                <input type="text" class="formInput" data-iscompleted="${isCompleted}" placeholder="e.g. Make coffee" value="${currentValue}" required data-title="${currenttitle}"/>
+                <button class="deleteSubtask" type="button"><img alt="Delete subtask symbol" src="./src/assets/icons/cross.svg"/></button>
+            </li>`;
+        });
 
         // MAKE SURE THE MARKUP MATCHES THE MARKUP GENERATED BY generateListElements
-        const markup = /*html*/
+        markup += /*html*/
             `<li>
-                <input type="text" class="formInput" data-iscompleted="false" placeholder="e.g. Make coffee" value="" required/>
+                <input type="text" class="formInput" data-iscompleted="false" placeholder="e.g. Make coffee" value="" required data-title=""/>
                 <button class="deleteSubtask" type="button"><img alt="Delete subtask symbol" src="./src/assets/icons/cross.svg"/></button>
             </li>`;
 
-        editTaskDialogForm.querySelector('.editTaskSubtaskList').innerHTML += markup;
+        editTaskDialogFormElement.querySelector('.editTaskSubtaskList').innerHTML = markup;
     }
 
     closeTaskEditDialog() {
@@ -362,7 +403,6 @@ export default class TaskPreview extends HTMLElement {
         if (editTaskDialogForm.open) editTaskDialogForm.close();
     }
 
-    // FORM VALIDATION SETUP--------------------
     submitEditTaskDialogFormManager() {
         if (!this.isTaskEditDialogShowing()) return;
 
@@ -435,7 +475,8 @@ export default class TaskPreview extends HTMLElement {
                         identifier: {
                             board: this.state.board,
                             column: this.state.column,
-                            title: this.state.title
+                            title: this.state.title,
+                            columnChanged: this.state.column !== columnSelect.value
                         },
                         newState: {
                             newTitle: titleInput.value,
@@ -445,7 +486,7 @@ export default class TaskPreview extends HTMLElement {
                         }
                     }
                 };
-    
+
                 this.store.dispatch(action);
                 this.closeTaskEditDialog();
             }

@@ -79,6 +79,9 @@
         transform: scale(1);
     }
 }
+dialog:not([open]) {
+    display: none;
+}
 
 dialog[open]::backdrop {
     background-color: #000000;
