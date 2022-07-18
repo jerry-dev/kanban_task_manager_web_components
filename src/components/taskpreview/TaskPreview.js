@@ -290,7 +290,6 @@ export default class TaskPreview extends HTMLElement {
         }
     }
 
-    // NEW
     checkBoxManager() {
         const taskCheckboxList = this.shadowRoot.querySelector('.expandedTaskDialog').querySelector('.taskCheckboxList');
 
