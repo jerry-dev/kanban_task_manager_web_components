@@ -370,6 +370,11 @@ export default class TaskPreview extends HTMLElement {
         }
     }
 
+    launchTaskDeleteDialog() {
+        const deleteTaskDialog = getDeleteTaskDialogForm();
+        deleteTaskDialog.open();
+    }
+
     getDeleteTaskDialogForm() {
         return this.shadowRoot.querySelector('.deleteTaskDialog');
     }
