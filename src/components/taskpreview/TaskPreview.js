@@ -127,7 +127,7 @@ export default class TaskPreview extends HTMLElement {
             <form class="deleteTaskDialogForm">
                 <span class="deleteTaskDialogFormInnerContainer">
                     <header class="formHeader">
-                        <h3 class="dialogTaskTitle deleteHeader">Deletethis task?</h3>
+                        <h3 class="dialogTaskTitle deleteHeader">Delete this task?</h3>
                     </header>
                     <p>Are you sure you want to delete the ‘Build settings UI’ task and its subtasks? This action cannot be reversed.</p>
                     <section class="buttonContainer">
@@ -368,6 +368,10 @@ export default class TaskPreview extends HTMLElement {
                 }
             });
         }
+    }
+
+    getDeleteTaskDialogForm() {
+        return this.shadowRoot.querySelector('.deleteTaskDialog');
     }
 
     dynamicInputValidation(elementInput, defaultMessage) {
