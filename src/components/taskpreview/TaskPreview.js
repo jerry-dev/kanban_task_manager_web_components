@@ -122,6 +122,20 @@ export default class TaskPreview extends HTMLElement {
                     <button type="submit" class="editTaskSaveChanges">Save Changes</button>
                 </span>
             </form>
+        </dialog>
+        <dialog class="deleteTaskDialog">
+            <form class="deleteTaskDialogForm">
+                <span class="deleteTaskDialogFormInnerContainer">
+                    <header class="formHeader">
+                        <h3 class="dialogTaskTitle deleteHeader">Deletethis task?</h3>
+                    </header>
+                    <p>Are you sure you want to delete the ‘Build settings UI’ task and its subtasks? This action cannot be reversed.</p>
+                    <section class="buttonContainer">
+                        <button class="deleteButton">Delete</button>
+                        <button class="cancelButton">Cancel</button>
+                    </section>
+                </span>
+            </form>
         </dialog>`;
 
         this.shadowRoot.innerHTML = markup;
