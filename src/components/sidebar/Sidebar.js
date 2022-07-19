@@ -3,6 +3,7 @@ import AppLogo from '../applogo/AppLogo.js';
 import HideSidebarButton from '../hidesidebarbutton/HideSidebarButton.js';
 import DarkLightModeSwitch from '../darklightmodeswitch/DarkLightModeSwitch.js';
 import BoardNavigationButton from '../boardnavigationbutton/BoardNavigationButton.js';
+import CreateNewBoardButton from '../createnewboardbutton/CreateNewBoardButton.js';
 import store from '../../lib/store/index.js';
 
 export default class Sidebar extends HTMLElement {
@@ -69,6 +70,8 @@ export default class Sidebar extends HTMLElement {
             </li>`;
         });
 
+        collection += /*html*/ `<li><create-new-board-button></create-new-board-button></li>`;
+
         return collection;
     }
 
@@ -77,12 +80,14 @@ export default class Sidebar extends HTMLElement {
             const currentLocation = window.location.hash.replace(" ", "-").toLowerCase().replace("#/", "");
             const liCollection = this.shadowRoot.querySelectorAll('li');
             liCollection.forEach((li) => {
-                if (currentLocation === li.id) {
-                    li.classList.add('current');
-                    li.getElementsByTagName('board-navigation-button')[0].classList.add('current');
-                } else {
-                    li.classList.remove('current');
-                    li.getElementsByTagName('board-navigation-button')[0].classList.remove('current');
+                if (!li.getElementsByTagName('create-new-board-button')[0]) {
+                    if (currentLocation === li.id) {
+                        li.classList.add('current');
+                        li.getElementsByTagName('board-navigation-button')[0].classList.add('current');
+                    } else {
+                        li.classList.remove('current');
+                        li.getElementsByTagName('board-navigation-button')[0].classList.remove('current');
+                    }
                 }
             })
         });
