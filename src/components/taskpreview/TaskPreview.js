@@ -131,8 +131,8 @@ export default class TaskPreview extends HTMLElement {
                     </header>
                     <p>Are you sure you want to delete the ‘Build settings UI’ task and its subtasks? This action cannot be reversed.</p>
                     <section class="buttonContainer">
-                        <button class="deleteButton">Delete</button>
-                        <button class="cancelButton">Cancel</button>
+                        <button class="confirmButton deleteButton">Delete</button>
+                        <button class="confirmButton cancelButton">Cancel</button>
                     </section>
                 </span>
             </form>
@@ -150,11 +150,15 @@ export default class TaskPreview extends HTMLElement {
     }
 
     clickManager() {
+        this.expandedTaskDialogClickListener();
+        this.checkBoxManager();
+        this.expandedTaskDialogOverlayClickListener();
         this.addEventListener('click', () => {
             if (this.dialogsAreNotShowing()) {
                 this.dialogManager();
             }
         });
+        this.kebabMenuManager();
     }
 
     currentStatusChanged() {
@@ -271,39 +275,44 @@ export default class TaskPreview extends HTMLElement {
         const expandedTaskDialog = this.shadowRoot.querySelector('.expandedTaskDialog');
 
         if (!expandedTaskDialog.open) {
-            expandedTaskDialog.showModal();
-            this.checkBoxManager();
-
             this.crossOutCompletedTask();
-            this.addEventListener('click', (event) => {
-                this.kebabMenuManager(event, expandedTaskDialog);
-                this.closeDialog(event, expandedTaskDialog);
-            })
         }
     }
 
-    kebabMenuManager(event, expandedTaskDialog) {
-        if (!expandedTaskDialog.open) return;
-
-        if (event.composedPath()[0].id === "kebabMenuButtonInnerContainer") {
-            const kebabPopupMenu = this.getKebabPopupMenu();
-
-            kebabPopupMenu.addEventListener('click', (event) => {
-                event.preventDefault();
-
-                if (event.composedPath()[0].className === "kebabEditMenuButton") {
-                    this.closeExpandedTaskDialog();
-                    this.launchTaskEditDialog(event);
-                    kebabPopupMenu.close();
-                }
-
-                if (event.composedPath()[0].className === "kebabDeleteMenuButton") {
-                    this.closeExpandedTaskDialog();
-                    this.launchTaskDeleteDialog();
-                    kebabPopupMenu.close();
-                }
-            })
+    launchExpandedTaskDialog() {
+        if (!this.dialogsAreNotShowing()) return;
+        
+        if (!this.isExpandedTaskDialogShowing()) {
+            this.shadowRoot.querySelector('.expandedTaskDialog').showModal();
         }
+    }
+
+    expandedTaskDialogClickListener() {
+        this.addEventListener('click', (event) => {
+            if (event.composedPath()[0].className === "confirmButton deleteButton") return;
+            if (event.composedPath()[0].className === "confirmButton cancelButton") return;
+
+            this.launchExpandedTaskDialog();
+        });
+    }
+    
+    kebabMenuManager() {
+        const kebabPopupMenu = this.getKebabPopupMenu();
+
+        const kebabEditMenuButton = kebabPopupMenu.querySelector('.popupMenuInnerContainer > .kebabEditMenuButton');
+        const kebabDeleteMenuButton = kebabPopupMenu.querySelector('.popupMenuInnerContainer > .kebabDeleteMenuButton');
+
+        kebabEditMenuButton.addEventListener('click', () => {
+            this.closeExpandedTaskDialog();
+            this.launchTaskEditDialog();
+            kebabPopupMenu.close();
+        });
+
+        kebabDeleteMenuButton.addEventListener('click', () => {
+            this.closeExpandedTaskDialog();
+            this.launchTaskDeleteDialog();
+            kebabPopupMenu.close();
+        });
     }
 
     checkBoxManager() {
@@ -352,24 +361,38 @@ export default class TaskPreview extends HTMLElement {
 
         if (!editTaskDialog.open) {
             editTaskDialog.showModal();
-            this.generateEditTaskSubtaskList()
+            this.generateEditTaskSubtaskList();
 
+            this.addNewSubtaskClickListener();
+            this.deleteSubtaskClickListener();
             this.submitEditTaskDialogFormManager();
 
             editTaskDialog.addEventListener('click', (event) => {
                 if (event.composedPath()[0].nodeName === "DIALOG") {
                     this.closeTaskEditDialog();
                 }
-
-                if (event.target.className === "newSubtaskButton") {
-                    this.addNewSubtask();
-                }
-
-                if (event.target.className === "deleteSubtask") {
-                    return event.target.parentNode.remove();
-                }
             });
         }
+    }
+
+    addNewSubtaskClickListener() {
+        const editTaskDialog = this.getEditTaskDialogForm();
+        const newSubtaskButton = editTaskDialog.querySelector('.editTaskDialogForm > .editTaskDialogFormInnerContainer > .newSubtaskButton');
+
+        newSubtaskButton.addEventListener('click', () => {
+            this.addNewSubtask();
+        });
+    }
+
+    deleteSubtaskClickListener() {
+        const editTaskDialog = this.getEditTaskDialogForm();
+        const editTaskSubtaskList = editTaskDialog.querySelector('.editTaskSubtaskList');
+        
+        editTaskSubtaskList.addEventListener('click', (event) => {
+            if (event.target.className === "deleteSubtask") {
+                event.target.parentNode.remove();
+            }
+        });
     }
 
     launchTaskDeleteDialog() {
@@ -379,11 +402,42 @@ export default class TaskPreview extends HTMLElement {
             deleteTaskDialog.showModal();
         }
 
-        // Create listener for the button clicks like with launchTaskEditDialog()
+        this.confirmButtonsListener();
+    }
+
+    confirmButtonsListener() {
+        const deleteTaskDialog = this.getDeleteTaskDialogForm();
+
+        const deleteButton = deleteTaskDialog.querySelector('.buttonContainer > .deleteButton');
+        const cancelButton = deleteTaskDialog.querySelector('.buttonContainer > .cancelButton');
+
+        deleteButton.addEventListener('click', (event) => {
+            event.preventDefault();
+
+            const action = {
+                type: "DELETE_TASK",
+                payload: {
+                    board: this.state.board,
+                    column: this.state.column,
+                    title: this.state.title
+                }};
+
+            this.store.dispatch(action);
+            this.closeDeleteTaskDialog();
+        });
+
+        cancelButton.addEventListener('click', (event) => {
+            event.preventDefault();
+            this.closeDeleteTaskDialog();
+        });
     }
 
     isDeleteTaskDialogShowing() {
         return this.shadowRoot.querySelector('.deleteTaskDialog').open === true;
+    }
+
+    closeDeleteTaskDialog() {
+        this.shadowRoot.querySelector('.deleteTaskDialog').close();
     }
 
     getDeleteTaskDialogForm() {
@@ -554,14 +608,18 @@ export default class TaskPreview extends HTMLElement {
         return this.shadowRoot.querySelector('.editTaskDialog').open === true;
     }
 
-    closeDialog(event, expandedTaskDialog) {
-        if (!expandedTaskDialog.open) return;
+    expandedTaskDialogOverlayClickListener() {
+        this.addEventListener('click', (event) => {
+            if (event.composedPath()[0].nodeName === "DIALOG") {
+                this.getExpandedTaskDialog().close();
+                this.dispatchFormDataIfChangesMade();
+                this.currentStatusChanged();
+            }
+        });
+    }
 
-        if (event.composedPath()[0].nodeName === "DIALOG") {
-            expandedTaskDialog.close();
-            this.dispatchFormDataIfChangesMade();
-            this.currentStatusChanged();
-        }
+    getExpandedTaskDialog() {
+        return this.shadowRoot.querySelector('.expandedTaskDialog');
     }
 
     // IMPORTANT: MAKE SURE EVERY DIALOG IS REPRESENTED HERE --------------------

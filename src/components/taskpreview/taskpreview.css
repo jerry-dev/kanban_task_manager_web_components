@@ -28,6 +28,7 @@
     display: block;
     margin-left: auto;
     margin-right: auto;
+    pointer-events: none;
     width: 88.57%;
 }
 
