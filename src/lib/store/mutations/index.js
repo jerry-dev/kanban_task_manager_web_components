@@ -4,6 +4,7 @@ import loadApplicationData from './loadApplicationData.js';
 import isApplicationDataReady from './isApplicationDataReady.js';
 import updateTask from './updateTask.js';
 import editTask from './editTask.js';
+import deleteTask from './deleteTask.js';
 
 export default {
     ADD_NEW_TASK: addNewTask,
@@ -12,4 +13,5 @@ export default {
     IS_APPLICATION_DATA_READY: isApplicationDataReady,
     UPDATE_TASK: updateTask,
     EDIT_TASK: editTask,
+    DELETE_TASK: deleteTask,
 }
