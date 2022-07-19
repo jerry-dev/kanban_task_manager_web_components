@@ -7,6 +7,7 @@
     --Add-New-Subtask-Background-Color: var(--Main-Purple-Hover-1);
     --Add-New-Subtask-Background-Color-Hover: var(--Main-Purple-Hover-2);
     --Border-Color: var(--Lines-Light);
+    --Cancel-Button-Background-Color: var(--Main-Purple-Hover-1);
     --Dark-Light-Mode-Switch-Background-Color: var(--Light-Grey-Light-BG);
     --Dialog-Text-1-Color: var(--Medium-Grey);
     --Header-Background-Color: var(--White);
@@ -21,6 +22,7 @@
     --Add-New-Subtask-Background-Color: var(--White);
     --Add-New-Subtask-Background-Color-Hover: var(--White);
     --Border-Color: var(--Lines-Dark);
+    --Cancel-Button-Background-Color: var(--White);
     --Dark-Light-Mode-Switch-Background-Color: var(--Very-Dark-Grey-Dark-BG);
     --Dialog-Text-1-Color: var(--White);
     --Header-Background-Color: var(--Dark-Grey);

@@ -298,6 +298,8 @@ export default class TaskPreview extends HTMLElement {
                 }
 
                 if (event.composedPath()[0].className === "kebabDeleteMenuButton") {
+                    this.closeExpandedTaskDialog();
+                    this.launchTaskDeleteDialog();
                     kebabPopupMenu.close();
                 }
             })
@@ -371,8 +373,17 @@ export default class TaskPreview extends HTMLElement {
     }
 
     launchTaskDeleteDialog() {
-        const deleteTaskDialog = getDeleteTaskDialogForm();
-        deleteTaskDialog.open();
+        const deleteTaskDialog = this.getDeleteTaskDialogForm();
+
+        if (!deleteTaskDialog.open) {
+            deleteTaskDialog.showModal();
+        }
+
+        // Create listener for the button clicks like with launchTaskEditDialog()
+    }
+
+    isDeleteTaskDialogShowing() {
+        return this.shadowRoot.querySelector('.deleteTaskDialog').open === true;
     }
 
     getDeleteTaskDialogForm() {
@@ -553,8 +564,9 @@ export default class TaskPreview extends HTMLElement {
         }
     }
 
+    // IMPORTANT: MAKE SURE EVERY DIALOG IS REPRESENTED HERE --------------------
     dialogsAreNotShowing() {
-        if (!this.isExpandedTaskDialogShowing() && !this.isTaskEditDialogShowing()) {
+        if (!this.isExpandedTaskDialogShowing() && !this.isTaskEditDialogShowing() && !this.isDeleteTaskDialogShowing()) {
             return true;
         }
     }
