@@ -64,8 +64,8 @@ export default class Sidebar extends HTMLElement {
             collection += /*html*/
             `<li ${(isCurrent) ? 'class="current"': ""} id=${reformattedLink}>
                 <board-navigation-button
-                    link=${reformattedLink}
-                    boardname=${JSON.stringify(item.name).replace(" ", "__")}
+                    link="${reformattedLink}"
+                    boardname="${item.name}"
                     isCurrent=${(isCurrent) ? true: false}
                 ></board-navigation-button>
             </li>`;

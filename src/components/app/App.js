@@ -113,9 +113,9 @@ export default class App extends HTMLElement {
             markup += /*html*/
             `<tasksboard-column
                 colorindex=${colorIndex}
-                columnname=${columnName}
+                columnname="${columnName}"
                 numberoftasks=${numberOfTasks}
-                board=${data.board}
+                board="${data.board}"
             ></tasksboard-column>`;
         });
 

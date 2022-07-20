@@ -22,8 +22,8 @@ export default class BoardNavigationButton extends HTMLElement {
 
     HTML() {
         const markup = /*html*/
-        `<a href="#/${this.getAttribute('link').replace("__", "-")}">
-            <img src="./src/assets/icons/fluent_board-split-24-regular.svg"/>${this.getAttribute('boardname').replace("__", " ")}
+        `<a href="#/${this.getAttribute('link').replace(" ", "-")}">
+            <img src="./src/assets/icons/fluent_board-split-24-regular.svg"/>${this.getAttribute('boardname')}
         </a>`;
 
         this.shadowRoot.innerHTML = markup;

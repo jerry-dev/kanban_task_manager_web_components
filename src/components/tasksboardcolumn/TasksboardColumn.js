@@ -69,56 +69,60 @@ export default class TasksboardColumn extends HTMLElement {
     }
 
     HTML(renderState) {
-        const markup = /*html*/
-        `<h4 class="columnTitle"><span class="circle" data-color=${this.state.colorIndex}></span>${this.state.columnName.toUpperCase()} (${this.getAttribute('numberoftasks')})</h4>
-        <ul>${this.state.columnData.tasks.map((taskInstances) => {
-            const totalSubtasks = taskInstances.subtasks.length;
-            let completedSubtasks = 0;
+        if (this.state.columnData.length < 1) {
+            this.noTaskRender();
+        } else {
+            const markup = /*html*/
+            `<h4 class="columnTitle"><span class="circle" data-color=${this.state.colorIndex}></span>${this.state.columnName.toUpperCase()} (${this.getAttribute('numberoftasks')})</h4>
+            <ul>${this.state.columnData.tasks.map((taskInstances) => {
+                const totalSubtasks = taskInstances.subtasks.length;
+                let completedSubtasks = 0;
 
-            taskInstances.subtasks.forEach((item) => {
-                if (item.isCompleted) {
-                    completedSubtasks++;
+                taskInstances.subtasks.forEach((item) => {
+                    if (item.isCompleted) {
+                        completedSubtasks++;
+                    }
+                });
+
+                if (renderState === "initialLoad") {
+                    return /*html*/ `
+                    <li class="initialLoad">
+                        <task-preview
+                            role="button"
+                            board="${this.state.board}"
+                            title="${taskInstances.title}"
+                            completedsubtasks=${completedSubtasks}
+                            totalsubtasks=${totalSubtasks}
+                            columnname="${this.state.columnName}"
+                        ></task-preview>
+                    </li>`;
+                } else if (renderState === "rehydrate") {
+                    let hydrationClass = '';
+                    if (this.numberOfElementsHasGrown()) {
+                        if (index === this.store.state.boards[i].columns[j].tasks.length - 1) {
+                            hydrationClass = 'class="rehydrate"'
+                        }
+                    }
+
+                    return /*html*/ `
+                    <li ${hydrationClass}>
+                        <task-preview
+                            role="button"
+                            board="${this.state.board}"
+                            title="${taskInstances.title}"
+                            completedsubtasks=${completedSubtasks}
+                            totalsubtasks=${totalSubtasks}
+                            columnname="${this.state.columnName}"
+                        ></task-preview>
+                    </li>`;
                 }
-            });
+            }).join('')}</ul>`;
 
             if (renderState === "initialLoad") {
-                return /*html*/ `
-                <li class="initialLoad">
-                    <task-preview
-                        role="button"
-                        board=${JSON.stringify(this.state.board)}
-                        title=${JSON.stringify(taskInstances.title)}
-                        completedsubtasks=${completedSubtasks}
-                        totalsubtasks=${totalSubtasks}
-                        columnname=${this.state.columnName}
-                    ></task-preview>
-                </li>`;
-            } else if (renderState === "rehydrate") {
-                let hydrationClass = '';
-                if (this.numberOfElementsHasGrown()) {
-                    if (index === this.store.state.boards[i].columns[j].tasks.length - 1) {
-                        hydrationClass = 'class="rehydrate"'
-                    }
-                }
-
-                return /*html*/ `
-                <li ${hydrationClass}>
-                    <task-preview
-                        role="button"
-                        board=${JSON.stringify(this.state.board)}
-                        title=${JSON.stringify(taskInstances.title)}
-                        completedsubtasks=${completedSubtasks}
-                        totalsubtasks=${totalSubtasks}
-                        columnname=${this.state.columnName}
-                    ></task-preview>
-                </li>`;
+                this.shadowRoot.innerHTML = markup;
+            } else {
+                setTimeout(() => {this.shadowRoot.innerHTML = markup;}, 400);
             }
-        }).join('')}</ul>`;
-
-        if (renderState === "initialLoad") {
-            this.shadowRoot.innerHTML = markup;
-        } else {
-            setTimeout(() => {this.shadowRoot.innerHTML = markup;}, 400);
         }
     }
 
@@ -126,6 +130,12 @@ export default class TasksboardColumn extends HTMLElement {
         if ((this.state.numberoftasks + 1) === this.state.newNumberOfTasks) {
             return true;
         }
+    }
+
+    noTaskRender() {
+        const markup = /*html*/
+        `<h4 class="columnTitle"><span class="circle" data-color=${this.state.colorIndex}></span>${this.state.columnName.toUpperCase()} (${this.getAttribute('numberoftasks')})</h4>`;
+        this.shadowRoot.innerHTML = markup;
     }
 }
 
