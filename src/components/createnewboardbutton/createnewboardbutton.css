@@ -32,3 +32,214 @@
         brightness(91%)
         contrast(93%);
 }
+
+/* --------------Dialog Styling------------- */
+
+.addNewBoardDialog[open] {
+    background-color: var(--Taskboard-Background-Color);
+    border: none;
+    border-radius: 0.375rem;
+    padding: 0;
+    width: 30rem;
+
+    animation-name: revealDialog;
+    animation-duration: 0.4s;
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;
+    opacity: 0;
+    transform: scale(0.9);
+}
+
+@keyframes revealDialog {
+    0% {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+dialog:not([open]) {
+    display: none;
+}
+
+dialog[open]::backdrop {
+    background-color: #000000;
+    opacity: 0.5;
+}
+
+:host .detail {
+    color: var(--Medium-Grey);
+    font-size: var(--font-size-12);
+    font-style: normal;
+    font-weight: var(--font-weight-7);
+    line-height: var(--line-height-15);
+    margin: 0;
+}
+
+:host .addNewBoardDialogForm {
+    background-color: var(--Task-Preview-Background-Color);
+    height: 100%;
+    padding-bottom: 2rem;
+    padding-top: 2rem;
+    width: 100%;
+}
+
+:host .addNewBoardDialogFormInnerContainer {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 86.666666%;
+}
+
+:host .addNewBoardDialogForm .formHeader {
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+}
+
+:host .newBoardLabelContainer {
+    color: var(--Main-Text-Color);
+    font-size: var(--font-size-12);
+    font-style: normal;
+    font-weight: var(--font-weight-7);
+    line-height: var(--line-height-15);
+    margin: 0;
+}
+
+:host .newBoardLabelContainer {
+    align-items: flex-start;
+    color: var(--Dialog-Text-1-Color);
+    display: flex;
+    flex-direction: column;
+    margin-top: 1.4375rem;
+    padding: 0;
+    width: 100%;
+}
+
+:host .dialogBoardTitle {
+    color: var(--Main-Text-Color);
+    font-size: var(--font-size-18);
+    font-style: normal;
+    font-weight: var(--font-weight-7);
+    line-height: var(--line-height-23);
+    margin: 0;
+}
+
+.formInput {
+    background: none;
+    border: 0.0625rem solid var(--Border-Color);
+    border-radius: 0.25rem;
+    box-sizing: border-box;
+    color: var(--Main-Text-Color);
+    cursor: pointer;
+    font-style: normal;
+    font-size: var(--font-size-13);
+    font-weight: var(--font-weight-5);
+    line-height: var(--line-height-23);
+    height: 2.5rem;
+    margin-top: 0.5rem;
+    padding: 0;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    width: 100%;
+}
+
+.formInput:hover {
+    border: 0.0625rem solid var(--Main-Purple);
+}
+
+.newBoardLabelContainer {
+    position: relative;
+}
+
+.formInput::placeholder {
+    color: var(--Placeholder-Text-Color);
+    font-style: normal;
+    font-weight: var(--font-weight-5);
+    font-size: var(--font-size-13);
+    line-height: var(--line-height-23);
+    opacity: 0.25;
+    white-space: pre-line; 
+}
+
+:host .newBoardLabelContainer > .newColumnList {
+    list-style: none;
+    padding: 0;
+    width: 100%;
+}
+
+:host .newBoardLabelContainer > .newColumnList li {
+    align-items: center;
+    display: flex;
+    padding: 0;
+    width: 100%;
+}
+
+:host .newBoardLabelContainer > .newColumnList li:not(:last-child) {
+    margin-bottom: 0.75rem;
+}
+
+:host .newBoardLabelContainer > .newColumnList li .formInput {
+    margin-top: 0;
+}
+
+:host .newBoardLabelContainer li button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    height: 0.928125rem;
+    margin-left: 1rem;
+    width: 0.928125rem;
+}
+
+:host .newBoardLabelContainer li button > * {
+    pointer-events: none;
+}
+
+.newColumnButton,
+.createNewBoard {
+    border: none;
+    border-radius: 1.25rem;
+    cursor: pointer;
+    display: block;
+    height: 2.5rem;
+    font-style: normal;
+    font-weight: var(--font-weight-7);
+    font-size: var(--font-size-13);
+    line-height: var(--line-height-23);
+    width: 100%;
+}
+
+.newColumnButton:active,
+.createNewBoard:active {
+    transform: scale(0.95);
+}
+
+.newColumnButton {
+    background-color: var(--Add-New-Subtask-Background-Color);
+    color: var(--Main-Purple);
+    margin-bottom: 1.5rem;
+}
+
+.createNewBoard {
+    background-color: var(--Main-Purple);
+    color: var(--White);
+}
+
+
+/* --------------Dialog Error On Form Validation Styling------------- */
+
+
+.errorFormInput {
+    border: 0.0625rem solid var(--Error-Color);
+}
+
+.errorFormInput::placeholder {
+    color: var(--Error-Color);
+    opacity: 1;
+    text-align: right;
+}
