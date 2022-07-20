@@ -249,7 +249,7 @@ export default class CreateNewBoardButton extends HTMLElement {
 
             if (formIsValid) {
                 const action = {
-                    type: 'ADD_NEW_BOARD',
+                    type: 'CREATE_NEW_BOARD',
                     payload: {
                         name: titleInput.value,
                         columns: this.getNewBoardkDialogFormColumns()
