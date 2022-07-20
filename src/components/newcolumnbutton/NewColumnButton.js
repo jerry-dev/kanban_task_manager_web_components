@@ -1,4 +1,5 @@
 import newColumnButtonStyleSheet from './newcolumnbutton.css' assert {type: 'css'};
+import store from '../../lib/store/index.js';
 
 export default class NewColumnButton extends HTMLElement {
     constructor() {
@@ -7,6 +8,7 @@ export default class NewColumnButton extends HTMLElement {
     }
 
     connectedCallback() {
+        this.store = store;
         this.render();
     }
 
