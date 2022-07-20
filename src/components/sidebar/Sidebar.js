@@ -14,6 +14,7 @@ export default class Sidebar extends HTMLElement {
 
     connectedCallback() {
         this.store = store;
+        this.store.observer.subscribe('stateChange', () => {this.render()})
         this.render();
     }
 
