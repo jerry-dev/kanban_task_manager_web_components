@@ -422,6 +422,8 @@ export default class TaskPreview extends HTMLElement {
                     title: this.state.title
                 }};
 
+            this.markForDeletion();
+
             this.store.dispatch(action);
             this.closeDeleteTaskDialog();
         });
@@ -438,6 +440,10 @@ export default class TaskPreview extends HTMLElement {
 
     closeDeleteTaskDialog() {
         this.shadowRoot.querySelector('.deleteTaskDialog').close();
+    }
+
+    markForDeletion() {
+        this.classList.add('deleted');
     }
 
     getDeleteTaskDialogForm() {

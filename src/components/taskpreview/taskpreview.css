@@ -430,3 +430,19 @@ dialog[open]::backdrop {
     transform: scale(0.95);
 }
 
+:host(.deleted) {
+    animation-name: delete;
+    animation-duration: 0.4s;
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;
+}
+
+@keyframes delete {
+    0% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+        background-color: var(--Red);
+    }
+}
