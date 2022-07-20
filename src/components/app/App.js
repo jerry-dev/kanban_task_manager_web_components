@@ -120,7 +120,7 @@ export default class App extends HTMLElement {
             ></tasksboard-column>`;
         });
 
-        markup += /*html*/ `<new-column-button></new-column-button>`;
+        markup += /*html*/ `<new-column-button board="${data.board}"></new-column-button>`;
 
         this.getMainRoute().innerHTML = markup;
     }
