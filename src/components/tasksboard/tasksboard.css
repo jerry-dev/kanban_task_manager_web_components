@@ -13,6 +13,17 @@
     display: none;
 }
 
+#componentInnerContainer {
+    overflow: auto;
+    white-space: nowrap;
+}
+
+#componentInnerContainer > * {
+    /* Undoing the inherited "white-space: nowrap:" from above */
+    /* Makes the TaskPreview text spill out of their containers */
+    white-space: normal;
+}
+
 #sideBarControl {
     background-color: var(--Main-Purple);
     border: none;
