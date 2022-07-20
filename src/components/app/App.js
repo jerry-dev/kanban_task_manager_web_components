@@ -5,6 +5,7 @@ import Tasksboard from '../tasksboard/Tasksboard.js';
 import TasksboardColumn from '../tasksboardcolumn/TasksboardColumn.js';
 import store from '../../lib/store/index.js';
 import fetchLocalData from '../../lib/fetchLocalData.js';
+import NewColumnButton from '../newcolumnbutton/NewColumnButton.js';
 
 export default class App extends HTMLElement {
     constructor() {
@@ -118,6 +119,8 @@ export default class App extends HTMLElement {
                 board="${data.board}"
             ></tasksboard-column>`;
         });
+
+        markup += /*html*/ `<new-column-button></new-column-button>`;
 
         this.getMainRoute().innerHTML = markup;
     }

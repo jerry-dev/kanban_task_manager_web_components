@@ -12,6 +12,7 @@
     --Dialog-Text-1-Color: var(--Medium-Grey);
     --Header-Background-Color: var(--White);
     --Main-Text-Color: var(--Black);
+    --New-Column-Background-Color: var(--Main-Purple-Hover-1);
     --Placeholder-Text-Color: hsla(237, 100%, 4%, 1);
     --Sidebar-Background-Color: var(--White);
     --Task-Preview-Background-Color:  var(--White);
@@ -27,6 +28,7 @@
     --Dialog-Text-1-Color: var(--White);
     --Header-Background-Color: var(--Dark-Grey);
     --Main-Text-Color: var(--White);
+    --New-Column-Background-Color: var(--Dark-Grey);
     --Placeholder-Text-Color: hsla(0, 0%, 100%, 1);
     --Sidebar-Background-Color: var(--Dark-Grey);
     --Task-Preview-Background-Color:  var(--Dark-Grey);

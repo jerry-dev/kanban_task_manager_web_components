@@ -1,0 +1,27 @@
+:host {
+    align-items: center;
+    background-color: var(--New-Column-Background-Color);
+    border-radius: 0.375rem;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    margin-top: 3.9375rem;
+    width: 17.5rem;
+    
+}
+
+:host > * {
+    pointer-events: none;
+}
+
+p {
+    color: var(--Medium-Grey);
+    font-style: normal;
+    font-weight: var(--font-weight-7);
+    font-size: var(--font-size-24);
+    line-height: var(--line-height-30);
+}
+
+:host(:hover) p {
+    color: var(--Main-Purple);
+}
