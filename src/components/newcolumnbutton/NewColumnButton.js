@@ -59,6 +59,7 @@ export default class NewColumnButton extends HTMLElement {
 
     clickManagers() {       
         this.clickedListener();
+        this.closeOnOverlayClickListener();
         this.addNewColumnClickListener();
         this.deleteColumnClickListener();
     }
@@ -89,8 +90,10 @@ export default class NewColumnButton extends HTMLElement {
     }
 
     clickedListener() {
-        this.addEventListener('click', () => {
-            this.launchEditBoardDialog();
+        this.addEventListener('click', (event) => {
+            if (event.composedPath()[0].nodeName !== "DIALOG") {
+                this.launchEditBoardDialog();
+            }
         });
     }
 
@@ -110,6 +113,16 @@ export default class NewColumnButton extends HTMLElement {
 
     closeEditBoardDialog() {
         if (this.isEditBoardDialogShowing()) this.getEditBoardDialog().close();
+    }
+
+    closeOnOverlayClickListener() {
+        const editBoardDialog = this.getEditBoardDialog();
+
+        editBoardDialog.addEventListener('click', (event) => {
+            if (event.composedPath()[0].nodeName === "DIALOG") {
+                this.closeEditBoardDialog();
+            }
+        });
     }
 
     addNewColumnClickListener() {

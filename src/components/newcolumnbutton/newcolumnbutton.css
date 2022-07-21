@@ -222,6 +222,10 @@ dialog[open]::backdrop {
     color: var(--White);
 }
 
+.editBoardSaveChanges:hover {
+    background-color: var(--Main-Purple-Hover-3);
+}
+
 
 /* --------------Dialog Error On Form Validation Styling------------- */
 
