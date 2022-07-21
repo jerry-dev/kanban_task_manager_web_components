@@ -5,6 +5,7 @@ import isApplicationDataReady from './isApplicationDataReady.js';
 import updateTask from './updateTask.js';
 import editTask from './editTask.js';
 import deleteTask from './deleteTask.js';
+import editBoard from './editBoard.js';
 
 export default {
     ADD_NEW_TASK: addNewTask,
@@ -14,4 +15,5 @@ export default {
     UPDATE_TASK: updateTask,
     EDIT_TASK: editTask,
     DELETE_TASK: deleteTask,
+    EDIT_BOARD: editBoard,
 }

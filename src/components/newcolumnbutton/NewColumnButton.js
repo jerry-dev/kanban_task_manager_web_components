@@ -335,6 +335,14 @@ export default class NewColumnButton extends HTMLElement {
 
         });
 
+        // If there are no columns, then that means each column was deleted.
+        // In that case, we'll mark each column name within the state to be deleted.
+        if (columnListElements.length < 1) {
+            this.state.columnNames.forEach((stateDataColName) => {
+                deletedColumns[deletedColumns.length] = stateDataColName;
+            });
+        }
+
         return { boardNameDetails, columnDetails, deletedColumns };
     }
 }
