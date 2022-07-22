@@ -14,5 +14,6 @@ export default {
     IS_APPLICATION_DATA_READY: isApplicationDataReady,
     UPDATE_TASK: updateTask,
     EDIT_TASK: editTask,
+    DELETE_TASK: deleteTask,
     EDIT_BOARD: editBoard,
 }
