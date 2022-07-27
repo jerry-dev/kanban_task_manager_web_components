@@ -2,10 +2,9 @@ import appStyleSheet from './app.css' assert { type: 'css' };
 import router from '../../lib/router/index.js';
 import Sidebar from '../sidebar/Sidebar.js';
 import Tasksboard from '../tasksboard/Tasksboard.js';
-import TasksboardColumn from '../tasksboardcolumn/TasksboardColumn.js';
 import store from '../../lib/store/index.js';
 import fetchLocalData from '../../lib/fetchLocalData.js';
-import NewColumnButton from '../newcolumnbutton/NewColumnButton.js';
+import AppHeader from '../appheader/AppHeader.js';
 
 export default class App extends HTMLElement {
     constructor() {
@@ -16,11 +15,15 @@ export default class App extends HTMLElement {
     connectedCallback() {
         this.store = store;
         fetchLocalData(this.store.dispatch, this.store.state.isApplicationDataReady);
+        this.store.observer.subscribe('stateChange', () => {
+            this.refresh();
+        })
         this.render();
         this.routerInit();
     }
 
     render() {
+        this.initializeComponentState();
         this.CSS();
         this.HTML();
         this.SCRIPTS();
@@ -30,15 +33,12 @@ export default class App extends HTMLElement {
         this.shadowRoot.adoptedStyleSheets = [ appStyleSheet ];
     }
 
-    HTML() {
-        const markup = /*html*/
-        
-        `<main id="canvas" data-menu="on-screen">
+    HTML(board) {
+        const markup = /*html*/ `<div id="canvas" data-menu="on-screen">
+            <app-header></app-header>
             <side-bar></side-bar>
-            <tasks-board data-sidebar-control="off-screen">
-                <output id="mainRoute"></output>
-            </tasks-board>
-        </main>`;
+            <tasks-board data-sidebar-control="off-screen" currentboard="${board}"></tasks-board>
+        </div>`;
 
         this.shadowRoot.innerHTML = markup;
     }
@@ -73,8 +73,7 @@ export default class App extends HTMLElement {
                     if (!router.lastResolved()) {
                         this.beforeNewViewRenderedOperations();
                     }
-
-                    this.renderBoardColumns(data);
+                    this.renderTasksBoard(data);
                 },
                 hooks: {
                     before: (done) => {
@@ -90,68 +89,61 @@ export default class App extends HTMLElement {
 
         router.resolve();
     }
+    
+    renderTasksBoard(data) {
+        if (!data.board) return;
 
-    renderBoardColumns(data) {
-        const reformattedColumnData = this.getReformattedData(data);
+        let boardName = data.board;
+        boardName = boardName.split("");
+        boardName[0] = boardName[0].toUpperCase();
 
-        let markup = ``;
-
-        // There are currently 6 colors to choose from.
-        // The colors are positioned like arrays: 0, 1, 2, 3, 4, 5
-        let colorIndex = null;
-
-        Object.keys(reformattedColumnData).forEach((columnName) => {
-
-            // Keeping the color choice in range
-            if (colorIndex !== null && colorIndex < 5) {
-                colorIndex++;
-            } else {
-                colorIndex = 0;
-            }
-
-            const numberOfTasks = reformattedColumnData[columnName].length;
-
-            markup += /*html*/
-            `<tasksboard-column
-                colorindex=${colorIndex}
-                columnname="${columnName}"
-                numberoftasks=${numberOfTasks}
-                board="${data.board}"
-            ></tasksboard-column>`;
-        });
-
-        markup += /*html*/ `<new-column-button board="${data.board}"></new-column-button>`;
-
-        this.getMainRoute().innerHTML = markup;
-    }
-
-
-    getReformattedData(data) {
-        const observedColumns = {};
-
-        for (let i = 0; i < this.store.state.boards.length; i++) {
-            const reformattedBoardName = this.store.state.boards[i].name.replace(" ", "-").toLowerCase();
-            if (reformattedBoardName === data.board) {
-                for (let j = 0; j < this.store.state.boards[i].columns.length; j++) {
-                    // For each distinct column name, we create a array property for it within
-                    // the observedColumns object. We'll inject/push the associated tasks in it later.
-                    if (!observedColumns[this.store.state.boards[i].columns[j].name]) {
-                        observedColumns[this.store.state.boards[i].columns[j].name] = [];
-
-                        // Pushing the individual tasks objects into the associated column array
-                        this.store.state.boards[i].columns[j].tasks.forEach((taskInstance) => {
-                            observedColumns[this.store.state.boards[i].columns[j].name].push(taskInstance);
-                        });
-                    }
-                }
+        for (let i = 0; i < boardName.length; i++) {
+            if (boardName[i] === "-") {
+                boardName[i] = " "
+                boardName[i+1] = boardName[i+1].toUpperCase();
+                break;
             }
         }
+        
+        boardName = boardName.join("");
+        this.state.currentBoard = boardName;
 
-        return observedColumns;
+        this.HTML(this.state.currentBoard);
+    }
+
+    // NEW
+    initializeComponentState() {
+        this.oldState = null;
+        this.state = {};
+        
+        if (!this.state?.boards ?? false) this.state.boards = [];
+        if (!this.state?.currentBoard ?? false) this.state.currentBoard = '';
+
+        
+        for (let i = 0; i < this.store.state.boards.length; i++) {
+            const reformattedBoardName = this.store.state.boards[i].name.replace(" ", "-").toLowerCase();
+            this.state.boards[this.state.boards.length] = reformattedBoardName;
+        }
+
+        this.updateOldState();
+    }
+
+    refresh() {
+        this.state.boards = [];
+        for (let i = 0; i < this.store.state.boards.length; i++) {
+            const reformattedBoardName = this.store.state.boards[i].name.replace(" ", "-").toLowerCase();
+            this.state.boards[this.state.boards.length] = reformattedBoardName;
+        }
+
+        if (this.didComponentStateChange()) {
+            this.clearRoute(this.getMainRoute());
+            this.renderTasksBoard(this.getCurrentBoard());
+            this.updateOldState();
+        }
     }
 
     getMainRoute() {
-        return this.shadowRoot.getElementById('mainRoute');
+        return this.shadowRoot.querySelector('tasks-board').shadowRoot.getElementById('mainRoute');
     }
 
     renderOneView() {
@@ -160,6 +152,18 @@ export default class App extends HTMLElement {
 
     beforeNewViewRenderedOperations() {
         this.clearRoute(this.getMainRoute());
+    }
+
+    getCurrentBoard() {
+        return this.state.currentBoard;
+    }
+
+    updateOldState() {
+        this.oldState = JSON.parse(JSON.stringify(this.state));
+    }
+
+    didComponentStateChange() {
+        return JSON.stringify(this.oldState.boards) !== JSON.stringify(this.state.boards);
     }
 
     SCRIPTS() {
@@ -208,16 +212,14 @@ export default class App extends HTMLElement {
 
     hideAppHeaderLogo() {
         this.shadowRoot.getElementById('canvas')
-            .getElementsByTagName('tasks-board')[0]
-            .shadowRoot.querySelector('app-header')
-            .shadowRoot.getElementById('logoOuterContainer').setAttribute('data-behavior', 'hide');
+            .querySelector('app-header')
+            .shadowRoot.querySelector('#logoOuterContainer').setAttribute('data-behavior', 'hide');
     }
 
     unhideAppHeaderLogo() {
         this.shadowRoot.getElementById('canvas')
-            .getElementsByTagName('tasks-board')[0]
-            .shadowRoot.querySelector('app-header')
-            .shadowRoot.getElementById('logoOuterContainer').setAttribute('data-behavior', 'show');
+            .querySelector('app-header')
+            .shadowRoot.querySelector('#logoOuterContainer').setAttribute('data-behavior', 'show');
     }
 
     activateDarkTheme() {

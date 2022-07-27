@@ -13,6 +13,8 @@
     animation-name: fadeOut;
     animation-iteration-count: 1;
     animation-fill-mode: forwards;
+
+    opacity: 0;
 }
 
 @keyframes fadeOut {

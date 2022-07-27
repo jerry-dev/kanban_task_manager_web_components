@@ -30,16 +30,22 @@
     border-radius: 0 6.25rem 6.25rem 0;
     cursor: pointer;
     height: 3rem;
+    left: 0;
     position: absolute;
     top: 95vh;
     width: 3.5rem;
-    z-index: 99;
 }
 
 #sideBarControl:hover {
-    background-color: var(--Main-Purple-Hover-1);
+    background-color: var(--Main-Purple-Hover-3);
 }
 
 #sideBarControl > * {
     pointer-events: none;
+}
+
+#mainRoute {
+    display: flex;
+    gap: 1.5rem;
+    margin-left: 1.5rem;
 }

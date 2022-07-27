@@ -1,5 +1,7 @@
 import tasksBoardStyleSheet from './tasksboard.css' assert {type: 'css'};
-import AppHeader from '../appheader/AppHeader.js';
+import TasksboardColumn from '../tasksboardcolumn/TasksboardColumn.js'; //NEW
+import NewColumnButton from '../newcolumnbutton/NewColumnButton.js'; //NEW
+import store from '../../lib/store/index.js';
 
 export default class Tasksboard extends HTMLElement {
     constructor() {
@@ -8,10 +10,15 @@ export default class Tasksboard extends HTMLElement {
     }
 
     connectedCallback() {
+        this.store = store;
+        this.store.observer.subscribe('stateChange', () => {
+            this.refresh();
+        })
         this.render();
     }
 
     render() {
+        this.initializeComponentState();
         this.CSS();
         this.HTML();
     }
@@ -22,15 +29,85 @@ export default class Tasksboard extends HTMLElement {
 
     HTML() {
         const markup = /*html*/
-        `<app-header></app-header>    
-        <div id="componentInnerContainer">
-            <slot></slot>
+        `<div id="componentInnerContainer">
+            <output id="mainRoute">
+                ${this.getColumns()}
+                <new-column-button board="${this.state.currentBoard}"></new-column-button>
+            </output>
             <button type="button" id="sideBarControl">
                 <img src="../../src/assets/icons/eye.svg"/>
             </button>
         </div>`;
 
         this.shadowRoot.innerHTML = markup;
+    }
+
+    getColumns() {
+        if (!this.getAttribute('currentboard')) return;
+        let markup = ``;
+        // There are currently 6 colors to choose from.
+        // The colors are positioned like arrays: 0, 1, 2, 3, 4, 5
+        let colorIndex = null;
+
+        this.state.columns.forEach((column) => {
+            // Keeping the color choice in range
+            if (colorIndex !== null && colorIndex < 5) {
+                colorIndex++;
+            } else {
+                colorIndex = 0;
+            }
+            
+            markup += /*html*/
+            `<tasksboard-column
+                colorindex=${colorIndex}
+                columnname="${column}"
+                board="${this.state.currentBoard}"
+            ></tasksboard-column>`;
+        });
+
+        return markup;
+    }
+
+    initializeComponentState() {
+        this.oldState = null;
+
+        this.state = (this.state?.columns ?? false)
+            ? { columns: this.state.columns, currentBoard: this.getAttribute('board') }
+            : { columns: [], currentBoard: this.getAttribute('currentboard') }
+
+        for (let i = 0; i < this.store.state.boards.length; i++) {
+            if (this.state.currentBoard === this.store.state.boards[i].name) {
+                this.store.state.boards[i].columns.forEach((column) => {
+                    this.state.columns[this.state.columns.length] = column.name;
+                });
+            }            
+        }
+
+        this.updateOldState();
+    }
+
+    updateOldState() {
+        this.oldState = JSON.parse(JSON.stringify(this.state));
+    }
+
+    didComponentStateChange() {
+        return JSON.stringify(this.oldState.columns) !== JSON.stringify(this.state.columns);
+    }
+
+    refresh() {
+        this.state.columns = [];
+        for (let i = 0; i < this.store.state.boards.length; i++) {
+            if (this.state.currentBoard === this.store.state.boards[i].name) {
+                this.store.state.boards[i].columns.forEach((column) => {
+                    this.state.columns[this.state.columns.length] = column.name;
+                });
+            }            
+        }
+
+        if (this.didComponentStateChange()) {
+            this.HTML();
+            this.updateOldState();
+        }
     }
 }
 
