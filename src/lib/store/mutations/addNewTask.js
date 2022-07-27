@@ -1,3 +1,6 @@
-export default function(context, payload) {
-    console.log('mutation addNewTask executed');
+export default function(state, payload) {
+    const { ...newState } = state;
+    newState.boards = payload;
+    sessionStorage.setItem('appState', JSON.stringify(newState));
+    return newState;
 }
