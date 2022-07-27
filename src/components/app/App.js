@@ -35,7 +35,7 @@ export default class App extends HTMLElement {
 
     HTML(board) {
         const markup = /*html*/ `<div id="canvas" data-menu="on-screen">
-            <app-header></app-header>
+            <app-header currentboard="${board}"></app-header>
             <side-bar></side-bar>
             <tasks-board data-sidebar-control="off-screen" currentboard="${board}"></tasks-board>
         </div>`;
@@ -55,8 +55,7 @@ export default class App extends HTMLElement {
                         this.beforeNewViewRenderedOperations();
                     }
 
-                    this.renderOneView();
-                    //Navigate to the first board
+                    this.navigateToTheFirstBoard();
                 },
                 hooks: {
                     before: (done) => {
@@ -111,7 +110,6 @@ export default class App extends HTMLElement {
         this.HTML(this.state.currentBoard);
     }
 
-    // NEW
     initializeComponentState() {
         this.oldState = null;
         this.state = {};
@@ -129,16 +127,21 @@ export default class App extends HTMLElement {
     }
 
     refresh() {
+        this.refreshCurrentState();
+
+        if (this.didComponentStateChange()) {
+            this.navigateToTheFirstBoard();
+            this.renderTasksBoard(this.getCurrentBoard());
+            this.updateOldState();
+        }
+    }
+
+    refreshCurrentState() {
         this.state.boards = [];
+
         for (let i = 0; i < this.store.state.boards.length; i++) {
             const reformattedBoardName = this.store.state.boards[i].name.replace(" ", "-").toLowerCase();
             this.state.boards[this.state.boards.length] = reformattedBoardName;
-        }
-
-        if (this.didComponentStateChange()) {
-            this.clearRoute(this.getMainRoute());
-            this.renderTasksBoard(this.getCurrentBoard());
-            this.updateOldState();
         }
     }
 
@@ -146,8 +149,10 @@ export default class App extends HTMLElement {
         return this.shadowRoot.querySelector('tasks-board').shadowRoot.getElementById('mainRoute');
     }
 
-    renderOneView() {
-        this.getMainRoute().innerHTML = /*html*/ `<div>ONE</div>`;
+    navigateToTheFirstBoard() {
+        const firstBoard = this.state.boards[0];
+        router.navigate(`${firstBoard}`);
+        this.highlightSidebarFirstBoardButton();
     }
 
     beforeNewViewRenderedOperations() {
@@ -251,6 +256,12 @@ export default class App extends HTMLElement {
     hideSidebarControl() {
         this.shadowRoot.getElementById('canvas')
             .getElementsByTagName('tasks-board')[0].setAttribute('data-sidebar-control', "off-screen");
+    }
+
+    highlightSidebarFirstBoardButton() {
+        setTimeout(() => {
+            this.shadowRoot.querySelector('side-bar').setFirstBoardToCurrent();
+        }, 0);
     }
 }
 

@@ -49,7 +49,7 @@ export default class Sidebar extends HTMLElement {
     }
 
     SCRIPTS() {
-        this.refresh()
+        this.currentBoardHighlighter()
     }
 
     generateBoardNavListElements() {
@@ -76,7 +76,7 @@ export default class Sidebar extends HTMLElement {
         return collection;
     }
 
-    refresh() {
+    currentBoardHighlighter() {
         window.addEventListener('popstate', () => {
             const currentLocation = window.location.hash.replace(" ", "-").toLowerCase().replace("#/", "");
             const liCollection = this.shadowRoot.querySelectorAll('li');
@@ -92,6 +92,13 @@ export default class Sidebar extends HTMLElement {
                 }
             })
         });
+    }
+
+    setFirstBoardToCurrent() {
+        const firstLi = Array.from(this.shadowRoot.querySelectorAll('li'))[0];
+
+        firstLi.classList.add('current');
+        firstLi.getElementsByTagName('board-navigation-button')[0].classList.add('current');
     }
 }
 
