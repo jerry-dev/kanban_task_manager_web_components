@@ -6,8 +6,8 @@
     display: flex;
     justify-content: center;
     margin-top: 3.9375rem;
+    min-width: 17.5rem;
     width: 17.5rem;
-    
 }
 
 p {
