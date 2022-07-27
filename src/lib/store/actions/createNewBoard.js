@@ -1,5 +1,4 @@
 export default function(context, payload) {
-    const boards = JSON.parse(JSON.stringify(context.state.boards));
     const newBoard = {
         name: payload.name,
         columns: []
