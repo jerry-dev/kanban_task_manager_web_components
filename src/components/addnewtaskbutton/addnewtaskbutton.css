@@ -10,6 +10,7 @@
 
 #innerContainer {
     color: var(--White);
+    pointer-events: none;
     font-size: var(--font-size-15);
     font-weight: var(--font-weight-7);
     line-height: var(--line-height-19);
@@ -21,4 +22,395 @@
 
 :host(:active) {
     transform: scale(0.95);
+}
+
+/* --------- Dialog Rules --------- */
+
+.addNewTaskDialog[open] {
+    background-color: var(--Taskboard-Background-Color);
+    border: none;
+    border-radius: 0.375rem;
+    padding: 0;
+    width: 30rem;
+
+    animation-name: revealDialog;
+    animation-duration: 0.4s;
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;
+    opacity: 0;
+    transform: scale(0.9);
+}
+
+@keyframes revealDialog {
+    0% {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+dialog:not([open]) {
+    display: none;
+}
+
+dialog[open]::backdrop {
+    background-color: #000000;
+    opacity: 0.5;
+}
+
+:host .addNewTaskDialogForm {
+    background-color: var(--Task-Preview-Background-Color);
+    cursor: auto;
+    height: 100%;
+    padding-bottom: 2rem;
+    padding-top: 2rem;
+    width: 100%;
+}
+
+:host .addNewTaskDialogForm .formHeader {
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+}
+
+/* :host .expandedTaskDialogForm .formHeader kebab-menu-button {
+    margin-left: 1.5rem;
+} */
+
+:host .addNewTaskDialogFormInnerContainer {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 86.666666%;
+}
+
+:host .dialogTaskTitle {
+    color: var(--Main-Text-Color);
+    font-size: var(--font-size-18);
+    font-style: normal;
+    font-weight: var(--font-weight-7);
+    line-height: var(--line-height-23);
+    margin: 0;
+}
+
+/* :host .deleteHeader {
+    color: var(--Red);
+} */
+
+:host .addNewTaskDialogFormInnerContainer {
+    color: var(--Medium-Grey);
+    font-size: var(--font-size-13);
+    font-style: normal;
+    font-weight: var(--font-weight-5);
+    line-height: var(--line-height-23);
+}
+
+/* :host .buttonContainer {
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-top: 1.5rem;
+} */
+
+:host button {
+    border: none;
+    border-radius: 1.25rem;
+    cursor: pointer;
+    font-style: normal;
+    font-weight: var(--font-weight-7);
+    font-size: var(--font-size-13);
+    line-height: var(--line-height-23);
+    height: 2.5rem;
+    width: 12.5rem;
+}
+
+/* :host .buttonContainer .deleteButton {
+    background-color: var(--Red);
+    color: var(--White);
+} */
+
+/* :host .buttonContainer .cancelButton {
+    background-color: var(--Cancel-Button-Background-Color);
+    color: var(--Main-Purple);
+} */
+
+/* :host .dialogTaskDescription {
+    color: var(--Medium-Grey);
+    font-size: var(--font-size-13);
+    font-style: normal;
+    font-weight: var(--font-weight-5);
+    line-height: var(--line-height-23);
+    margin: 0;
+    margin-bottom: 1.5rem;
+} */
+
+/* :host .dialogCompletionStats {
+    color: var(--Dialog-Text-1-Color);
+    margin-top: 1.4375rem;
+} */
+
+/* :host .expandedTaskDialog[open] .taskCheckboxList {
+    list-style: none;
+    padding: 0;
+} */
+
+/* :host .addNewTaskDialog[open] .taskCheckboxList li {
+    align-items: center;
+    background-color: var(--Taskboard-Background-Color);
+    border-radius: 0.25rem;
+    display: flex;
+    margin: 0;
+    padding: 0;
+    padding-bottom: 0.75rem;
+    padding-top: 0.8125rem;
+    width: 100%;
+} */
+
+/* :host .expandedTaskDialog[open] .taskCheckboxList li:hover {
+    background-color: var(--Main-Purple-Hover-1);
+} */
+
+/* :host .expandedTaskDialog[open] .taskCheckboxList li:not(:last-child) {
+    margin-bottom: 0.5rem;
+} */
+
+/* :host .expandedTaskDialog[open] .taskCheckboxList li label {
+    align-items: center;
+    color: var(--Main-Text-Color);
+    cursor: pointer;
+    display: flex;
+    font-size: var(--font-size-12);
+    font-style: normal;
+    font-weight: var(--font-weight-7);
+    line-height: var(--line-height-15);
+    margin: 0;
+    margin-left: auto;
+    margin-right: auto;
+    width: 24.25rem;
+} */
+
+/* :host .expandedTaskDialog[open] .taskCheckboxList li label.crossOut {
+    color: var(--Medium-Grey);
+    text-decoration: line-through var(--Medium-Grey);
+} */
+
+/* :host .expandedTaskDialog[open] .taskCheckboxList li label input {
+    accent-color: var(--Main-Purple);
+    border-color: var(--Medium-Grey);
+    border-radius: 0.125rem;
+    cursor: pointer;
+    margin-right: 1rem;
+    width: 1rem;
+    height: 1rem;
+} */
+
+/* :host .expandedTaskDialog[open] .taskCheckboxList li label input:not(:checked)::after {
+    background-color: var(--Task-Preview-Background-Color);
+    border-color: var(--Medium-Grey);
+    border-radius: 0.125rem;
+    content: "";
+    height: 1rem;
+    margin-bottom: 1.5rem;
+    position: absolute;
+    width: 1rem;
+} */
+
+:host .currentStatusLabel {
+    color: var(--Dialog-Text-1-Color);
+    display: block;
+    font-size: var(--font-size-12);
+    font-style: normal;
+    font-weight: var(--font-weight-7);
+    line-height: var(--line-height-15);
+    margin-bottom: 0.5rem;
+}
+
+/* GOING TO MOVE THIS INTO A COMPONENT */
+:host #currentStatus {
+    background-color: var(--Task-Preview-Background-Color);
+    border: 0.0625rem solid var(--Border-Color);
+    color: var(--Main-Text-Color);
+    display: block;
+    height: 2.5rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    width: 100%;
+}
+
+/* GOING TO MOVE THIS INTO A COMPONENT */
+:host #currentStatus > option {
+    /* background-color: red; */
+    color: var(--Medium-Grey);
+    /* cursor: pointer; */
+    display: block;
+    font-size: var(--font-size-13);
+    font-style: normal;
+    font-weight: var(--font-weight-5);
+    height: 1.4375rem;
+    line-height: var(--line-height-23);
+    width: 10rem;
+}
+
+:host .addNewTaskLabelContainer {
+    align-items: flex-start;
+    color: var(--Dialog-Text-1-Color);
+    display: flex;
+    flex-direction: column;
+    font-size: var(--font-size-12);
+    margin-top: 1.4375rem;
+    padding: 0;
+    width: 100%;
+}
+
+.formInput {
+    background: none;
+    border: 0.0625rem solid var(--Border-Color);
+    border-radius: 0.25rem;
+    box-sizing: border-box;
+    color: var(--Main-Text-Color);
+    cursor: pointer;
+    font-style: normal;
+    font-size: var(--font-size-13);
+    font-weight: var(--font-weight-5);
+    line-height: var(--line-height-23);
+    height: 2.5rem;
+    margin-top: 0.5rem;
+    padding: 0;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    width: 100%;
+}
+
+.formInput:hover {
+    border: 0.0625rem solid var(--Main-Purple);
+}
+
+.addNewTaskDialogFormInnerContainer {
+    position: relative;
+}
+
+:host .addNewTaskLabelContainer > .descriptionTextarea {
+    min-height: 7rem;
+    padding-top: 0.5rem;
+    resize: none;
+}
+
+.formInput::placeholder {
+    color: var(--Placeholder-Text-Color);
+    font-style: normal;
+    font-weight: var(--font-weight-5);
+    font-size: var(--font-size-13);
+    line-height: var(--line-height-23);
+    opacity: 0.25;
+    white-space: pre-line; 
+}
+
+.errorFormInput {
+    border: 0.0625rem solid var(--Red);
+}
+
+.errorFormInput::placeholder {
+    color: var(--Red);
+    opacity: 1;
+    text-align: right;
+}
+
+:host .addNewTaskLabelContainer > .addNewTaskSubtaskList {
+    list-style: none;
+    padding: 0;
+    width: 100%;
+}
+
+:host .addNewTaskLabelContainer > .addNewTaskSubtaskList li {
+    align-items: center;
+    display: flex;
+    padding: 0;
+    width: 100%;
+}
+
+:host .addNewTaskLabelContainer > .addNewTaskSubtaskList li:not(:last-child) {
+    margin-bottom: 0.75rem;
+}
+
+:host .addNewTaskLabelContainer > .addNewTaskSubtaskList li .formInput {
+    margin-top: 0;
+}
+
+:host .addNewTaskSubtaskList li button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    height: 0.928125rem;
+    margin-left: 1rem;
+    width: 0.928125rem;
+}
+
+:host .addNewTaskSubtaskList li button > * {
+    pointer-events: none;
+}
+
+/*  */
+
+:host .newSubtaskButton,
+:host .addNewTaskDialogFormInnerContainer > .createNewTask {
+    background: none;
+    border: none;
+    border-radius: 1.25rem;
+    color: var(--Main-Purple);
+    cursor: pointer;
+    font-style: normal;
+    font-weight: var(--font-weight-7);
+    font-size: var(--font-size-13);
+    height: 2.5rem;
+    line-height: var(--line-height-23);  
+    width: 100%;
+}
+
+:host .newSubtaskButton {
+    background-color: var(--Add-New-Subtask-Background-Color);
+}
+
+:host .addNewTaskDialogFormInnerContainer > .createNewTask {
+    background-color: var(--Main-Purple);
+    color: var(--White);
+    margin-top: 1.5rem;
+}
+
+:host .addNewTaskDialogFormInnerContainer > .createNewTask:hover {
+    background-color: hsla(242, 100%, 82%, 1);
+}
+
+:host .newSubtaskButton:hover {
+    background-color: var(--Add-New-Subtask-Background-Color-Hover);
+}
+
+:host .newSubtaskButton:active,
+:host .addNewTaskDialogFormInnerContainer > .createNewTask:active {
+    transform: scale(0.95);
+}
+
+:host(.deleted) {
+    animation-name: delete;
+    animation-duration: 0.4s;
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;
+
+    opacity: 0;
+    background-color: var(--Red);
+}
+
+@keyframes delete {
+    0% {
+        opacity: 1;
+        background-color: var(--Task-Preview-Background-Color);
+    }
+    100% {
+        opacity: 0;
+        background-color: var(--Red);
+    }
 }
