@@ -144,6 +144,16 @@ export default class KebabMenuButton extends HTMLElement {
         if (popupMenu.open) popupMenu.close();
     }
 
+    closeOnPopUpMenuOverlayClickListener() {
+        const popupMenu = this.getPopUpMenu();
+
+        popupMenu.addEventListener('click', (event) => {
+            if (event.composedPath()[0].nodeName === "DIALOG") {
+                this.closePopUpMenu();
+            }
+        });
+    }
+
     clickManager() {
         this.popUpMenuManager();
         this.editButtonClickManager();
@@ -152,6 +162,7 @@ export default class KebabMenuButton extends HTMLElement {
         this.deleteColumnClickListener();
         this.closeOnEditBoardOverlayClickListener();
         this.closeOnDeleteBoardOverlayClickListener();
+        this.closeOnPopUpMenuOverlayClickListener();
         this.confirmButtonsListener();
     }
 
