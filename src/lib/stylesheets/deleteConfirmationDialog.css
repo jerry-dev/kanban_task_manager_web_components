@@ -104,7 +104,15 @@ dialog[open]::backdrop {
     color: var(--White);
 }
 
+.buttonContainer .deleteButton:hover {
+    background-color: var(--Red-Hover);
+}
+
 .buttonContainer .cancelButton {
     background-color: var(--Cancel-Button-Background-Color);
     color: var(--Main-Purple);
+}
+
+.buttonContainer .cancelButton:hover {
+    background-color: var(--White);
 }
