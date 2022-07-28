@@ -114,6 +114,7 @@ export default class AddNewTaskButton extends HTMLElement {
     closeAddNewTaskkDialog() {
         const addNewTaskDialog = this.getAddNewTaskDialog();
         if (addNewTaskDialog.open) addNewTaskDialog.close();
+        this.clearForm();
     }
 
     launchAddNewTaskDialog() {
@@ -183,6 +184,17 @@ export default class AddNewTaskButton extends HTMLElement {
             </li>`;
 
         addNewTaskDialogFormElement.querySelector('.addNewTaskSubtaskList').innerHTML = markup;
+    }
+
+    clearForm() {
+        this.getAddNewTaskDialog().querySelectorAll('.formInput')[0].value = '';
+        this.getAddNewTaskDialog().querySelector('textarea').value = '';
+        const subtaskListElements = Array.from(this.getAddNewTaskDialog().querySelector('.addNewTaskSubtaskList').querySelectorAll('li'));
+
+        subtaskListElements.forEach((item) => {
+            item.querySelector('input').dataset.title = '';
+            item.querySelector('input').value = '';
+        })
     }
 
     deleteSubtaskClickListener() {
