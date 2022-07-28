@@ -32,7 +32,6 @@ export default class Tasksboard extends HTMLElement {
         `<div id="componentInnerContainer">
             <output id="mainRoute">
                 ${this.getColumns()}
-                <new-column-button board="${this.state.currentBoard}"></new-column-button>
             </output>
             <button type="button" id="sideBarControl">
                 <img src="../../src/assets/icons/eye.svg"/>
@@ -49,21 +48,28 @@ export default class Tasksboard extends HTMLElement {
         // The colors are positioned like arrays: 0, 1, 2, 3, 4, 5
         let colorIndex = null;
 
-        this.state.columns.forEach((column) => {
-            // Keeping the color choice in range
-            if (colorIndex !== null && colorIndex < 5) {
-                colorIndex++;
-            } else {
-                colorIndex = 0;
-            }
-            
-            markup += /*html*/
-            `<tasksboard-column
-                colorindex=${colorIndex}
-                columnname="${column}"
-                board="${this.state.currentBoard}"
-            ></tasksboard-column>`;
-        });
+        if (this.state.columns.length > 1) {
+            this.state.columns.forEach((column) => {
+                // Keeping the color choice in range
+                if (colorIndex !== null && colorIndex < 5) {
+                    colorIndex++;
+                } else {
+                    colorIndex = 0;
+                }
+                
+                markup += /*html*/
+                `<tasksboard-column
+                    colorindex=${colorIndex}
+                    columnname="${column}"
+                    board="${this.state.currentBoard}"
+                ></tasksboard-column>`;
+            });
+    
+            markup += /*html*/`<new-column-button board="${this.state.currentBoard}"></new-column-button>`;
+        } else {
+            markup += /*html*/`<new-column-button style="empty" board="${this.state.currentBoard}"></new-column-button>`;
+        }
+        
 
         return markup;
     }

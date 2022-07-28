@@ -25,7 +25,14 @@ export default class NewColumnButton extends HTMLElement {
     }
 
     HTML() {
-        let markup = /*html*/`<p>+ New Column</p>`;
+        let markup = '';
+
+        if (this.getAttribute('style') === 'empty') {
+            markup += /*html*/`<h2>This board is empty. Create a new column to get started.</h2>`;
+            markup += /*html*/`<p role="button">+ Add New Column</p>`;
+        } else {
+            markup = /*html*/`<p>+ New Column</p>`;
+        }
 
         markup += /*html*/
         `<dialog class="editBoardDialog">
