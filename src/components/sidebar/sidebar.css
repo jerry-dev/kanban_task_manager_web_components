@@ -9,10 +9,6 @@
     left: -18.75rem;
 }
 
-app-logo {
-    margin-left: 2.125rem;
-}
-
 label {
     color: var(--Medium-Grey);
     display: block;
@@ -22,6 +18,7 @@ label {
     line-height: 0.9375rem;
     margin-bottom: 1.1875rem;
     margin-left: 2rem;
+    margin-top: 0.9375rem;
 }
 
 #sideBarNav > ul {
