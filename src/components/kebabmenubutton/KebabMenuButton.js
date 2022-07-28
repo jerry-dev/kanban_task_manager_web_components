@@ -180,7 +180,10 @@ export default class KebabMenuButton extends HTMLElement {
     }
 
     launchEditBoardDialog() {
-        if (!this.isEditBoardDialogShowing()) this.getEditBoardDialog().showModal();
+        if (!this.isEditBoardDialogShowing()) {
+            this.closePopUpMenu();
+            this.getEditBoardDialog().showModal();
+        };
     }
 
     closeEditBoardDialog() {
@@ -206,7 +209,10 @@ export default class KebabMenuButton extends HTMLElement {
     }
 
     launchDeleteBoardDialog() {
-        if (!this.isDeleteBoardDialogShowing()) this.getDeleteBoardDialog().showModal();
+        if (!this.isDeleteBoardDialogShowing()) {
+            this.closePopUpMenu();
+            this.getDeleteBoardDialog().showModal();
+        };
     }
 
     closeDeleteBoardDialog() {
