@@ -1,15 +1,6 @@
 :host {
     display: block;
-    max-width: 9.533125rem;
-}
-
-#logoOuterContainer {
-    border-right: 0.0625rem solid var(--Border-Color);
-    display: flex;
-    justify-content: center;
-    height: 100%;
-    max-width: 13.0625rem;
-    width: 14.513888%;
+    width: 9.533125rem;
 }
 
 #logoInnerContainer {
@@ -17,8 +8,6 @@
     display: flex;
     height: 6.0625rem;
     justify-content: space-between;
-    width: 72.98086%;
-    width: 100%;
 }
 
 #logoBarsContainer {
