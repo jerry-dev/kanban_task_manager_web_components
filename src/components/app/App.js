@@ -34,8 +34,9 @@ export default class App extends HTMLElement {
     }
 
     HTML(board) {
-        const markup = /*html*/ `<div id="canvas" data-menu="on-screen">
-            <app-header currentboard="${board}"></app-header>
+        let markup = '';
+        markup +=  /*html*/ `<app-header currentboard="${board}"></app-header>`;
+        markup += /*html*/ `<div id="canvas" data-menu="on-screen">
             <side-bar></side-bar>
             <tasks-board data-sidebar-control="off-screen" currentboard="${board}"></tasks-board>
         </div>`;
@@ -186,7 +187,6 @@ export default class App extends HTMLElement {
         if (event.composedPath()[0].id === 'sideBarControl') {
             if (!this.isSideBarOnScreen()) {
                 this.revealSidebar();
-                return this.hideAppHeaderLogo();
             }
         }
     }
@@ -195,7 +195,6 @@ export default class App extends HTMLElement {
         if (event.composedPath()[0].tagName === "HIDE-SIDEBAR-BUTTON") {
             if (this.isSideBarOnScreen()) {
                 this.hideSidebar();
-                return this.unhideAppHeaderLogo();
             }
         }
     }
@@ -212,18 +211,6 @@ export default class App extends HTMLElement {
                 this.activateDarkTheme();
             }
         }
-    }
-
-    hideAppHeaderLogo() {
-        this.shadowRoot.getElementById('canvas')
-            .querySelector('app-header')
-            .shadowRoot.querySelector('#logoOuterContainer').setAttribute('data-behavior', 'hide');
-    }
-
-    unhideAppHeaderLogo() {
-        this.shadowRoot.getElementById('canvas')
-            .querySelector('app-header')
-            .shadowRoot.querySelector('#logoOuterContainer').setAttribute('data-behavior', 'show');
     }
 
     activateDarkTheme() {

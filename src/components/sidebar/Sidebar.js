@@ -30,8 +30,7 @@ export default class Sidebar extends HTMLElement {
 
     HTML() {
         const markup = /*html*/
-        `<app-logo></app-logo>
-        <label for="sideBarNav">ALL BOARDS (${this.getNumberOfBoards()})</label>
+        `<label for="sideBarNav">ALL BOARDS (${this.getNumberOfBoards()})</label>
         <nav id="sideBarNav">
             <ul>
                 ${this.generateBoardNavListElements()}

@@ -2,6 +2,7 @@
     background-color: var(--Taskboard-Background-Color);
     display: block;
     height: 100%;
+    min-height: 64rem;
     overflow-y: auto;
     width: var(--application-width);
     
@@ -32,9 +33,6 @@
     border-radius: 0 6.25rem 6.25rem 0;
     cursor: pointer;
     height: 3rem;
-    left: 0;
-    position: absolute;
-    top: 95vh;
     width: 3.5rem;
 }
 
