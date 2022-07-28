@@ -32,7 +32,7 @@ export default class AppHeader extends HTMLElement {
             <div id="sectionTitleSectionInnerContainer">
                 <h2>${this.getAttribute('currentboard')}</h2>
                 <add-new-task-button currentboard="${this.getAttribute('currentboard')}"></add-new-task-button>
-                <kebab-menu-button></kebab-menu-button>
+                <kebab-menu-button currentboard="${this.getAttribute('currentboard')}" altering="Board"></kebab-menu-button>
             </div>
         </section>`;
 

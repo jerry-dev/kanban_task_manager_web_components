@@ -100,7 +100,6 @@ export default class App extends HTMLElement {
             if (boardName[i] === "-") {
                 boardName[i] = " "
                 boardName[i+1] = boardName[i+1].toUpperCase();
-                break;
             }
         }
         

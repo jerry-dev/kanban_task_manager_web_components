@@ -72,7 +72,7 @@ export default class Tasksboard extends HTMLElement {
         this.oldState = null;
 
         this.state = (this.state?.columns ?? false)
-            ? { columns: this.state.columns, currentBoard: this.getAttribute('board') }
+            ? { columns: this.state.columns, currentBoard: this.getAttribute('currentboard') }
             : { columns: [], currentBoard: this.getAttribute('currentboard') }
 
         for (let i = 0; i < this.store.state.boards.length; i++) {
