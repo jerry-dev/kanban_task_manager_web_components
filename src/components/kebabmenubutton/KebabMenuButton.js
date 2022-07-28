@@ -1,5 +1,6 @@
 import kebabMenuButtonStyleSheet from './kebabmenubutton.css' assert { type: 'css' };
 import editBoardDialogStyleSheet from '../../lib/stylesheets/editBoardDialog.css' assert { type: 'css' };
+import deleteConfirmationDialogStyleSheet from '../../lib/stylesheets/deleteConfirmationDialog.css' assert { type: 'css' };
 import store from '../../lib/store/index.js';
 
 export default class KebabMenuButton extends HTMLElement {
@@ -21,7 +22,11 @@ export default class KebabMenuButton extends HTMLElement {
     }
 
     CSS() {
-        this.shadowRoot.adoptedStyleSheets = [ kebabMenuButtonStyleSheet, editBoardDialogStyleSheet ];
+        this.shadowRoot.adoptedStyleSheets = [
+            kebabMenuButtonStyleSheet,
+            editBoardDialogStyleSheet,
+            deleteConfirmationDialogStyleSheet
+        ];
     }
 
     HTML() {
@@ -57,6 +62,22 @@ export default class KebabMenuButton extends HTMLElement {
                     </label>
                     <button type="button" class="newColumnButton">+ Add New Column</button>
                     <button type="submit" class="editBoardSaveChanges">Save Changes</button>
+                </span>
+            </form>
+        </dialog>`;
+
+        markup += /*html*/
+        `<dialog class="deleteBoardDialog">
+            <form class="deleteBoardDialogForm">
+                <span class="deleteBoardDialogFormInnerContainer">
+                    <header class="formHeader">
+                        <h3 class="dialogTaskTitle deleteHeader">Delete this task?</h3>
+                    </header>
+                    <p>Are you sure you want to delete the ‘${this.state.currentBoard}’ board? This action will remove all columns and tasks and cannot be reversed.</p>
+                    <section class="buttonContainer">
+                        <button class="confirmButton deleteButton">Delete</button>
+                        <button class="confirmButton cancelButton">Cancel</button>
+                    </section>
                 </span>
             </form>
         </dialog>`;
@@ -126,8 +147,12 @@ export default class KebabMenuButton extends HTMLElement {
     clickManager() {
         this.popUpMenuManager();
         this.editButtonClickManager();
+        this.deleteButtonClickManager();
         this.addNewColumnClickListener();
         this.deleteColumnClickListener();
+        this.closeOnEditBoardOverlayClickListener();
+        this.closeOnDeleteBoardOverlayClickListener();
+        this.confirmButtonsListener();
     }
 
     editButtonClickManager() {
@@ -135,6 +160,14 @@ export default class KebabMenuButton extends HTMLElement {
 
         kebabEditMenuButton.addEventListener('click', () => {
             this.launchEditBoardDialog();
+        });
+    }
+
+    deleteButtonClickManager() {
+        const kebabDeleteMenuButton = this.getPopUpMenu().querySelector('.kebabDeleteMenuButton');
+
+        kebabDeleteMenuButton.addEventListener('click', () => {
+            this.launchDeleteBoardDialog();
         });
     }
 
@@ -154,12 +187,38 @@ export default class KebabMenuButton extends HTMLElement {
         if (this.isEditBoardDialogShowing()) this.getEditBoardDialog().close();
     }
 
-    closeOnOverlayClickListener() {
+    closeOnEditBoardOverlayClickListener() {
         const editBoardDialog = this.getEditBoardDialog();
 
         editBoardDialog.addEventListener('click', (event) => {
             if (event.composedPath()[0].nodeName === "DIALOG") {
                 this.closeEditBoardDialog();
+            }
+        });
+    }
+
+    getDeleteBoardDialog() {
+        return this.shadowRoot.querySelector('.deleteBoardDialog');
+    }
+
+    isDeleteBoardDialogShowing() {
+        return this.getDeleteBoardDialog().open === true;
+    }
+
+    launchDeleteBoardDialog() {
+        if (!this.isDeleteBoardDialogShowing()) this.getDeleteBoardDialog().showModal();
+    }
+
+    closeDeleteBoardDialog() {
+        if (this.isDeleteBoardDialogShowing()) this.getDeleteBoardDialog().close();
+    }
+
+    closeOnDeleteBoardOverlayClickListener() {
+        const deleteBoardDialog = this.getDeleteBoardDialog();
+
+        deleteBoardDialog.addEventListener('click', (event) => {
+            if (event.composedPath()[0].nodeName === "DIALOG") {
+                this.closeDeleteBoardDialog();
             }
         });
     }
@@ -383,6 +442,31 @@ export default class KebabMenuButton extends HTMLElement {
         }
 
         return { boardNameDetails, columnDetails, deletedColumns };
+    }
+
+    confirmButtonsListener() {
+        const deleteBoardDialog = this.getDeleteBoardDialog();
+
+        const deleteButton = deleteBoardDialog.querySelector('.buttonContainer > .deleteButton');
+        const cancelButton = deleteBoardDialog.querySelector('.buttonContainer > .cancelButton');
+
+        deleteButton.addEventListener('click', (event) => {
+            event.preventDefault();
+
+            const action = {
+                type: "DELETE_BOARD",
+                payload: {
+                    board: this.state.currentBoard,
+                }};
+
+            this.store.dispatch(action);
+            this.closeDeleteBoardDialog();
+        });
+
+        cancelButton.addEventListener('click', (event) => {
+            event.preventDefault();
+            this.closeDeleteBoardDialog();
+        });
     }
 }
 
