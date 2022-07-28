@@ -6,6 +6,7 @@ import updateTask from './updateTask.js';
 import editTask from './editTask.js';
 import deleteTask from './deleteTask.js';
 import editBoard from './editBoard.js';
+import deleteBoard from './deleteBoard.js';
 
 export default {
     ADD_NEW_TASK: addNewTask,
@@ -16,4 +17,5 @@ export default {
     EDIT_TASK: editTask,
     DELETE_TASK: deleteTask,
     EDIT_BOARD: editBoard,
+    DELETE_BOARD: deleteBoard,
 }
