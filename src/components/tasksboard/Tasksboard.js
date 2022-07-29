@@ -42,13 +42,13 @@ export default class Tasksboard extends HTMLElement {
     }
 
     getColumns() {
-        if (!this.getAttribute('currentboard')) return;
+        if (!this.state.currentBoard) return;
         let markup = ``;
         // There are currently 6 colors to choose from.
         // The colors are positioned like arrays: 0, 1, 2, 3, 4, 5
         let colorIndex = null;
 
-        if (this.state.columns.length > 1) {
+        if (this.state.columns.length > 0) {
             this.state.columns.forEach((column) => {
                 // Keeping the color choice in range
                 if (colorIndex !== null && colorIndex < 5) {

@@ -9,12 +9,11 @@ export default class NewColumnButton extends HTMLElement {
 
     connectedCallback() {
         this.store = store;
-        this.state = {};
+        this.initializeState();
         this.render();
     }
 
     render() {
-        this.initializeState();
         this.CSS();
         this.HTML();
         this.SCRIPTS();
@@ -27,9 +26,9 @@ export default class NewColumnButton extends HTMLElement {
     HTML() {
         let markup = '';
 
-        if (this.getAttribute('style') === 'empty') {
+        if (this.state.style === 'empty') {
             markup += /*html*/`<h2>This board is empty. Create a new column to get started.</h2>`;
-            markup += /*html*/`<p role="button">+ Add New Column</p>`;
+            markup += /*html*/`<p class ="emptyBoardAddNewColumnButton" role="button">+ Add New Column</p>`;
         } else {
             markup = /*html*/`<p>+ New Column</p>`;
         }
@@ -72,6 +71,9 @@ export default class NewColumnButton extends HTMLElement {
     }
 
     initializeState() {
+        this.state = {};
+        this.state.style = this.getAttribute('style');
+
         let reformattedBoardName = this.getAttribute('board').split("");
         reformattedBoardName[0] = reformattedBoardName[0].toUpperCase();
 
@@ -138,6 +140,14 @@ export default class NewColumnButton extends HTMLElement {
         newColumnButton.addEventListener('click', () => {
             this.addNewColumn();
         });
+
+        if (this.state.style === 'empty') {
+            const emptyBoardAddNewColumnButton = this.shadowRoot.querySelector('.emptyBoardAddNewColumnButton');
+
+            emptyBoardAddNewColumnButton.addEventListener('click', () => {
+                this.addNewColumn();
+            });
+        }
     }
 
     generateColumnList() {
@@ -159,7 +169,7 @@ export default class NewColumnButton extends HTMLElement {
 
         let markup = '';
 
-        const columnListElements = editBoardDialog.querySelector('.columnList').querySelectorAll('li');
+        const columnListElements = Array.from(editBoardDialog.querySelector('.columnList').querySelectorAll('li'));
 
         columnListElements.forEach((item) => {
             const currentValue = item.querySelector('input').value;
@@ -278,6 +288,7 @@ export default class NewColumnButton extends HTMLElement {
                     payload: this.getEditBoardFormDetails()
                 };
 
+                console.log(action)
                 this.store.dispatch(action);
                 this.closeEditBoardDialog();
             }
