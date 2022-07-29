@@ -1,5 +1,6 @@
 import createNewBoardButtonStyleSheet from './createnewboardbutton.css' assert { type: 'css' };
 import store from '../../lib/store/index.js';
+import isTextTooSimilar from '../../lib/isTextTooSimilar.js';
 
 export default class CreateNewBoardButton extends HTMLElement {
     constructor() {
@@ -143,27 +144,13 @@ export default class CreateNewBoardButton extends HTMLElement {
         addNewBoardkDialog.querySelector('.newColumnList').innerHTML = markup;
     }
 
-    isTextTooSimilar(textOne, textTwo) {
-        //Removing all white space and joining the text together into one text string
-        const textOneReformatted = textOne.replace(" " , "").toLowerCase().split("").filter((text) => { return text !== " " }).join("")
-        const textTwoReformatted = textTwo.replace(" " , "").toLowerCase().split("").filter((text) => { return text !== " " }).join("")
-        
-        let result = false;
-
-        if (textOneReformatted === textTwoReformatted) {
-            result = true;
-        }
-
-        return result;
-    }
-
     doesBoardNameExist(newBoardName, store) {
         const boards = JSON.parse(JSON.stringify(store.state.boards));
 
         let result = false;
 
         boards.forEach((board) => {
-            result = this.isTextTooSimilar(board.name, newBoardName);
+            result = isTextTooSimilar(board.name, newBoardName);
         });
 
         return result;
@@ -187,7 +174,7 @@ export default class CreateNewBoardButton extends HTMLElement {
             let count = 0;
 
             for (let i = 0; i < columnListElements.length; i++) {
-                if (this.isTextTooSimilar(columnListElements[i].querySelector('input').value, columnValue)) {
+                if (isTextTooSimilar(columnListElements[i].querySelector('input').value, columnValue)) {
                     count++
                 }
             }
