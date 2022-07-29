@@ -243,3 +243,7 @@ dialog[open]::backdrop {
     opacity: 1;
     text-align: right;
 }
+
+.error {
+    color: var(--Red);
+}

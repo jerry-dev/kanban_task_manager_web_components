@@ -33,7 +33,7 @@ export default class CreateNewBoardButton extends HTMLElement {
                         <h3 class="dialogBoardTitle">Add New Board</h3>
                     </header>
                     <label class="newBoardLabelContainer detail">
-                        Name
+                        <span>Name</span>
                         <input type="text" class="formInput" placeholder="e.g. Web Design" value="" required/>
                     </label>
                     <label class="newBoardLabelContainer detail">
@@ -141,6 +141,29 @@ export default class CreateNewBoardButton extends HTMLElement {
             </li>`;
 
         addNewBoardkDialog.querySelector('.newColumnList').innerHTML = markup;
+    }
+
+    doesBoardNameExist(newBoardName, store) {
+        const boards = JSON.parse(JSON.stringify(store.state.boards));
+
+        let result = false;
+
+        boards.forEach((board) => {
+            //Removing all white space and joining the text together into one text string
+            const existingNameReformatted = board.name.replace(" " , "").toLowerCase().split("").filter((text) => { return text !== " " }).join("")
+            const incomingBoardNameReformatted = newBoardName.replace(" " , "").toLowerCase().split("").filter((text) => { return text !== " " }).join("")
+            
+            if (existingNameReformatted === incomingBoardNameReformatted) {
+                result = true;
+            }
+        });
+
+        return result;
+    }
+
+    notifyOfDuplicate(input) {
+        input.parentNode.querySelector('span').classList.add('error');
+        input.parentNode.querySelector('span').innerText = `The name you specified is too similar to an existing board's name. Please specify another name.`;
     }
 
     deleteNewColumnClickListener() {
@@ -256,8 +279,12 @@ export default class CreateNewBoardButton extends HTMLElement {
                     }
                 };
 
-                this.store.dispatch(action);
-                this.closeAddNewBoardDialog();
+                if (this.doesBoardNameExist(titleInput.value, this.store)) {
+                    this.notifyOfDuplicate(titleInput);
+                } else {
+                    this.store.dispatch(action);
+                    this.closeAddNewBoardDialog();
+                }
             }
         });
     }
