@@ -1,5 +1,6 @@
 import newColumnButtonStyleSheet from './newcolumnbutton.css' assert {type: 'css'};
 import store from '../../lib/store/index.js';
+import isTextTooSimilar from '../../lib/isTextTooSimilar.js';
 
 export default class NewColumnButton extends HTMLElement {
     constructor() {
@@ -41,11 +42,11 @@ export default class NewColumnButton extends HTMLElement {
                         <h3 class="dialogTitle">Edit Board</h3>
                     </header>
                     <label class="editBoardLabelContainer detail">
-                        Board Name
+                        <span>Board Name</span>
                         <input type="text" class="formInput" placeholder="e.g. Project X" value="${this.state.board}" required/>
                     </label>
                     <label class="editBoardLabelContainer detail">
-                        Board Columns
+                        <span>Board Columns</span>
                         <ul class="columnList"></ul>
                     </label>
                     <button type="button" class="newColumnButton">+ Add New Column</button>
@@ -222,6 +223,72 @@ export default class NewColumnButton extends HTMLElement {
         })
     }
 
+    // ---------------------------------------------------------------------------
+    // Invoke if the originalBoardNameStatus === "CHANGED"
+    // Skip this check if the originalBoardNameStatus === "SAME"
+    doesBoardNameExist(newBoardName, store) {
+        const boards = JSON.parse(JSON.stringify(store.state.boards));
+
+        let result = false;
+
+        boards.forEach((board) => {
+            if (isTextTooSimilar(board.name, newBoardName)) {
+                result = true;
+                console.log('board.name:', board.name);
+                console.log('board.name:', board.name);
+                console.log('isTextTooSimilar result:', result);
+            }            
+        });
+
+        return result;
+    }
+
+
+    notifyOfDuplicateBoardName() {
+        const messageContainer = this.getEditBoardDialog().querySelectorAll('label')[0].querySelector('span');
+        messageContainer.classList.add('error');
+        messageContainer.innerText = `The name you specified is too similar to an existing board's name. Please specify another name.`;
+    }
+
+    // Invoke if the originalColumnStatus !== "SAME"
+    // If it isn't "SAME", then the originalColumnStatus === "NEW" or "CHANGED"
+    // In the case of "NEW" or "CHANGED", we'll need to check those
+    areThereDuplicateColumnNames() {
+        let result = false;
+
+        const columnListLabelContainer = this.getEditBoardDialog().querySelectorAll('.editBoardLabelContainer')[1];
+        const columnListElements = Array.from(columnListLabelContainer.querySelectorAll('.columnList li'));
+
+        let theColumnValues = [];
+
+        columnListElements.forEach((listElement) => {
+            theColumnValues[theColumnValues.length] = listElement.querySelector('input').value;
+        });
+
+        theColumnValues.forEach((columnValue) => {
+            let count = 0;
+
+            for (let i = 0; i < columnListElements.length; i++) {
+                if (isTextTooSimilar(columnListElements[i].querySelector('input').value, columnValue)) {
+                    count++
+                }
+            }
+
+            if (count > 1) {
+                result = true;
+            }
+        });
+
+        return result;
+    }
+
+    notifyOfDuplicateColumnName() {
+        const messageContainer = this.getEditBoardDialog().querySelectorAll('label')[1].querySelector('span');
+        messageContainer.classList.add('error');
+        messageContainer.innerText = `At least one column name you specified is too similar to an existing column name in this board. Please specify another name.`;
+    }
+    // END------------------------------------------------------------------------
+
     submitEditBoardDialogFormManager() {
         let isWatchingBoardNameInput = false;
 
@@ -288,9 +355,21 @@ export default class NewColumnButton extends HTMLElement {
                     payload: this.getEditBoardFormDetails()
                 };
 
-                console.log(action)
-                this.store.dispatch(action);
-                this.closeEditBoardDialog();
+                const newBoardName = this.getEditBoardDialog().querySelector('.editBoardLabelContainer > input').value;
+
+                if (action.payload.boardNameDetails.originalBoardNameStatus === "CHANGED" && this.doesBoardNameExist(newBoardName, this.store)) {
+                    this.notifyOfDuplicateBoardName();
+                } else {
+                    // If there is no dupliate boards name, we start
+                    // to check if there are any duplicate column names
+                    if (action.payload.columnDetails.originalColumnStatus !== "SAME" && this.areThereDuplicateColumnNames()) {
+                        this.notifyOfDuplicateColumnName();
+                    } else {
+                        // if there are no duplicate board names and no duplicate column names
+                        this.store.dispatch(action);
+                        this.closeEditBoardDialog();
+                    }                    
+                }
             }
         });
     }
