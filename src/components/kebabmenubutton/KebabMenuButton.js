@@ -11,6 +11,9 @@ export default class KebabMenuButton extends HTMLElement {
 
     connectedCallback() {
         this.store = store;
+        this.store.observer.subscribe('stateChange', () => {
+            this.refresh();
+        })
         this.initializeState();
         this.render();
     }
@@ -484,6 +487,21 @@ export default class KebabMenuButton extends HTMLElement {
             event.preventDefault();
             this.closeDeleteBoardDialog();
         });
+    }
+
+    refresh(){
+        this.state.columnNames = [];
+
+        for (let i = 0; i < this.store.state.boards.length; i++) {
+            if (this.store.state.boards[i].name === this.state.currentBoard) {
+                this.store.state.boards[i].columns.forEach((column) => {
+                    this.state.columnNames[this.state.columnNames.length] = column.name;
+                });
+            }
+        }
+
+        this.shadowRoot.innerText = '';
+        this.render();
     }
 }
 
