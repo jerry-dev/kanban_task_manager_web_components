@@ -37,7 +37,7 @@ export default class CreateNewBoardButton extends HTMLElement {
                         <input type="text" class="formInput" placeholder="e.g. Web Design" value="" required/>
                     </label>
                     <label class="newBoardLabelContainer detail">
-                        Columns
+                        <span>Columns</span>
                         <ul class="newColumnList">
                             <li>
                                 <input type="text" class="formInput" placeholder="e.g. Todo" value="" required/>
@@ -143,17 +143,56 @@ export default class CreateNewBoardButton extends HTMLElement {
         addNewBoardkDialog.querySelector('.newColumnList').innerHTML = markup;
     }
 
+    isTextTooSimilar(textOne, textTwo) {
+        //Removing all white space and joining the text together into one text string
+        const textOneReformatted = textOne.replace(" " , "").toLowerCase().split("").filter((text) => { return text !== " " }).join("")
+        const textTwoReformatted = textTwo.replace(" " , "").toLowerCase().split("").filter((text) => { return text !== " " }).join("")
+        
+        let result = false;
+
+        if (textOneReformatted === textTwoReformatted) {
+            result = true;
+        }
+
+        return result;
+    }
+
     doesBoardNameExist(newBoardName, store) {
         const boards = JSON.parse(JSON.stringify(store.state.boards));
 
         let result = false;
 
         boards.forEach((board) => {
-            //Removing all white space and joining the text together into one text string
-            const existingNameReformatted = board.name.replace(" " , "").toLowerCase().split("").filter((text) => { return text !== " " }).join("")
-            const incomingBoardNameReformatted = newBoardName.replace(" " , "").toLowerCase().split("").filter((text) => { return text !== " " }).join("")
-            
-            if (existingNameReformatted === incomingBoardNameReformatted) {
+            result = this.isTextTooSimilar(board.name, newBoardName);
+        });
+
+        return result;
+    }
+
+    notifyOfDuplicateBoardName() {
+        const messageContainer = this.getAddNewBoardDialog().querySelectorAll('label')[0].querySelector('span');
+        messageContainer.classList.add('error');
+        messageContainer.innerText = `The name you specified is too similar to an existing board's name. Please specify another name.`;
+    }
+
+    areThereDuplicateColumnNames() {
+        let result = false;
+
+        const theColumnValues = this.getNewBoardkDialogFormColumns();
+
+        const columnListLabelContainer = this.getAddNewBoardDialog().querySelectorAll('label')[1];
+        const columnListElements = Array.from(columnListLabelContainer.querySelectorAll('.newColumnList li'));
+
+        theColumnValues.forEach((columnValue) => {
+            let count = 0;
+
+            for (let i = 0; i < columnListElements.length; i++) {
+                if (this.isTextTooSimilar(columnListElements[i].querySelector('input').value, columnValue)) {
+                    count++
+                }
+            }
+
+            if (count > 1) {
                 result = true;
             }
         });
@@ -161,10 +200,12 @@ export default class CreateNewBoardButton extends HTMLElement {
         return result;
     }
 
-    notifyOfDuplicate(input) {
-        input.parentNode.querySelector('span').classList.add('error');
-        input.parentNode.querySelector('span').innerText = `The name you specified is too similar to an existing board's name. Please specify another name.`;
+    notifyOfDuplicateColumnName() {
+        const messageContainer = this.getAddNewBoardDialog().querySelectorAll('label')[1].querySelector('span');
+        messageContainer.classList.add('error');
+        messageContainer.innerText = `At least one column name you specified is too similar to an existing column name in this board. Please specify another name.`;
     }
+    
 
     deleteNewColumnClickListener() {
         const addNewBoardkDialog = this.getAddNewBoardDialog();
@@ -280,10 +321,17 @@ export default class CreateNewBoardButton extends HTMLElement {
                 };
 
                 if (this.doesBoardNameExist(titleInput.value, this.store)) {
-                    this.notifyOfDuplicate(titleInput);
+                    this.notifyOfDuplicateBoardName();
                 } else {
-                    this.store.dispatch(action);
-                    this.closeAddNewBoardDialog();
+                    // If there is no dupliate boards name, we start
+                    // to check if there are any duplicate column names
+                    if (this.areThereDuplicateColumnNames()) {
+                        this.notifyOfDuplicateColumnName();
+                    } else {
+                        // if there are no duplicate board names and no duplicate column names
+                        this.store.dispatch(action);
+                        this.closeAddNewBoardDialog();
+                    }                    
                 }
             }
         });
