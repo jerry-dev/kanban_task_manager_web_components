@@ -234,9 +234,6 @@ export default class NewColumnButton extends HTMLElement {
         boards.forEach((board) => {
             if (isTextTooSimilar(board.name, newBoardName)) {
                 result = true;
-                console.log('board.name:', board.name);
-                console.log('board.name:', board.name);
-                console.log('isTextTooSimilar result:', result);
             }            
         });
 
