@@ -21,12 +21,17 @@ export default class TaskPreview extends HTMLElement {
     }
 
     initializeComponentState() {
+        // We don't define currentStatus here.
+        // The currentStatus gets define within this.HTML
+        // We are defining our store data identifiers
+        // based on the parent supplied attributes
         this.oldState = null;
         this.state = {
             board: '',
-            column: '',
+            column: this.getAttribute('columnname'),
             description: '',
-            subtasks: []
+            subtasks: [],
+            title: this.getAttribute('title')
         }
 
         let reformattedBoardName = this.getAttribute('board').split("");
@@ -41,8 +46,6 @@ export default class TaskPreview extends HTMLElement {
         }
 
         this.state.board = reformattedBoardName.join("");
-        this.state.column = this.getAttribute('columnname');
-        this.state.title = this.getAttribute('title');
 
         // Searching for the component's associated data based on the title and column name
         // Once found, hydrate the this.state.description and this.state.subtasks
@@ -74,7 +77,10 @@ export default class TaskPreview extends HTMLElement {
     }
 
     didComponentStateChanged() {
-        return `${JSON.stringify(this.oldState.subtasks)}${JSON.stringify(this.oldState.column)}` !== `${JSON.stringify(this.state.subtasks)}${JSON.stringify(this.state.column)}`;
+        const oldState = `${JSON.stringify(this.oldState.subtasks)}${JSON.stringify(this.oldState.column)}${JSON.stringify(this.oldState.currentStatus)}`;
+        const newState = `${JSON.stringify(this.state.subtasks)}${JSON.stringify(this.state.column)}${JSON.stringify(this.state.currentStatus)}`;
+
+        return oldState !== newState;
     }
 
     CSS() {
@@ -178,13 +184,12 @@ export default class TaskPreview extends HTMLElement {
 
     currentStatusChanged() {
         if (this.state.currentStatus !== this.shadowRoot.getElementById('currentStatus').value) {
-            this.setAttribute('changed', '');
             this.updateDefaultStateValues();
         }
     }
 
     updateDefaultStateValues() {
-        this.state.currentStatus = this.shadowRoot.getElementById('currentStatus').value
+        this.state.currentStatus = this.shadowRoot.getElementById('currentStatus').value;
     }
 
     dispatchFormDataIfChangesMade() {
@@ -203,9 +208,9 @@ export default class TaskPreview extends HTMLElement {
         const action = {
             type: 'UPDATE_TASK',
             payload: {
-                boardName: this.state.board,
-                columnName: this.state.column,
-                taskTitle: this.state.title,
+                boardName: this.state.board, // Store data identifier
+                columnName: this.state.column, // Store data identifier
+                taskTitle: this.state.title, // Store data identifier
                 newStatus: this.shadowRoot.getElementById('currentStatus').value,
                 subtasks: subtasksArray
             }
