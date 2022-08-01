@@ -77,9 +77,7 @@ export default class TaskPreview extends HTMLElement {
     didComponentStateChanged() {
         const oldState = `${JSON.stringify(this.oldState.subtasks)}${JSON.stringify(this.oldState.column)}${JSON.stringify(this.oldState.currentStatus)}`;
         const newState = `${JSON.stringify(this.state.subtasks)}${JSON.stringify(this.state.column)}${JSON.stringify(this.state.currentStatus)}`;
-        console.log('old state status:', oldState);
-        console.log('new state status:', newState);
-
+        
         return oldState !== newState;
     }
 
