@@ -118,7 +118,7 @@
     }
 }
 
-.rehydrate {
+/* .rehydrate {
     animation-name: fadeIn;
     animation-duration: 0.2s;
     animation-iteration-count: 1;
@@ -136,4 +136,4 @@
         opacity: 1;
         transform: scale(1);
     }
-}
+} */

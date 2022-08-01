@@ -11,7 +11,6 @@ export default class TasksboardColumn extends HTMLElement {
     connectedCallback() {
         this.store = store;
         this.store.observer.subscribe('stateChange', () => {
-            this.state.animationDetails.style = "rehydrate";
             this.refresh();
         });
         this.render();
@@ -25,9 +24,7 @@ export default class TasksboardColumn extends HTMLElement {
 
     initializeComponentState() {
         this.oldState = null;
-        this.state = (this.state?.animationDetails ?? false)
-            ? { animationDetails: { isTarget: false, style: 'initialLoad' }, columnData: [] }
-            : { animationDetails: { isTarget: false, style: 'initialLoad' }, columnData: [] }
+        this.state = { animationDetails: { style: this.getAttribute('animationstyle') }, columnData: [] }
         
         this.state.board = this.getAttribute('board');
         this.state.columnName = this.getAttribute('columnname');
@@ -65,17 +62,8 @@ export default class TasksboardColumn extends HTMLElement {
             }
         }
 
-        if (this.didComponentStateChanged()) {
-            if (this.columnHasGrownNEW()) {
-                this.state.animationDetails.isTarget = true;
-                this.state.animationDetails.style = "rehydrate";
-            }
-        }
-
-        setTimeout(() => {
-            this.HTML();
-            this.updateOldState();
-        }, 0);
+        this.HTML("static");
+        this.updateOldState();
     }
 
     updateOldState() {
@@ -99,14 +87,7 @@ export default class TasksboardColumn extends HTMLElement {
             `<h4 class="columnTitle"><span class="circle" data-color=${this.state.colorIndex}></span>${this.state.columnName.toUpperCase()} (${this.state.numberOfTasks})</h4>`;
         markup += /*html*/ `<ul>${this.renderListOfPreviews()}</ul>`;
 
-
-        if (this.state.animationDetails.style === "initialLoad") {
-            this.shadowRoot.innerHTML = markup;
-        } else {
-            setTimeout(() => {
-                this.shadowRoot.innerHTML = markup;
-            }, 800);
-        }
+        this.shadowRoot.innerHTML = markup;
     }
 
     renderListOfPreviews() {
@@ -123,50 +104,21 @@ export default class TasksboardColumn extends HTMLElement {
                     }
                 });
 
-                if (this.state.animationDetails.style === "initialLoad") {
-                    markup +=/*html*/`<li class="initialLoad">
-                        <task-preview
-                            role="button"
-                            board="${this.state.board}"
-                            title="${taskInstances.title}"
-                            completedsubtasks=${completedSubtasks}
-                            totalsubtasks=${totalSubtasks}
-                            columnname="${this.state.columnName}"
-                        ></task-preview>
-                    </li> `;
-                } else if (this.state.animationDetails.style === "rehydrate") {
-                    let hydrationClass = '';
-                    if ((this.state.animationDetails.isTarget) && (index === this.state.numberOfTasks - 1)) {
-                        hydrationClass = 'class="rehydrate"';
-                    }
-                    markup +=/*html*/`<li ${hydrationClass}>
-                        <task-preview
-                            role="button"
-                            board="${this.state.board}"
-                            title="${taskInstances.title}"
-                            completedsubtasks=${completedSubtasks}
-                            totalsubtasks=${totalSubtasks}
-                            columnname="${this.state.columnName}"
-                        ></task-preview>
-                    </li>`;
-                }
+                markup +=/*html*/`<li class="${this.state.animationDetails.style}">
+                    <task-preview
+                        role="button"
+                        board="${this.state.board}"
+                        title="${taskInstances.title}"
+                        completedsubtasks=${completedSubtasks}
+                        totalsubtasks=${totalSubtasks}
+                        columnname="${this.state.columnName}"
+                    ></task-preview>
+                </li> `;
             })
         }
 
         return markup;
     };
-
-    numberOfElementsHasGrown() {
-        if ((this.oldState.numberOfTasks + 1) === this.state.numberOfTasks) {
-            return true;
-        }
-    }
-
-    noTaskRender() {
-        const markup = /*html*/
-        `<h4 class="columnTitle"><span class="circle" data-color=${this.state.colorIndex}></span>${this.state.columnName.toUpperCase()} (${this.getAttribute('numberoftasks')})</h4>`;
-        this.shadowRoot.innerHTML = markup;
-    }
 }
 
 window.customElements.define('tasksboard-column', TasksboardColumn);

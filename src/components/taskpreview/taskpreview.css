@@ -8,7 +8,7 @@
     padding-top: 1.4375rem;
 }
 
-:host([changed]) {
+/* :host([changed]) {
     animation-duration: 0.4s;
     animation-name: fadeOut;
     animation-iteration-count: 1;
@@ -24,7 +24,7 @@
     100% {
         opacity: 0;
     }
-}
+} */
 
 :host .taskInnerContainer {
     display: block;

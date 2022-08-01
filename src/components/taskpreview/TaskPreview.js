@@ -423,9 +423,11 @@ export default class TaskPreview extends HTMLElement {
                 }};
 
             this.markForDeletion();
-
-            this.store.dispatch(action);
             this.closeDeleteTaskDialog();
+
+            setTimeout(() => {
+                this.store.dispatch(action);
+            }, 400);
         });
 
         cancelButton.addEventListener('click', (event) => {
