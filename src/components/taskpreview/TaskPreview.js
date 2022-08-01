@@ -182,15 +182,12 @@ export default class TaskPreview extends HTMLElement {
     }
 
     currentStatusChanged() {
-        console.log('currentStatusChanged invoked')
         if (this.state.currentStatus !== this.shadowRoot.getElementById('currentStatus').value) {
             this.updateDefaultStateValues();
         }
     }
 
     updateDefaultStateValues() {
-        console.log('updateDefaultStateValues invoked')
-        console.log('changed this.state.currentStatus from: ', this.state.currentStatus, ' to: ', this.shadowRoot.getElementById('currentStatus').value)
         this.state.currentStatus = this.shadowRoot.getElementById('currentStatus').value;
     }
 
