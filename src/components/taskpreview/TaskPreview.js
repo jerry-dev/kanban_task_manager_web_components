@@ -21,17 +21,14 @@ export default class TaskPreview extends HTMLElement {
     }
 
     initializeComponentState() {
-        // We don't define currentStatus here.
-        // The currentStatus gets define within this.HTML
-        // We are defining our store data identifiers
-        // based on the parent supplied attributes
         this.oldState = null;
         this.state = {
-            board: '',
-            column: this.getAttribute('columnname'),
+            board: '', // Will be store data identifier after reformatting
+            column: this.getAttribute('columnname'), // Store data identifier
+            currentStatus: this.getAttribute('columnname'),
             description: '',
             subtasks: [],
-            title: this.getAttribute('title')
+            title: this.getAttribute('title') // Store data identifier
         }
 
         let reformattedBoardName = this.getAttribute('board').split("");
@@ -45,6 +42,7 @@ export default class TaskPreview extends HTMLElement {
             }
         }
 
+         // Store data identifier
         this.state.board = reformattedBoardName.join("");
 
         // Searching for the component's associated data based on the title and column name
@@ -79,6 +77,8 @@ export default class TaskPreview extends HTMLElement {
     didComponentStateChanged() {
         const oldState = `${JSON.stringify(this.oldState.subtasks)}${JSON.stringify(this.oldState.column)}${JSON.stringify(this.oldState.currentStatus)}`;
         const newState = `${JSON.stringify(this.state.subtasks)}${JSON.stringify(this.state.column)}${JSON.stringify(this.state.currentStatus)}`;
+        console.log('old state status:', oldState);
+        console.log('new state status:', newState);
 
         return oldState !== newState;
     }
@@ -160,7 +160,6 @@ export default class TaskPreview extends HTMLElement {
         </dialog>`;
 
         this.shadowRoot.innerHTML = markup;
-        this.state.currentStatus = this.shadowRoot.getElementById('currentStatus').value
     }
 
     SCRIPTS() {
@@ -183,12 +182,15 @@ export default class TaskPreview extends HTMLElement {
     }
 
     currentStatusChanged() {
+        console.log('currentStatusChanged invoked')
         if (this.state.currentStatus !== this.shadowRoot.getElementById('currentStatus').value) {
             this.updateDefaultStateValues();
         }
     }
 
     updateDefaultStateValues() {
+        console.log('updateDefaultStateValues invoked')
+        console.log('changed this.state.currentStatus from: ', this.state.currentStatus, ' to: ', this.shadowRoot.getElementById('currentStatus').value)
         this.state.currentStatus = this.shadowRoot.getElementById('currentStatus').value;
     }
 
@@ -285,7 +287,7 @@ export default class TaskPreview extends HTMLElement {
         const theColumns = this.getCurrentBoardColumnNames();
 
         theColumns.forEach((item) => {
-            const selected = (item === this.state.column) ? 'selected' : '';
+            const selected = (item === this.state.currentStatus) ? 'selected' : '';
 
             markup += /*html*/ `<option class="statusOption" value="${item}" ${selected}>${item}</option>`;
         });
@@ -642,8 +644,8 @@ export default class TaskPreview extends HTMLElement {
         this.addEventListener('click', (event) => {
             if (event.composedPath()[0].nodeName === "DIALOG") {
                 this.getExpandedTaskDialog().close();
-                this.dispatchFormDataIfChangesMade();
                 this.currentStatusChanged();
+                this.dispatchFormDataIfChangesMade(); // Should always be invoked after currentStatusChanged
             }
         });
     }
