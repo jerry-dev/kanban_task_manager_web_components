@@ -70,6 +70,10 @@ export default class TaskPreview extends HTMLElement {
         this.oldState = JSON.parse(JSON.stringify(this.state));
     }
 
+    didComponentStateChanged() {
+        return JSON.stringify(this.oldState) !== JSON.stringify(this.state);
+    }
+
     CSS() {
         this.shadowRoot.adoptedStyleSheets = [ taskPreviewStyleSheet ];
     }
@@ -192,7 +196,7 @@ export default class TaskPreview extends HTMLElement {
                 title: item.getElementsByTagName('label')[0].getElementsByTagName('span')[0].innerText
             }
         });
-        
+
         const action = {
             type: 'UPDATE_TASK',
             payload: {
