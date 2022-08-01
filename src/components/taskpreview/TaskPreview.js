@@ -10,12 +10,11 @@ export default class TaskPreview extends HTMLElement {
 
     connectedCallback() {
         this.store = store;
-        this.state = {};
+        this.initializeComponentState();
         this.render();
     }
 
     render() {
-        this.initializeComponentState();
         this.CSS();
         this.HTML();
         this.SCRIPTS();
@@ -23,6 +22,12 @@ export default class TaskPreview extends HTMLElement {
 
     initializeComponentState() {
         this.oldState = null;
+        this.state = {
+            board: '',
+            column: '',
+            description: '',
+            subtasks: []
+        }
 
         let reformattedBoardName = this.getAttribute('board').split("");
         reformattedBoardName[0] = reformattedBoardName[0].toUpperCase();
@@ -38,8 +43,6 @@ export default class TaskPreview extends HTMLElement {
         this.state.board = reformattedBoardName.join("");
         this.state.column = this.getAttribute('columnname');
         this.state.title = this.getAttribute('title');
-        this.state.description = '';
-        this.state.subtasks = [];
 
         // Searching for the component's associated data based on the title and column name
         // Once found, hydrate the this.state.description and this.state.subtasks
@@ -71,7 +74,7 @@ export default class TaskPreview extends HTMLElement {
     }
 
     didComponentStateChanged() {
-        return JSON.stringify(this.oldState) !== JSON.stringify(this.state);
+        return `${JSON.stringify(this.oldState.subtasks)}${JSON.stringify(this.oldState.column)}` !== `${JSON.stringify(this.state.subtasks)}${JSON.stringify(this.state.column)}`;
     }
 
     CSS() {
@@ -208,7 +211,9 @@ export default class TaskPreview extends HTMLElement {
             }
         }
 
-        this.store.dispatch(action);
+        if (this.didComponentStateChanged()) {
+            this.store.dispatch(action);
+        }
     }
 
     crossOutCompletedTask() {
