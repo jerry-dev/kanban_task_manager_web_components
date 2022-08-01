@@ -22,6 +22,8 @@ export default class TaskPreview extends HTMLElement {
     }
 
     initializeComponentState() {
+        this.oldState = null;
+
         let reformattedBoardName = this.getAttribute('board').split("");
         reformattedBoardName[0] = reformattedBoardName[0].toUpperCase();
 
@@ -60,6 +62,12 @@ export default class TaskPreview extends HTMLElement {
                 }
             }
         }
+
+        this.updateOldState();
+    }
+
+    updateOldState() {
+        this.oldState = JSON.parse(JSON.stringify(this.state));
     }
 
     CSS() {
@@ -184,7 +192,7 @@ export default class TaskPreview extends HTMLElement {
                 title: item.getElementsByTagName('label')[0].getElementsByTagName('span')[0].innerText
             }
         });
-
+        
         const action = {
             type: 'UPDATE_TASK',
             payload: {
