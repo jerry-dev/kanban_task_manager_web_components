@@ -579,7 +579,8 @@ export default class KebabMenuButton extends HTMLElement {
         }
 
         this.shadowRoot.innerText = '';
-        this.render();
+        this.HTML();
+        // this.render();
     }
 }
 
