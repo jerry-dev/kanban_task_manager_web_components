@@ -15,7 +15,8 @@ export default class App extends HTMLElement {
     connectedCallback() {
         this.store = store;
         fetchLocalData(this.store.dispatch, this.store.state.isApplicationDataReady);
-        this.store.observer.subscribe('stateChange', () => {
+        this.initializeComponentState();
+        this.store.observer.subscribe(this, 'stateChange', () => {
             this.refresh();
         })
         this.render();
@@ -23,7 +24,6 @@ export default class App extends HTMLElement {
     }
 
     render() {
-        this.initializeComponentState();
         this.CSS();
         this.HTML();
         this.SCRIPTS();
@@ -34,6 +34,10 @@ export default class App extends HTMLElement {
     }
 
     HTML(board) {
+        if (!board) {
+            board = this.state.currentBoard;
+        }
+
         let markup = '';
         markup +=  /*html*/ `<app-header currentboard="${board}"></app-header>`;
         markup += /*html*/ `<div id="canvas" data-menu="on-screen">
@@ -46,6 +50,10 @@ export default class App extends HTMLElement {
 
     clearRoute(route) {
         route.textContent = '';
+    }
+
+    getName() {
+        return 'App';
     }
 
     routerInit() {
@@ -73,6 +81,7 @@ export default class App extends HTMLElement {
                     if (!router.lastResolved()) {
                         this.beforeNewViewRenderedOperations();
                     }
+
                     this.renderTasksBoard(data);
                 },
                 hooks: {
@@ -87,7 +96,7 @@ export default class App extends HTMLElement {
             },
         });
 
-        router.resolve();
+        // router.resolve();
     }
     
     renderTasksBoard(data) {
@@ -105,44 +114,85 @@ export default class App extends HTMLElement {
         }
         
         boardName = boardName.join("");
-        this.state.currentBoard = boardName;
-
-        this.HTML(this.state.currentBoard);
+        this.HTML(boardName);
+        this.forceChildBoardToSubscribe();
     }
 
     initializeComponentState() {
         this.oldState = null;
-        this.state = {};
-        
-        if (!this.state?.boards ?? false) this.state.boards = [];
-        if (!this.state?.currentBoard ?? false) this.state.currentBoard = '';
+        this.state = {
+            boards: this.getBoards(),
+            numberOfBoards: this.getBoards().length,
+            currentBoard: this.reformatHashToPropertyText(window.location.hash)
+        };
 
-        
-        for (let i = 0; i < this.store.state.boards.length; i++) {
-            const reformattedBoardName = this.store.state.boards[i].name.replace(" ", "-").toLowerCase();
-            this.state.boards[this.state.boards.length] = reformattedBoardName;
+        if (!this.state.currentBoard) {
+            this.state.currentBoard = this.state.boards[0];
+            this.shadowRoot.textContent = '';
+            this.navigateToTheFirstBoard();
         }
-
+        
         this.updateOldState();
     }
 
     refresh() {
-        this.refreshCurrentState();
+        this.state = {
+            boards: this.getBoards(),
+            numberOfBoards: this.getBoards().length,
+            currentBoard: this.store.state.boards[0].name
+        };
 
         if (this.didComponentStateChange()) {
-            this.navigateToTheFirstBoard();
             this.renderTasksBoard(this.getCurrentBoard());
+
+            if (this.didNumberOfBoardsShrink()) {
+                this.navigateToTheFirstBoard();
+            }
+
+            if (this.didNumberOfBoardsGrow()) {
+                this.navigateToTheNewBoard();
+            }
             this.updateOldState();
         }
     }
 
-    refreshCurrentState() {
-        this.state.boards = [];
+    // Expecting window.location.hash
+    reformatHashToPropertyText(hashText) {
+        if (!hashText) return;
+        const result = hashText.replace("#/", "").split("")
+        result[0] = result[0].toUpperCase();
+
+        for (let i = 0; i < result.length; i++) {
+            
+            if (result[i] === "-") {
+                result[i+1] = result[i+1].toUpperCase();
+            }
+        }
+
+        return result.join("").replace("-", " ");
+    }
+
+    forceChildBoardToSubscribe() {
+        this.shadowRoot.querySelector('tasks-board').subscribeToTheStore();
+    }
+
+    didNumberOfBoardsShrink() {
+        return JSON.stringify(this.oldState.numberOfBoards) > JSON.stringify(this.state.numberOfBoards)
+    }
+
+    didNumberOfBoardsGrow() {
+        return JSON.stringify(this.oldState.numberOfBoards) < JSON.stringify(this.state.numberOfBoards)
+    }
+
+    getBoards() {
+        let result = [];
 
         for (let i = 0; i < this.store.state.boards.length; i++) {
             const reformattedBoardName = this.store.state.boards[i].name.replace(" ", "-").toLowerCase();
-            this.state.boards[this.state.boards.length] = reformattedBoardName;
+            result[result.length] = reformattedBoardName;
         }
+
+        return result;
     }
 
     getMainRoute() {
@@ -153,6 +203,12 @@ export default class App extends HTMLElement {
         const firstBoard = this.state.boards[0];
         router.navigate(`${firstBoard}`);
         this.highlightSidebarFirstBoardButton();
+    }
+
+    navigateToTheNewBoard() {
+        const newBoard = this.state.boards[this.state.boards.length-1];
+        router.navigate(`${newBoard}`);
+        this.highlightSidebarNewBoardButton();
     }
 
     beforeNewViewRenderedOperations() {
@@ -168,7 +224,9 @@ export default class App extends HTMLElement {
     }
 
     didComponentStateChange() {
-        return JSON.stringify(this.oldState.boards) !== JSON.stringify(this.state.boards);
+        const oldState = `${JSON.stringify(this.oldState.numberOfBoards)}${JSON.stringify(this.oldState.boards)}`;
+		const currentState = `${JSON.stringify(this.state.numberOfBoards)}${JSON.stringify(this.state.boards)}`;
+        return oldState !== currentState;
     }
 
     SCRIPTS() {
@@ -247,6 +305,12 @@ export default class App extends HTMLElement {
     highlightSidebarFirstBoardButton() {
         setTimeout(() => {
             this.shadowRoot.querySelector('side-bar').setFirstBoardToCurrent();
+        }, 0);
+    }
+
+    highlightSidebarNewBoardButton() {
+        setTimeout(() => {
+            this.shadowRoot.querySelector('side-bar').setNewBoardToCurrent();
         }, 0);
     }
 }

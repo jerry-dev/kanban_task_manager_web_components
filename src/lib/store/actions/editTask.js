@@ -1,9 +1,6 @@
 export default function(context, payload) {
     let state = JSON.parse(JSON.stringify(context.state));
 
-    console.log('Incoming payload:', payload)
-    // console.log('The state:', state);
-
     if (!payload.identifier.columnChanged) {
         for (let i = 0; i < state.boards.length; i++) {
             if (state.boards[i].name === payload.identifier.board) {

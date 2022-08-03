@@ -36,7 +36,7 @@ export default function(context, payload) {
         // Appends the new column if a new column has been marked
         if (item.originalColumnStatus === "NEW") {
             for (let i = 0; i < boards.length; i++) {
-                if (boards[i].name === payload.boardNameDetails.originalBoardName) {
+                if (boards[i].name.toLowerCase() === payload.boardNameDetails.originalBoardName.toLowerCase()) {
                     const newColumn = {
                         name: item.newName,
                         tasks: []

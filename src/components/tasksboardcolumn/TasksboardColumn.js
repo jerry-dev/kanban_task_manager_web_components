@@ -10,26 +10,61 @@ export default class TasksboardColumn extends HTMLElement {
 
     connectedCallback() {
         this.store = store;
-        this.store.observer.subscribe('stateChange', () => {
+        this.initializeComponentState();
+        this.store.observer.subscribe(this, 'stateChange', () => {
             this.refresh();
         });
         this.render();
     }
 
     render() {
-        this.initializeComponentState();
         this.CSS();
         this.HTML();
     }
 
     initializeComponentState() {
         this.oldState = null;
-        this.state = { animationDetails: { style: this.getAttribute('animationstyle') }, columnData: [] }
-        
-        this.state.board = this.getAttribute('board');
-        this.state.columnName = this.getAttribute('columnname');
-        this.state.colorIndex = this.getAttribute('colorindex');
-        
+        this.state = {
+            board: this.getAttribute('board'),
+            columnName: this.getAttribute('columnname'),
+            colorIndex: this.getAttribute('colorindex'),
+            animationDetails: {
+                style: this.getAttribute('animationstyle')
+            },
+        }
+
+        this.state.numberOfTasks = this.getNumberOfTasks();
+        this.state.columnData = this.getColumnData();
+
+        this.updateOldState();
+    }
+
+    refresh() {
+        this.state = {
+            board: this.getAttribute('board'),
+            columnName: this.getAttribute('columnname'),
+            colorIndex: this.getAttribute('colorindex'),
+            animationDetails: {
+                style: this.getAttribute('animationstyle')
+            },
+        }
+
+        this.state.numberOfTasks = this.getNumberOfTasks();
+        this.state.columnData = this.getColumnData();
+
+        if (this.didComponentStateChanged()) {
+            this.refreshUI();
+            this.updateOldState();
+        }
+    }
+
+    refreshUI() {
+        this.shadowRoot.textContent = '';
+        this.HTML("static");
+    }
+
+    getColumnData() {
+        let result = null;
         // Searching for the component's associated data based on the title and column name
         // Once found, hydrate the this.state.x and this.state.y
         // First loop: Iterating through the boards array
@@ -40,30 +75,38 @@ export default class TasksboardColumn extends HTMLElement {
                 for (let j = 0; j < this.store.state.boards[i].columns.length; j++) {
                     // Checking if the second loop is at the column the component is in using the column name
                     if (this.store.state.boards[i].columns[j].name === this.state.columnName) {
-                        this.state.numberOfTasks = this.store.state.boards[i].columns[j].tasks.length;
-                        this.state.columnData = this.store.state.boards[i].columns[j];
+                        result = this.store.state.boards[i].columns[j];
                     }
                 }
             }
         }
 
-        this.updateOldState();
+        return result;
     }
 
-    refresh() {
+    getNumberOfTasks() {
+        let result = 0;
+        // Searching for the component's associated data based on the title and column name
+        // Once found, hydrate the this.state.x and this.state.y
+        // First loop: Iterating through the boards array
         for (let i = 0; i < this.store.state.boards.length; i++) {
+            // Checking if the loop is at the board the component is in using the boards name
             if (this.store.state.boards[i].name === this.state.board) {
+                // Second loop: While in the matched board, iterating over the array columns
                 for (let j = 0; j < this.store.state.boards[i].columns.length; j++) {
+                    // Checking if the second loop is at the column the component is in using the column name
                     if (this.store.state.boards[i].columns[j].name === this.state.columnName) {
-                        this.state.numberOfTasks = this.store.state.boards[i].columns[j].tasks.length;
-                        this.state.columnData = this.store.state.boards[i].columns[j];
+                        result = this.store.state.boards[i].columns[j].tasks.length;
                     }
                 }
             }
         }
 
-        this.HTML("static");
-        this.updateOldState();
+        return result;
+    }
+
+    getName() {
+        return `${this.state.board} - Column ${this.state.columnName}`;
     }
 
     updateOldState() {
@@ -75,7 +118,9 @@ export default class TasksboardColumn extends HTMLElement {
     }
 
     didComponentStateChanged() {
-        return JSON.stringify(this.oldState) !== JSON.stringify(this.state);
+        const oldState = `${JSON.stringify(this.oldState.numberOfTasks)}${JSON.stringify(this.oldState.columnData)}`;
+		const currentState = `${JSON.stringify(this.state.numberOfTasks)}${JSON.stringify(this.state.columnData)}`;
+        return oldState !== currentState;
     }
 
     CSS() {
@@ -91,6 +136,9 @@ export default class TasksboardColumn extends HTMLElement {
     }
 
     renderListOfPreviews() {
+        if (!this.state.columnData) return '';
+        if (!this.state.columnData.tasks) return '';
+
         let markup = ``;
 
         if (this.state.columnData.tasks) {

@@ -30,7 +30,7 @@ export default class BoardNavigationButton extends HTMLElement {
     }
 
     SCRIPTS() {
-        if (this.getAttribute('isCurrent') === 'true') {
+        if (this.getAttribute('iscurrent') === 'true') {
             this.classList.add('current');
         }
     }

@@ -14,8 +14,9 @@ export default class Sidebar extends HTMLElement {
 
     connectedCallback() {
         this.store = store;
-        this.store.observer.subscribe('stateChange', () => {
-            this.HTML()
+        this.initializeComponentState();
+        this.store.observer.subscribe(this, 'stateChange', () => {
+            this.refresh();
         })
         this.render();
     }
@@ -32,7 +33,7 @@ export default class Sidebar extends HTMLElement {
 
     HTML() {
         const markup = /*html*/
-        `<label for="sideBarNav">ALL BOARDS (${this.getNumberOfBoards()})</label>
+        `<label for="sideBarNav">ALL BOARDS (${this.state.numberOfBoards})</label>
         <nav id="sideBarNav">
             <ul>
                 ${this.generateBoardNavListElements()}
@@ -45,27 +46,72 @@ export default class Sidebar extends HTMLElement {
         this.shadowRoot.innerHTML = markup;
     }
 
+    SCRIPTS() {
+        this.highlighCurrentBoardOnPopState();
+    }
+
+    initializeComponentState() {
+        this.oldState = null;
+        this.state = { numberOfBoards: this.getNumberOfBoards(), boards: this.getBoardsData()};
+        
+        this.updateOldState();
+    }
+
+    getBoardsData() {
+        const boards = [];
+
+        this.store.state.boards.forEach((item) => {
+            const board = { };
+            board.name = item.name;
+            board.link = item.name.replace(" ", "-").toLowerCase();
+
+            boards[boards.length] = board;
+        });
+
+        return boards;
+    }
+
     getNumberOfBoards() {
         return this.store.state.boards.length;
     }
 
-    SCRIPTS() {
-        this.currentBoardHighlighter()
+    getName() {
+        return 'Sidebar';
+    }
+
+    refresh() {
+        this.state = { numberOfBoards: this.getNumberOfBoards(), boards: this.getBoardsData()};
+
+        if (this.didComponentStateChange()) {
+            this.updateOldState();
+            this.refreshUI();
+        }
+    }
+
+    refreshUI() {
+        this.shadowRoot.textContent = '';
+        this.HTML();
+    }
+
+    updateOldState() {
+        this.oldState = JSON.parse(JSON.stringify(this.state));
+    }
+
+    didComponentStateChange() {
+        return JSON.stringify(this.oldState.boards) !== JSON.stringify(this.state.boards);
     }
 
     generateBoardNavListElements() {
         let collection = '';
 
-        this.store.state.boards.forEach((item) => {
-            const reformattedLink = item.name.replace(" ", "-").toLowerCase();
+        this.state.boards.forEach((item) => {
             const hashReformatted = window.location.hash.replace(" ", "-").toLowerCase().replace("#/", "");
-
-            const isCurrent = (hashReformatted === reformattedLink) ? true : false; 
+            const isCurrent = (hashReformatted === item.link) ? true : false; 
 
             collection += /*html*/
-            `<li ${(isCurrent) ? 'class="current"': ""} id=${reformattedLink}>
+            `<li ${(isCurrent) ? 'class="current"': ""} id="${item.name}">
                 <board-navigation-button
-                    link="${reformattedLink}"
+                    link="${item.link}"
                     boardname="${item.name}"
                     isCurrent=${(isCurrent) ? true: false}
                 ></board-navigation-button>
@@ -77,7 +123,7 @@ export default class Sidebar extends HTMLElement {
         return collection;
     }
 
-    currentBoardHighlighter() {
+    highlighCurrentBoardOnPopState() {
         window.addEventListener('popstate', () => {
             const currentLocation = window.location.hash.replace(" ", "-").toLowerCase().replace("#/", "");
             const liCollection = this.shadowRoot.querySelectorAll('li');
@@ -100,6 +146,20 @@ export default class Sidebar extends HTMLElement {
 
         firstLi.classList.add('current');
         firstLi.getElementsByTagName('board-navigation-button')[0].classList.add('current');
+    }
+
+    setNewBoardToCurrent() {
+        const liCollection = Array.from(this.shadowRoot.querySelectorAll('li'));
+
+        // Length - 2 because the last li element features the + Create New Board Button
+        for (let i = 0; i < liCollection.length - 2; i++) {
+            liCollection[i].classList.remove('current');
+            liCollection[i].getElementsByTagName('board-navigation-button')[0].classList.remove('current');
+        }
+
+        // Length - 2 because the last li element features the + Create New Board Button
+        liCollection[liCollection.length - 2].classList.add('current');
+        liCollection[liCollection.length - 2].getElementsByTagName('board-navigation-button')[0].classList.add('current');
     }
 }
 

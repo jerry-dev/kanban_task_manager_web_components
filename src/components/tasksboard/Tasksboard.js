@@ -1,25 +1,24 @@
 import tasksBoardStyleSheet from './tasksboard.css' assert {type: 'css'};
-import TasksboardColumn from '../tasksboardcolumn/TasksboardColumn.js'; //NEW
-import NewColumnButton from '../newcolumnbutton/NewColumnButton.js'; //NEW
+import TasksboardColumn from '../tasksboardcolumn/TasksboardColumn.js';
+import NewColumnButton from '../newcolumnbutton/NewColumnButton.js';
 import store from '../../lib/store/index.js';
 
 export default class Tasksboard extends HTMLElement {
     constructor() {
         super();
         this.attachShadow({mode: 'open'});
-    }
+    }    
 
     connectedCallback() {
         this.store = store;
-        this.store.observer.subscribe('stateChange', () => {
+        this.initializeComponentState();
+        this.store.observer.subscribe(this, 'stateChange', () => {
             this.refresh();
         })
         this.render();
-        
     }
 
     render() {
-        this.initializeComponentState();
         this.CSS();
         this.HTML("initialLoad");
         this.SCRIPTS();
@@ -83,28 +82,49 @@ export default class Tasksboard extends HTMLElement {
 
     initializeComponentState() {
         this.oldState = null;
+        this.state = {
+            currentBoard: this.getAttribute('currentboard'),
+            FLIPdetails: { elementIdentifier: null, element: null, elementsFirstPosition: null }
+        }
 
-        this.state = (this.state?.columns ?? false)
-            ? { columns: this.state.columns, currentBoard: this.getAttribute('currentboard'), totalTasks: 0 }
-            : { columns: [], currentBoard: this.getAttribute('currentboard'), totalTasks: 0 }
+        this.state.columns = this.getColumnsData();
+        this.state.totalTasks = this.getNumberOfTasks();
 
-        this.state.FLIPdetails = { elementIdentifier: null, element: null, elementsFirstPosition: null }
+        this.updateOldState();
+    }
 
+    getColumnsData() {
+        const results = [];
+        
         for (let i = 0; i < this.store.state.boards.length; i++) {
-            if (this.state.currentBoard === this.store.state.boards[i].name) {
+            if (this.state.currentBoard.toLowerCase() === this.store.state.boards[i].name.toLowerCase()) {
                 this.store.state.boards[i].columns.forEach((column) => {
                     const columnInstance = {
                         name: column.name,
                         taskCount: column.tasks.length
                     }
+
+                    results[results.length] = columnInstance;
                     
-                    this.state.totalTasks += column.tasks.length;
-                    this.state.columns.push(columnInstance);
                 });
             }
         }
 
-        this.updateOldState();
+        return results;
+    }
+
+    getNumberOfTasks() {
+        let results = 0;
+        
+        for (let i = 0; i < this.store.state.boards.length; i++) {
+            if (this.state.currentBoard === this.store.state.boards[i].name) {
+                this.store.state.boards[i].columns.forEach((column) => {
+                    results += column.tasks.length;
+                });
+            }
+        }
+        
+        return results;
     }
 
     updateOldState() {
@@ -116,33 +136,33 @@ export default class Tasksboard extends HTMLElement {
     }
 
     refresh() {
-        this.state.columns = [];
-        this.state.totalTasks = 0;
-
-        for (let i = 0; i < this.store.state.boards.length; i++) {
-            if (this.state.currentBoard === this.store.state.boards[i].name) {
-                this.store.state.boards[i].columns.forEach((column) => {
-                    const columnInstance = {
-                        name: column.name,
-                        taskCount: column.tasks.length
-                    }
-                    this.state.totalTasks += column.tasks.length;
-                    this.state.columns.push(columnInstance);
-                });
-            }
+        this.state = {
+            currentBoard: this.getAttribute('currentboard'),
+            FLIPdetails: { elementIdentifier: null, element: null, elementsFirstPosition: null }
         }
 
+        this.state.columns = this.getColumnsData();
+        this.state.totalTasks = this.getNumberOfTasks();
+        
         if (this.didComponentStateChange()) {
-            console.log('@ Taskboard.js - component state changed');
+            //Triggered if task has changed columns/status
+            // Will handle the view updating if a subtask has changed along with the column/status change
             this.HTML("static");
             if (!this.didTasksGrowOrShrink()) {
-                // If the number of tasks grew, that
+                // If the number of tasks grew or shrank, that
                 // means a task was either added or deleted
-                // and not moved. Not sure how editing effects this.
+                // and not just moved.
                 this.FLIPanimate();
             }
             this.updateOldState();
+        } else {
+            //Triggered if ONLY the taskpreview has been changed (like changing it's subtask input)
+            this.HTML("static");
         }
+    }
+
+    getName() {
+        return `Tasksboard - ${this.state.currentBoard}`;
     }
 
     FLIPsetup() {
@@ -186,17 +206,24 @@ export default class Tasksboard extends HTMLElement {
 
                     tasksCollection[i].animate([
                         {
-                            transform:`translate3d(${deltaX/16}rem, ${deltaY/16}rem, 0)`
-                        }, {
+                            transform:`translate3d(${deltaX/16}rem, ${deltaY/16}rem, 0) scale(1)`
+                        },
+                        {
                             transform: 'none'
                         }], {
-                            duration: 350,
+                            duration: 600,
                             easing: 'ease-in-out',
                             fill: 'forwards'
                     });
                 }
             }
         });
+    }
+
+    subscribeToTheStore() {
+        this.store.observer.subscribe(this, 'stateChange', () => {
+            this.refresh();
+        })
     }
 }
 

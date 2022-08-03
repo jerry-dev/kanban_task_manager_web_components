@@ -10,6 +10,9 @@ export default class AddNewTaskButton extends HTMLElement {
     connectedCallback() {
         this.store = store;
         this.initializeComponentState();
+        this.store.observer.subscribe(this, 'stateChange', () => {
+            this.refresh();
+        })
         this.render();
     }
 
@@ -81,6 +84,14 @@ export default class AddNewTaskButton extends HTMLElement {
         this.submitAddNewTaskDialogFormManager();
     }
 
+    getName() {
+        return `AddNewTaskButton`;
+    }
+
+    updateOldState() {
+        this.oldState = JSON.parse(JSON.stringify(this.state));
+    }
+
     clickManagers() {
         this.addNewSubtaskClickListener();
         this.deleteSubtaskClickListener();
@@ -102,9 +113,38 @@ export default class AddNewTaskButton extends HTMLElement {
     }
 
     initializeComponentState() {
-        this.state = { currentBoard: '', column: '' };
+        this.oldState = null;
+        this.state = {
+            currentBoard: this.getAttribute('currentboard')
+        };
 
-        this.state.currentBoard = this.getAttribute('currentboard');
+        this.state.columns = this.getCurrentBoardColumnNames();
+
+        this.updateOldState();
+    }
+
+    refresh() {
+        this.state = {
+            currentBoard: this.getAttribute('currentboard')
+        };
+
+        this.state.columns = this.getCurrentBoardColumnNames();
+
+        if (this.didComponentStateChanged()) {
+            this.refreshUI();
+            this.updateOldState();
+        }
+    }
+
+    didComponentStateChanged() {
+        const oldState = `${JSON.stringify(this.oldState.currentBoard)}${JSON.stringify(this.oldState.columns)}`;
+		const currentState = `${JSON.stringify(this.state.currentBoard)}${JSON.stringify(this.state.columns)}`;
+        return oldState !== currentState;
+    }
+
+    refreshUI() {
+        this.shadowRoot.innerText = '';
+        this.HTML();
     }
 
     isAddNewTaskDialogShowing() {
@@ -210,12 +250,9 @@ export default class AddNewTaskButton extends HTMLElement {
 
     generateOptionsElements() {
         let markup = ``;
-        const theColumns = this.getCurrentBoardColumnNames();
 
-        theColumns.forEach((item) => {
-            const selected = (item === this.state.column) ? 'selected' : '';
-
-            markup += /*html*/ `<option class="statusOption" value="${item}" ${selected}>${item}</option>`;
+        this.state.columns.forEach((item) => {
+            markup += /*html*/ `<option class="statusOption" value="${item}">${item}</option>`;
         });
 
         return markup;
@@ -343,7 +380,7 @@ export default class AddNewTaskButton extends HTMLElement {
                         subtasks: this.getAddNewTaskDialogFormSubtasks()
                     }
                 };
-
+                
                 this.store.dispatch(action);
                 this.closeAddNewTaskkDialog();
             }

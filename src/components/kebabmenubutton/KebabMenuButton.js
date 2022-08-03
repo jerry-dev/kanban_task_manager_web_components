@@ -12,10 +12,10 @@ export default class KebabMenuButton extends HTMLElement {
 
     connectedCallback() {
         this.store = store;
-        this.store.observer.subscribe('stateChange', () => {
+        this.initializeState();
+        this.store.observer.subscribe(this, 'stateChange', () => {
             this.refresh();
         })
-        this.initializeState();
         this.render();
     }
 
@@ -72,7 +72,7 @@ export default class KebabMenuButton extends HTMLElement {
 
         markup += /*html*/
         `<dialog class="deleteBoardDialog">
-            <form class="deleteBoardDialogForm">
+            <form class="deleteBoardDialogForm" novalidate>
                 <span class="deleteBoardDialogFormInnerContainer">
                     <header class="formHeader">
                         <h3 class="dialogTaskTitle deleteHeader">Delete this task?</h3>
@@ -98,20 +98,47 @@ export default class KebabMenuButton extends HTMLElement {
         }        
     }
 
+    getName() {
+        return `KebabMenuButton${this.state.altering}`;
+    }
+
     initializeState() {
+        this.oldState = null;
+
         this.state = {
             altering: this.getAttribute('altering'),
             currentBoard: this.getAttribute('currentboard'),
-            columnNames: []
         };
+
+        this.state.columnNames = this.getColumnNames();
+
+        this.updateOldState();
+
+        // for (let i = 0; i < this.store.state.boards.length; i++) {
+        //     if (this.store.state.boards[i].name === this.state.currentBoard) {
+        //         this.store.state.boards[i].columns.forEach((column) => {
+        //             this.state.columnNames[this.state.columnNames.length] = column.name;
+        //         });
+        //     }
+        // }
+    }
+
+    updateOldState() {
+        this.oldState = JSON.parse(JSON.stringify(this.state));
+    }
+
+    getColumnNames() {
+        const results = [];
 
         for (let i = 0; i < this.store.state.boards.length; i++) {
             if (this.store.state.boards[i].name === this.state.currentBoard) {
                 this.store.state.boards[i].columns.forEach((column) => {
-                    this.state.columnNames[this.state.columnNames.length] = column.name;
+                    results[results.length] = column.name;
                 });
             }
         }
+
+        return results;
     }
 
     popUpMenuManager() {
@@ -464,12 +491,36 @@ export default class KebabMenuButton extends HTMLElement {
                         this.notifyOfDuplicateColumnName();
                     } else {
                         // if there are no duplicate board names and no duplicate column names
+                        if (action.payload.boardNameDetails.originalBoardNameStatus === "CHANGED") {
+                            this.unSubTheBoardAndChildColumns(action.payload.boardNameDetails.originalBoardName);
+                        }
+
+                        if (action.payload.deletedColumns.length > 0) {
+                            this.unSubTheColumns(action.payload.deletedColumns);
+                        }
                         this.store.dispatch(action);
-                        this.closeEditBoardDialog();
+                        this.closeEditBoardDialog(action.payload.columnDetails.deletedColumns);
                     }                    
                 }
             }
         });
+    }
+
+    // Expecting an array of column name(s) as a strings
+    unSubTheColumns(columns) {
+        columns.forEach((column) => {
+            const columnID = `${this.state.currentBoard} - Column ${column}`;
+            this.store.observer.unsubscribe(columnID, 'stateChange');
+        });
+    }
+
+    // Expecting a the board's name as a string
+    unSubTheBoardAndChildColumns(board) {
+        const theColumns = this.state.columnNames;
+        this.unSubTheColumns(theColumns);
+
+        const boardID = `Tasksboard - ${board}`;
+        this.store.observer.unsubscribe(boardID, 'stateChange');
     }
 
     getEditBoardFormDetails() {
@@ -557,6 +608,8 @@ export default class KebabMenuButton extends HTMLElement {
                 }
             };
 
+            this.unSubTheBoardAndChildColumns(this.state.currentBoard);
+
             this.store.dispatch(action);
             this.closeDeleteBoardDialog();
         });
@@ -567,20 +620,29 @@ export default class KebabMenuButton extends HTMLElement {
         });
     }
 
+    didComponentStateChanged() {
+        const oldState = `${JSON.stringify(this.oldState.altering)}${JSON.stringify(this.oldState.currentBoard)}${JSON.stringify(this.oldState.columnNames)}`;
+		const currentState = `${JSON.stringify(this.state.altering)}${JSON.stringify(this.state.currentBoard)}${JSON.stringify(this.state.columnNames)}`;
+        return oldState !== currentState;
+    }
+
     refresh(){
-        this.state.columnNames = [];
+        this.state = {
+            altering: this.getAttribute('altering'),
+            currentBoard: this.getAttribute('currentboard'),
+        };
 
-        for (let i = 0; i < this.store.state.boards.length; i++) {
-            if (this.store.state.boards[i].name === this.state.currentBoard) {
-                this.store.state.boards[i].columns.forEach((column) => {
-                    this.state.columnNames[this.state.columnNames.length] = column.name;
-                });
-            }
+        this.state.columnNames = this.getColumnNames();
+
+        if (this.didComponentStateChanged()) {
+            this.refreshUI();
+            this.updateOldState();
         }
+    }
 
+    refreshUI() {
         this.shadowRoot.innerText = '';
         this.HTML();
-        // this.render();
     }
 }
 

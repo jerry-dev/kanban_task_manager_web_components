@@ -2,6 +2,7 @@ import appHeaderStylesheet from './appheader.css' assert { type: 'css' };
 import AddNewTaskButton from '../addnewtaskbutton/AddNewTaskButton.js';
 import AppLogo from '../applogo/AppLogo.js';
 import KebabMenuButton from '../kebabmenubutton/KebabMenuButton.js';
+import store from '../../lib/store/index.js';
 
 export default class AppHeader extends HTMLElement {
     constructor() {
@@ -10,6 +11,11 @@ export default class AppHeader extends HTMLElement {
     }
 
     connectedCallback() {
+        this.store = store;
+        this.initializeComponentState();
+        this.store.observer.subscribe(this, 'stateChange', () => {
+            this.refresh();
+        })
         this.render();
     }
 
@@ -30,13 +36,50 @@ export default class AppHeader extends HTMLElement {
             
         <section id="sectionTitleSection">
             <div id="sectionTitleSectionInnerContainer">
-                <h2>${this.getAttribute('currentboard')}</h2>
-                <add-new-task-button currentboard="${this.getAttribute('currentboard')}"></add-new-task-button>
-                <kebab-menu-button currentboard="${this.getAttribute('currentboard')}" altering="Board"></kebab-menu-button>
+                <h2>${this.state.currentBoard}</h2>
+                <add-new-task-button currentboard="${this.state.currentBoard}"></add-new-task-button>
+                <kebab-menu-button currentboard="${this.state.currentBoard}" altering="Board"></kebab-menu-button>
             </div>
         </section>`;
 
         this.shadowRoot.innerHTML = markup;
+    }
+
+    initializeComponentState() {
+        this.oldState = null;
+        this.state = {
+            currentBoard: this.getAttribute('currentboard')
+        };
+        
+        this.updateOldState();
+    }
+
+    updateOldState() {
+        this.oldState = JSON.parse(JSON.stringify(this.state));
+    }
+
+    didComponentStateChange() {
+        return JSON.stringify(this.oldState.currentBoard) !== JSON.stringify(this.state.currentBoard);
+    }
+
+    refresh() {
+        this.state = {
+            currentBoard: this.getAttribute('currentboard')
+        };
+
+        if (this.didComponentStateChange()) {
+            this.refreshUI();
+            this.updateOldState();
+        }
+    }
+
+    refreshUI() {
+        this.shadowRoot.textContent = '';
+        this.HTML();
+    }
+
+    getName() {
+        return 'AppHeader';
     }
 }
 
