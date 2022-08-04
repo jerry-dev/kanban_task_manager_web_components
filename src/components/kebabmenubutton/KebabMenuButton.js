@@ -550,7 +550,7 @@ export default class KebabMenuButton extends HTMLElement {
                 columnStatus = "SAME";
             }
 
-            if ((originalColumnName.length > 1) && (originalColumnName !== newColumnName)) {
+            if ((originalColumnName.length > 0) && (originalColumnName !== newColumnName)) {
                 columnStatus = "CHANGED";
             }
 

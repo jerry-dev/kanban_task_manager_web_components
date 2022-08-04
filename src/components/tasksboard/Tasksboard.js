@@ -4,19 +4,10 @@ import NewColumnButton from '../newcolumnbutton/NewColumnButton.js';
 import store from '../../lib/store/index.js';
 
 export default class Tasksboard extends HTMLElement {
-    static get observedAttributes() {
-		return ['currentboard'];
-    }
 
     constructor() {
         super();
         this.attachShadow({mode: 'open'});
-    }
-
-    attributeChangedCallback(attrName, oldValue, newValue) {
-		if (oldValue !== newValue) {
-			this[attrName] = this.getAttribute(attrName);
-		}
     }
 
     connectedCallback() {
