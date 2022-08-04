@@ -201,8 +201,6 @@ export default class Tasksboard extends HTMLElement {
         const deltaX = this.state.FLIPdetails.elementsFirstPosition.left - lastPosition.left;
         const deltaY = this.state.FLIPdetails.elementsFirstPosition.top - lastPosition.top;
 
-        console.log({deltaX, deltaY})
-
         Array.from(this.shadowRoot.querySelectorAll('tasksboard-column')).forEach((column) => {
             const tasksCollection = column.shadowRoot.querySelectorAll('task-preview');
             for (let i = 0; i < tasksCollection.length; i++) {
