@@ -4,10 +4,20 @@ import NewColumnButton from '../newcolumnbutton/NewColumnButton.js';
 import store from '../../lib/store/index.js';
 
 export default class Tasksboard extends HTMLElement {
+    static get observedAttributes() {
+		return ['currentboard'];
+    }
+
     constructor() {
         super();
         this.attachShadow({mode: 'open'});
-    }    
+    }
+
+    attributeChangedCallback(attrName, oldValue, newValue) {
+		if (oldValue !== newValue) {
+			this[attrName] = this.getAttribute(attrName);
+		}
+    }
 
     connectedCallback() {
         this.store = store;
@@ -139,11 +149,7 @@ export default class Tasksboard extends HTMLElement {
     }
 
     refresh() {
-        this.state = {
-            currentBoard: this.getAttribute('currentboard'),
-            FLIPdetails: { elementIdentifier: null, element: null, elementsFirstPosition: null }
-        }
-
+        this.state.currentBoard = this.getAttribute('currentboard')
         this.state.columns = this.getColumnsData();
         this.state.numberOfColumns = this.state.columns.length;
         this.state.totalTasks = this.getNumberOfTasks();
@@ -215,7 +221,7 @@ export default class Tasksboard extends HTMLElement {
                         {
                             transform: 'none'
                         }], {
-                            duration: 600,
+                            duration: 450,
                             easing: 'ease-in-out',
                             fill: 'forwards'
                     });

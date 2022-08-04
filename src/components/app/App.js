@@ -25,7 +25,7 @@ export default class App extends HTMLElement {
 
     render() {
         this.CSS();
-        this.HTML();
+        this.HTML(this.reformatHashToPropertyText(window.location.hash));
         this.SCRIPTS();
     }
 
@@ -34,10 +34,6 @@ export default class App extends HTMLElement {
     }
 
     HTML(board) {
-        if (!board) {
-            board = this.state.currentBoard;
-        }
-
         let markup = '';
         markup +=  /*html*/ `<app-header currentboard="${board}"></app-header>`;
         markup += /*html*/ `<div id="canvas" data-menu="on-screen">
@@ -139,7 +135,7 @@ export default class App extends HTMLElement {
         this.state = {
             boards: this.getBoards(),
             numberOfBoards: this.getBoards().length,
-            currentBoard: this.store.state.boards[0].name
+            currentBoard: this.reformatHashToPropertyText(window.location.hash)
         };
 
         if (this.didComponentStateChange()) {
