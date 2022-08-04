@@ -144,7 +144,7 @@ export default class Tasksboard extends HTMLElement {
         this.state.columns = this.getColumnsData();
         this.state.numberOfColumns = this.state.columns.length;
         this.state.totalTasks = this.getNumberOfTasks();
-        
+
         if (this.didComponentStateChange()) {
             //Triggered if task has changed columns/status
             // Will handle the view updating if a subtask has changed along with the column/status change
@@ -153,6 +153,7 @@ export default class Tasksboard extends HTMLElement {
                 // If the number of tasks grew or shrank, that
                 // means a task was either added or deleted
                 // and not just moved.
+                // this.HTML("static");
                 this.FLIPanimate();
             }
             this.updateOldState();
@@ -199,6 +200,8 @@ export default class Tasksboard extends HTMLElement {
         }
         const deltaX = this.state.FLIPdetails.elementsFirstPosition.left - lastPosition.left;
         const deltaY = this.state.FLIPdetails.elementsFirstPosition.top - lastPosition.top;
+
+        console.log({deltaX, deltaY})
 
         Array.from(this.shadowRoot.querySelectorAll('tasksboard-column')).forEach((column) => {
             const tasksCollection = column.shadowRoot.querySelectorAll('task-preview');

@@ -123,6 +123,7 @@ export default class TasksboardColumn extends HTMLElement {
         return oldState !== currentState;
     }
 
+    // Will be used to animate the last element
     didANewTaskGetAdded() {
         console.log('New task added?:', (this.oldState.numberOfTasks + 1) === this.state.numberOfTasks)
         return (this.oldState.numberOfTasks + 1) === this.state.numberOfTasks;
