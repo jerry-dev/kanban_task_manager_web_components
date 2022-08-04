@@ -158,6 +158,7 @@ export default class AddNewTaskButton extends HTMLElement {
     }
 
     launchAddNewTaskDialog() {
+        this.refresh();
         this.getAddNewTaskDialog().showModal();
     }
 
