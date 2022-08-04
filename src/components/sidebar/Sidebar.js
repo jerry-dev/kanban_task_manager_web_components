@@ -52,7 +52,10 @@ export default class Sidebar extends HTMLElement {
 
     initializeComponentState() {
         this.oldState = null;
-        this.state = { numberOfBoards: this.getNumberOfBoards(), boards: this.getBoardsData()};
+        this.state = {
+            numberOfBoards: this.getNumberOfBoards(),
+            boards: this.getBoardsData(),
+        };
         
         this.updateOldState();
     }
@@ -80,7 +83,10 @@ export default class Sidebar extends HTMLElement {
     }
 
     refresh() {
-        this.state = { numberOfBoards: this.getNumberOfBoards(), boards: this.getBoardsData()};
+        this.state = {
+            numberOfBoards: this.getNumberOfBoards(),
+            boards: this.getBoardsData(),
+        };
 
         if (this.didComponentStateChange()) {
             this.updateOldState();

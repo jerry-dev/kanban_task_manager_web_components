@@ -27,6 +27,7 @@ export default class App extends HTMLElement {
         this.CSS();
         this.HTML(this.reformatHashToPropertyText(window.location.hash));
         this.SCRIPTS();
+        
     }
 
     CSS() {
@@ -119,7 +120,8 @@ export default class App extends HTMLElement {
         this.state = {
             boards: this.getBoards(),
             numberOfBoards: this.getBoards().length,
-            currentBoard: this.reformatHashToPropertyText(window.location.hash)
+            currentBoard: this.reformatHashToPropertyText(window.location.hash),
+            theme: this.getTheme()
         };
 
         if (!this.state.currentBoard) {
@@ -132,11 +134,10 @@ export default class App extends HTMLElement {
     }
 
     refresh() {
-        this.state = {
-            boards: this.getBoards(),
-            numberOfBoards: this.getBoards().length,
-            currentBoard: this.reformatHashToPropertyText(window.location.hash)
-        };
+        this.state.boards = this.getBoards();
+        this.state.numberOfBoards = this.state.boards.length;
+        this.state.currentBoard = this.reformatHashToPropertyText(window.location.hash);
+        this.state.theme = this.getTheme();
 
         if (this.didComponentStateChange()) {
             this.renderTasksBoard(this.getCurrentBoard());
@@ -237,6 +238,7 @@ export default class App extends HTMLElement {
 
     SCRIPTS() {
         this.clickManager();
+        this.applyTheme();
     }
 
     clickManager() {
@@ -263,26 +265,47 @@ export default class App extends HTMLElement {
         }
     }
 
+    getToggleSwitchInput() {
+        return this.shadowRoot.querySelector("side-bar").shadowRoot
+            .querySelector('dark-light-mode-switch').shadowRoot
+            .querySelector('toggle-switch').shadowRoot
+            .querySelector('#toggleSwitch');
+    }
+
+    getTheme() {
+        return this.store.state.theme;
+    }
+
+    applyTheme() {
+        if (this.state.theme === "light") {
+            this.getToggleSwitchInput().removeAttribute("checked");
+            this.classList.remove('darkTheme');
+        }
+
+        if (this.state.theme === "dark") {
+            this.getToggleSwitchInput().setAttribute("checked", "");
+            this.classList.add('darkTheme');
+        }
+    }
+
+    setThemeToLight() {
+        this.getToggleSwitchInput().setAttribute("checked", "");
+        this.classList.remove('darkTheme');
+        this.store.dispatch({ type: 'SET_THEME', payload: 'light' });
+    }
+
+    setThemeToDark() {
+        this.getToggleSwitchInput().removeAttribute("checked");
+        this.classList.add('darkTheme');
+        this.store.dispatch({ type: 'SET_THEME', payload: 'dark' });
+    }
+
     darkThemeToggle(event) {
         if (event.composedPath()[0].id === "toggleSwitch") {
             const toggleInput = event.composedPath()[0];
 
-            if (!toggleInput.checked) {
-                toggleInput.setAttribute("checked", "");
-                this.deactivateDarkTheme();
-            } else {
-                toggleInput.removeAttribute("checked");
-                this.activateDarkTheme();
-            }
+            (!toggleInput.checked) ? this.setThemeToLight() : this.setThemeToDark();
         }
-    }
-
-    activateDarkTheme() {
-        this.classList.add('darkTheme');
-    }
-
-    deactivateDarkTheme() {
-        this.classList.remove('darkTheme');
     }
 
     isSideBarOnScreen() {
