@@ -363,7 +363,6 @@ export default class NewColumnButton extends HTMLElement {
                         this.notifyOfDuplicateColumnName();
                     } else {
                         // if there are no duplicate board names and no duplicate column names
-                        console.log('EDIT_BOARD payload:', action.payload);
                         this.store.dispatch(action);
                         this.closeEditBoardDialog();
                     }                    
