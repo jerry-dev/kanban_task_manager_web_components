@@ -88,6 +88,7 @@ export default class Tasksboard extends HTMLElement {
         }
 
         this.state.columns = this.getColumnsData();
+        this.state.numberOfColumns = this.state.columns.length;
         this.state.totalTasks = this.getNumberOfTasks();
 
         this.updateOldState();
@@ -132,7 +133,9 @@ export default class Tasksboard extends HTMLElement {
     }
 
     didComponentStateChange() {
-        return JSON.stringify(this.oldState.columns) !== JSON.stringify(this.state.columns);
+        const oldState = `${JSON.stringify(this.oldState.columns)}${JSON.stringify(this.oldState.numberOfColumns)}${JSON.stringify(this.oldState.totalTasks)}`;
+		const currentState = `${JSON.stringify(this.state.columns)}${JSON.stringify(this.state.numberOfColumns)}${JSON.stringify(this.state.totalTasks)}`;
+        return oldState !== currentState;
     }
 
     refresh() {
@@ -142,6 +145,7 @@ export default class Tasksboard extends HTMLElement {
         }
 
         this.state.columns = this.getColumnsData();
+        this.state.numberOfColumns = this.state.columns.length;
         this.state.totalTasks = this.getNumberOfTasks();
         
         if (this.didComponentStateChange()) {
