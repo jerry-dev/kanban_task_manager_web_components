@@ -50,7 +50,7 @@ export default class TasksboardColumn extends HTMLElement {
         }
 
         this.state.numberOfTasks = this.getNumberOfTasks();
-        this.state.columnData = this.getColumnData();
+        this.state.columnData = this.getColumnData();      
 
         if (this.didComponentStateChanged()) {
             this.refreshUI();
@@ -121,6 +121,11 @@ export default class TasksboardColumn extends HTMLElement {
         const oldState = `${JSON.stringify(this.oldState.numberOfTasks)}${JSON.stringify(this.oldState.columnData)}`;
 		const currentState = `${JSON.stringify(this.state.numberOfTasks)}${JSON.stringify(this.state.columnData)}`;
         return oldState !== currentState;
+    }
+
+    didANewTaskGetAdded() {
+        console.log('New task added?:', (this.oldState.numberOfTasks + 1) === this.state.numberOfTasks)
+        return (this.oldState.numberOfTasks + 1) === this.state.numberOfTasks;
     }
 
     CSS() {

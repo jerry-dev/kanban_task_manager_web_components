@@ -147,11 +147,12 @@ export default class App extends HTMLElement {
 
             if (this.didNumberOfBoardsShrink()) {
                 this.navigateToTheFirstBoard();
+            } else if (this.didNumberOfBoardsGrow()) {
+                this.navigateToTheNewBoard();
+            } else {
+                this.navigateToTheChangedBoard();
             }
 
-            if (this.didNumberOfBoardsGrow()) {
-                this.navigateToTheNewBoard();
-            }
             this.updateOldState();
         }
     }
@@ -170,6 +171,15 @@ export default class App extends HTMLElement {
         }
 
         return result.join("").replace("-", " ");
+    }
+
+    navigateToTheChangedBoard() {
+        for (let i = 0; i < this.state.boards.length; i++) {
+            if (this.oldState.boards.indexOf(this.state.boards[i]) === -1) {
+                router.navigate(this.state.boards[i]);
+                break;
+            }
+        }
     }
 
     forceChildBoardToSubscribe() {
