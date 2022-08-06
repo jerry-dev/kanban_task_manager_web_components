@@ -1,4 +1,6 @@
 import appHeaderStylesheet from './appheader.css' assert { type: 'css' };
+import appHeaderTabletStylesheet from './appheadertablet.css' assert { type: 'css' };
+import appHeaderMobileStylesheet from './appheadermobile.css' assert { type: 'css' };
 import AddNewTaskButton from '../addnewtaskbutton/AddNewTaskButton.js';
 import AppLogo from '../applogo/AppLogo.js';
 import KebabMenuButton from '../kebabmenubutton/KebabMenuButton.js';
@@ -25,7 +27,11 @@ export default class AppHeader extends HTMLElement {
     }
 
     CSS() {
-        this.shadowRoot.adoptedStyleSheets = [ appHeaderStylesheet ];
+        this.shadowRoot.adoptedStyleSheets = [
+            appHeaderStylesheet,
+            appHeaderTabletStylesheet,
+            appHeaderMobileStylesheet
+        ];
     }
 
     HTML() {
@@ -35,8 +41,10 @@ export default class AppHeader extends HTMLElement {
         </section>
             
         <section id="sectionTitleSection">
+            <app-logo mobilestyle></app-logo>
             <div id="sectionTitleSectionInnerContainer">
                 <h2>${this.state.currentBoard}</h2>
+                <button id="showNavButton" type="button"><img alt="launch navigation icon" src="./src/assets/icons/down-arrow.svg"/></button>
                 <add-new-task-button currentboard="${this.state.currentBoard}"></add-new-task-button>
                 <kebab-menu-button currentboard="${this.state.currentBoard}" altering="Board"></kebab-menu-button>
             </div>

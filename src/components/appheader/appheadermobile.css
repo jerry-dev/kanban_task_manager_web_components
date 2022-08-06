@@ -1,0 +1,37 @@
+@media screen and (max-width: 375px) {
+    :host {
+        height: 4rem;
+    }
+
+    #logoContainer {
+        display: none;
+    }
+
+    #sectionTitleSection {
+        margin: 0;
+        margin-left: auto;
+        margin-right: auto;
+        width: 91.4666666%;
+    }
+
+    app-logo[mobilestyle] {
+        display: block;
+        margin: 0;
+        margin-right: 1rem;
+    }
+
+    #sectionTitleSectionInnerContainer h2 {
+        font-size: var(--font-size-18);
+        line-height: var(--line-height-23);
+    }
+
+    #showNavButton {
+        background: none;
+        border: none;
+        display: block;
+    }
+    
+    kebab-menu-button {
+        margin-left: 1rem;
+    }
+}

@@ -1,0 +1,28 @@
+@media screen and (max-width: 768px) {
+    :host {
+        height: 5rem;
+    }
+
+    #logoContainer {
+        max-width: 16.3125rem;
+        width: 33.984375%;
+    }
+
+    app-logo {
+        margin-left: 10%;
+    }
+
+    #sectionTitleSection {
+        width: 66.015625%;
+    }
+    
+    #sectionTitleSectionInnerContainer {
+        max-width: 28.6875rem;
+        width: 90.532544%;
+    }
+
+    #sectionTitleSectionInnerContainer h2 {
+        font-size: var(--font-size-20);
+        line-height: var(--line-height-25);
+    }
+}

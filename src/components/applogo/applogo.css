@@ -3,6 +3,14 @@
     width: 9.533125rem;
 }
 
+:host([mobilestyle]) {
+    width: 1.5rem;
+}
+
+:host([mobilestyle]) #logoInnerContainer h2 {
+    display: none;
+}
+
 #logoInnerContainer {
     align-items: center;
     display: flex;
@@ -10,11 +18,21 @@
     justify-content: space-between;
 }
 
+:host([mobilestyle]) #logoInnerContainer {
+    padding: 0;
+    margin: 0;
+}
+
+
 #logoBarsContainer {
     display: flex;
     height: 1.5625rem;
     margin-right: 0.985rem;
     width: 1.5rem;
+}
+
+:host([mobilestyle]) #logoBarsContainer {
+    margin: 0;
 }
 
 .logoBars {

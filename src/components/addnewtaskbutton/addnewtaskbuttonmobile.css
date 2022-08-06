@@ -1,0 +1,19 @@
+@media screen and (max-width: 375px) {
+    :host {
+        height: 2rem;
+        width: 3rem;
+    }
+
+    #innerContainer {
+        display: none;
+    }
+
+    :host::after {
+        color: var(--White);
+        content: "+";
+        height: 0.75rem;
+        position: relative;
+        transform: translateY(-50%);
+        width: 0.75rem;
+    }
+}

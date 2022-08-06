@@ -8,6 +8,10 @@
     width: 100%;
 }
 
+#showNavButton {
+    display: none;
+}
+
 #logoContainer {
     border-right: 0.0625rem solid var(--Border-Color);
     height: 100%;
@@ -17,6 +21,10 @@
 
 app-logo {
     margin-left: 11.333333%;
+}
+
+app-logo[mobilestyle] {
+    display: none;
 }
 
 #logoInnerContainer {
@@ -132,11 +140,6 @@ app-logo {
     max-width: 72.875rem;
     width: 94.7967%;
 }
-
-/* #logoContainer[data-behavior="hide"] + #sectionTitleSection  > #sectionTitleSectionInnerContainer {
-    max-width: 87rem;
-    width: 100%;
-} */
 
 add-new-task-button {
     margin-left: auto;

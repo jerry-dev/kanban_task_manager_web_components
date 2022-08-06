@@ -1,4 +1,5 @@
 import AddNewTaskButtonStyleSheet from './addnewtaskbutton.css' assert { type: 'css' };
+import AddNewTaskButtonMobileStyleSheet from './addnewtaskbuttonmobile.css' assert { type: 'css' };
 import store from '../../lib/store/index.js';
 
 export default class AddNewTaskButton extends HTMLElement {
@@ -23,7 +24,10 @@ export default class AddNewTaskButton extends HTMLElement {
     }
 
     CSS() {
-        this.shadowRoot.adoptedStyleSheets = [ AddNewTaskButtonStyleSheet ];
+        this.shadowRoot.adoptedStyleSheets = [
+            AddNewTaskButtonStyleSheet,
+            AddNewTaskButtonMobileStyleSheet
+        ];
     }
 
     HTML() {
