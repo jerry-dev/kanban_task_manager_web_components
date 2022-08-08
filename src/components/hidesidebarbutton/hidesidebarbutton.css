@@ -1,7 +1,7 @@
 :host {
     border-radius: 0 6.25rem 6.25rem 0;
     cursor: pointer;
-    width: 17.25rem;
+    width: 92%;
 }
 
 :host(:hover) {

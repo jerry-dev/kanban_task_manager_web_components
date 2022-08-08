@@ -1,4 +1,4 @@
-@media screen and (max-width: 375px) {
+@media screen and (max-width: 376px) {
     :host {
         height: 4rem;
     }
@@ -30,8 +30,93 @@
         border: none;
         display: block;
     }
+
+    #showNavButton:focus {
+        outline: none;
+    }
+
+    .flipped {
+        transform: rotate(180deg);
+    }
     
     kebab-menu-button {
         margin-left: 1rem;
+    }
+
+    #mobileNavDialog[open] {
+        background-color: var(--Sidebar-Background-Color);
+        border: none;
+        border-radius: 0.5rem;
+        padding: 0;
+        width: 16.5rem;
+    
+        animation-name: revealDialog;
+        animation-duration: 0.4s;
+        animation-iteration-count: 1;
+        animation-fill-mode: forwards;
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    
+    @keyframes revealDialog {
+        0% {
+            opacity: 0;
+            transform: scale(0.9);
+        }
+        100% {
+            opacity: 1;
+            transform: scale(1);
+        }
+    }
+
+    #mobileNavDialog::backdrop {
+        background-color: #000000;
+        opacity: 0.5;
+    }
+
+    #mobileNavDialogInnerContainer {
+        display: block;
+        height: 100%;
+        padding-bottom: 1rem;
+        padding-top: 1rem;
+        width: 100%;
+    }
+    
+    label {
+        color: var(--Medium-Grey);
+        display: block;
+        font-size: var(--font-size-12);
+        font-weight: var(--font-weight-7);
+        letter-spacing: 0.15rem;
+        line-height: 0.9375rem;
+        margin-bottom: 1.1875rem;
+        margin-left: 2rem;
+    }
+    
+    #mobileNavList > ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        margin-bottom: 1rem;
+        max-width: 100%;
+        width: 15rem;
+    }
+    
+    #mobileNavList > ul li {
+        border-radius: 0 6.25rem 6.25rem 0;
+        cursor: pointer;
+        height: 3rem;
+    }
+    
+    #mobileNavList > ul li {
+        padding-left: 2rem;
+    }
+    
+    #mobileNavList > ul li.current {
+        background-color: var(--Main-Purple);
+    }
+    
+    #mobileNavList > ul li:hover {
+        background-color: var(--Light-Grey-Light-BG);
     }
 }

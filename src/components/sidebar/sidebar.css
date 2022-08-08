@@ -25,6 +25,7 @@ label {
     list-style: none;
     padding: 0;
     margin: 0;
+    max-width: 100%;
     width: 17.25rem;
 }
 

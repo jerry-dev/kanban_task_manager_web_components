@@ -1,4 +1,6 @@
 import appStyleSheet from './app.css' assert { type: 'css' };
+import appTabletStyleSheet from './apptablet.css' assert { type: 'css' };
+import appMobileStyleSheet from './appmobile.css' assert { type: 'css' };
 import router from '../../lib/router/index.js';
 import Sidebar from '../sidebar/Sidebar.js';
 import Tasksboard from '../tasksboard/Tasksboard.js';
@@ -31,7 +33,11 @@ export default class App extends HTMLElement {
     }
 
     CSS() {
-        this.shadowRoot.adoptedStyleSheets = [ appStyleSheet ];
+        this.shadowRoot.adoptedStyleSheets = [
+            appStyleSheet,
+            appTabletStyleSheet,
+            appMobileStyleSheet
+        ];
     }
 
     HTML(board) {
@@ -152,6 +158,8 @@ export default class App extends HTMLElement {
 
             this.updateOldState();
         }
+
+        this.applyTheme();
     }
 
     // Expecting window.location.hash

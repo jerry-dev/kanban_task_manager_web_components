@@ -1,4 +1,6 @@
 import sidebarStyleSheet from './sidebar.css' assert { type: 'css' };
+import sidebarTabletStyleSheet from './sidebartablet.css' assert { type: 'css' };
+import sidebarMobileStyleSheet from './sidebarmobile.css' assert { type: 'css' };
 import AppLogo from '../applogo/AppLogo.js';
 import HideSidebarButton from '../hidesidebarbutton/HideSidebarButton.js';
 import DarkLightModeSwitch from '../darklightmodeswitch/DarkLightModeSwitch.js';
@@ -28,11 +30,15 @@ export default class Sidebar extends HTMLElement {
     }
 
     CSS() {
-        this.shadowRoot.adoptedStyleSheets = [ sidebarStyleSheet ];
+        this.shadowRoot.adoptedStyleSheets = [
+            sidebarStyleSheet,
+            sidebarTabletStyleSheet,
+            sidebarMobileStyleSheet
+        ];
     }
 
     HTML() {
-        const markup = /*html*/
+        let markup = /*html*/
         `<label for="sideBarNav">ALL BOARDS (${this.state.numberOfBoards})</label>
         <nav id="sideBarNav">
             <ul>
@@ -41,7 +47,7 @@ export default class Sidebar extends HTMLElement {
         </nav>
 
         <dark-light-mode-switch></dark-light-mode-switch>
-        <hide-sidebar-button></hide-sidebar-button>`;
+        <hide-sidebar-button></hide-sidebar-button>`;       
 
         this.shadowRoot.innerHTML = markup;
     }

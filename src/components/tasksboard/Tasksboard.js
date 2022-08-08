@@ -189,6 +189,8 @@ export default class Tasksboard extends HTMLElement {
     FLIPanimate() {
         if (!this.state.FLIPdetails.element) return;
 
+        const duration = 450;
+
         let lastPosition = null;
         Array.from(this.shadowRoot.querySelectorAll('tasksboard-column')).forEach((column) => {
             const tasksCollection = column.shadowRoot.querySelectorAll('task-preview');
@@ -217,13 +219,17 @@ export default class Tasksboard extends HTMLElement {
                         {
                             transform: 'none'
                         }], {
-                            duration: 450,
+                            duration: duration,
                             easing: 'ease-in-out',
                             fill: 'forwards'
                     });
                 }
             }
         });
+
+        setTimeout(() => {
+            this.state.FLIPdetails = { elementIdentifier: null, element: null, elementsFirstPosition: null };
+        }, duration)        
     }
 
     subscribeToTheStore() {

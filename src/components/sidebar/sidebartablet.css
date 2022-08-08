@@ -1,0 +1,12 @@
+@media screen and (max-width: 768px) {
+    :host {
+        max-width: 16.25rem;
+        min-width: 16.25rem;
+        left: -16.25rem;
+    }
+
+    #sideBarNav > ul {
+        max-width: 100%;
+        width: 92.307692%
+    }
+}

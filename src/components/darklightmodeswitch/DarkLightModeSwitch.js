@@ -1,4 +1,5 @@
 import darkLightModeSwitchStyleSheet from './darklightmodeswitch.css' assert { type: 'css' };
+import darkLightModeSwitchTabletStyleSheet from './darklightmodeswitchtablet.css' assert { type: 'css' };
 import ToggleSwitch from '../toggleswitch/ToggleSwitch.js';
 
 export default class DarkLightModeSwitch extends HTMLElement {
@@ -17,7 +18,10 @@ export default class DarkLightModeSwitch extends HTMLElement {
     }
 
     CSS() {
-        this.shadowRoot.adoptedStyleSheets = [ darkLightModeSwitchStyleSheet ];
+        this.shadowRoot.adoptedStyleSheets = [
+            darkLightModeSwitchStyleSheet,
+            darkLightModeSwitchTabletStyleSheet
+        ];
     }
 
     HTML() {
