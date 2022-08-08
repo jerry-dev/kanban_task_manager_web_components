@@ -7,6 +7,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build-stylesheet": "cp ./public/index.css ./dist/index.css",
+    "build-dist": "[ ! -d ./dist ] && mkdir dist",
     "start:main": "browser-sync start --index ./public/index.html --browser wslview --server --files= ./src/main.js",
     "start:dev": "browser-sync start --index dist/index.html --browser wslview --server --files= ./dist/bundle.js",
     "start:prod": "browser-sync start --index dist/index.html --browser wslview --server --files= dist/*.html dist/*.js",
