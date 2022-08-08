@@ -10,6 +10,7 @@
     "start:main": "browser-sync start --index ./public/index.html --browser wslview --server --files= ./src/main.js",
     "start:dev": "browser-sync start --index dist/index.html --browser wslview --server --files= ./dist/bundle.js",
     "start:prod": "browser-sync start --index dist/index.html --browser wslview --server --files= dist/*.html dist/*.js",
+    "build-html": "cp ./src/template.html ./dist/index.html",
     "build:dev": "./node_modules/.bin/rollup --config --environment NODE_ENV:development",
     "build:prod": "./node_modules/.bin/rollup --config --environment NODE_ENV:production",
     "build:app": "npm run build:prod"
