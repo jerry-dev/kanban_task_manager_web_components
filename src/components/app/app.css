@@ -4,8 +4,11 @@
     position: relative;
 
     /* Specific Elements Default Colors */
+    
     --Add-New-Subtask-Background-Color: var(--Main-Purple-Hover-1);
     --Add-New-Subtask-Background-Color-Hover: var(--Main-Purple-Hover-2);
+    --Add-New-Task-Button-Background-Color: var(--Main-Purple);
+    --Add-New-Task-Button-Background-Color-Hover: var(--Main-Purple-Hover-3);
     --Border-Color: var(--Lines-Light);
     --Cancel-Button-Background-Color: var(--Main-Purple-Hover-1);
     --Dark-Light-Mode-Switch-Background-Color: var(--Light-Grey-Light-BG);
@@ -22,6 +25,7 @@
 :host(.darkTheme) {
     --Add-New-Subtask-Background-Color: var(--White);
     --Add-New-Subtask-Background-Color-Hover: var(--White);
+    --Add-New-Task-Button-Background-Color-Hover: var(--Main-Purple);
     --Border-Color: var(--Lines-Dark);
     --Cancel-Button-Background-Color: var(--White);
     --Dark-Light-Mode-Switch-Background-Color: var(--Very-Dark-Grey-Dark-BG);

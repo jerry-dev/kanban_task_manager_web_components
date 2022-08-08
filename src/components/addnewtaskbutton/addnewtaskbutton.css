@@ -1,6 +1,6 @@
 :host {
     align-items: center;
-    background-color: var(--Main-Purple);
+    background-color: var(--Add-New-Task-Button-Background-Color);
     border-radius: var(--border-radius-24);
     display: flex;
     height: 3rem;
@@ -17,6 +17,7 @@
 }
 
 :host(:hover) {
+    background-color: var(--Add-New-Task-Button-Background-Color-Hover);
     cursor: pointer;
 }
 
