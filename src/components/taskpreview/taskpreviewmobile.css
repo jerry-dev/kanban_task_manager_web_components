@@ -1,0 +1,8 @@
+.expandedTaskDialog[open] {
+    max-width: 21.4375rem;
+    width: 100%;
+}
+
+:host .expandedTaskDialogFormInnerContainer {
+    max-width: 86.005830%;
+}

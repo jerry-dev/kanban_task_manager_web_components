@@ -1,4 +1,5 @@
 import taskPreviewStyleSheet from './taskpreview.css' assert { type: 'css' };
+import taskPreviewMobileStyleSheet from './taskpreviewmobile.css' assert { type: 'css' };
 import store from '../../lib/store/index.js';
 import KebabMenuButton from '../kebabmenubutton/KebabMenuButton.js';
 
@@ -82,7 +83,10 @@ export default class TaskPreview extends HTMLElement {
     }
 
     CSS() {
-        this.shadowRoot.adoptedStyleSheets = [ taskPreviewStyleSheet ];
+        this.shadowRoot.adoptedStyleSheets = [
+            taskPreviewStyleSheet,
+            taskPreviewMobileStyleSheet
+        ];
     }
 
     HTML() {
