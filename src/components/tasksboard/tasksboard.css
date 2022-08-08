@@ -4,8 +4,7 @@
     height: 100%;
     min-height: 64rem;
     overflow-y: auto;
-    width: var(--application-width);
-    
+    width: 100%;
 }
 
 :host([data-sidebar-control="on-screen"]) #sideBarControl {
@@ -17,7 +16,6 @@
 }
 
 #componentInnerContainer {
-    overflow: auto;
     white-space: nowrap;
 }
 
