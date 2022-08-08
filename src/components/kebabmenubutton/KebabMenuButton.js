@@ -1,4 +1,6 @@
 import kebabMenuButtonStyleSheet from './kebabmenubutton.css' assert { type: 'css' };
+import kebabMenuButtonTabletStyleSheet from './kebabmenubuttontablet.css' assert { type: 'css' };
+import kebabMenuButtonMobileStyleSheet from './kebabmenubuttonmobile.css' assert { type: 'css' };
 import editBoardDialogStyleSheet from '../../lib/stylesheets/editBoardDialog.css' assert { type: 'css' };
 import deleteConfirmationDialogStyleSheet from '../../lib/stylesheets/deleteConfirmationDialog.css' assert { type: 'css' };
 import store from '../../lib/store/index.js';
@@ -29,7 +31,9 @@ export default class KebabMenuButton extends HTMLElement {
         this.shadowRoot.adoptedStyleSheets = [
             kebabMenuButtonStyleSheet,
             editBoardDialogStyleSheet,
-            deleteConfirmationDialogStyleSheet
+            deleteConfirmationDialogStyleSheet,
+            kebabMenuButtonTabletStyleSheet,
+            kebabMenuButtonMobileStyleSheet
         ];
     }
 

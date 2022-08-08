@@ -24,11 +24,33 @@
     background-color: var(--Taskboard-Background-Color);
     border: none;
     border-radius: 0.5rem;
-    padding: 0;
-    position: absolute;
-    bottom: 15.625rem;
-    left: 27.8125rem;
     min-width: 12rem;
+    padding: 0;
+}
+
+.popupMenu[open] {
+    animation-name: revealDialog;
+    animation-duration: 0.4s;
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;
+    opacity: 0;
+    transform: scale(0.9);
+}
+
+@keyframes revealDialog {
+    0% {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+:host([altering="Board"]) .popupMenu {
+    right: -82%;
+    top: -76%;
 }
 
 :host .popupMenu .popupMenuInnerContainer {
