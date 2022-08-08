@@ -1,4 +1,4 @@
-@media screen and (max-width: 375px) {
+@media screen and (max-width: 540px) {
     .deleteBoardDialog[open] {
         max-width: 21.4375rem;
         width: 100%;
