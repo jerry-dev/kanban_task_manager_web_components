@@ -1,0 +1,10 @@
+@media screen and (max-width: 375px) {
+    .deleteBoardDialog[open] {
+        max-width: 21.4375rem;
+        width: 100%;
+    }
+
+    :host .deleteBoardDialogFormInnerContainer {
+        max-width: 86.005830%;
+    }
+}

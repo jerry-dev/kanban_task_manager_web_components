@@ -1,4 +1,5 @@
 import newColumnButtonStyleSheet from './newcolumnbutton.css' assert {type: 'css'};
+import editBoardDialogMobileStyleSheet from '../../lib/stylesheets/editBoardDialogMobile.css' assert { type: 'css' };
 import store from '../../lib/store/index.js';
 import isTextTooSimilar from '../../lib/isTextTooSimilar.js';
 
@@ -21,7 +22,10 @@ export default class NewColumnButton extends HTMLElement {
     }
 
     CSS() {
-        this.shadowRoot.adoptedStyleSheets = [ newColumnButtonStyleSheet ];
+        this.shadowRoot.adoptedStyleSheets = [
+            newColumnButtonStyleSheet,
+            editBoardDialogMobileStyleSheet
+        ];
     }
 
     HTML() {

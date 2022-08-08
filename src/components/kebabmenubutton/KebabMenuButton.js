@@ -2,7 +2,9 @@ import kebabMenuButtonStyleSheet from './kebabmenubutton.css' assert { type: 'cs
 import kebabMenuButtonTabletStyleSheet from './kebabmenubuttontablet.css' assert { type: 'css' };
 import kebabMenuButtonMobileStyleSheet from './kebabmenubuttonmobile.css' assert { type: 'css' };
 import editBoardDialogStyleSheet from '../../lib/stylesheets/editBoardDialog.css' assert { type: 'css' };
+import editBoardDialogMobileStyleSheet from '../../lib/stylesheets/editBoardDialogMobile.css' assert { type: 'css' };
 import deleteConfirmationDialogStyleSheet from '../../lib/stylesheets/deleteConfirmationDialog.css' assert { type: 'css' };
+import deleteConfirmationDialogMobileStyleSheet from '../../lib/stylesheets/deleteConfirmationDialogMobile.css' assert { type: 'css' };
 import store from '../../lib/store/index.js';
 import isTextTooSimilar from '../../lib/isTextTooSimilar.js';
 
@@ -33,7 +35,9 @@ export default class KebabMenuButton extends HTMLElement {
             editBoardDialogStyleSheet,
             deleteConfirmationDialogStyleSheet,
             kebabMenuButtonTabletStyleSheet,
-            kebabMenuButtonMobileStyleSheet
+            kebabMenuButtonMobileStyleSheet,
+            editBoardDialogMobileStyleSheet,
+            deleteConfirmationDialogMobileStyleSheet
         ];
     }
 
