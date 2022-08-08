@@ -8,24 +8,6 @@
     padding-top: 1.4375rem;
 }
 
-/* :host([changed]) {
-    animation-duration: 0.4s;
-    animation-name: fadeOut;
-    animation-iteration-count: 1;
-    animation-fill-mode: forwards;
-
-    opacity: 0;
-}
-
-@keyframes fadeOut {
-    0% {
-        opacity: 1;
-    }
-    100% {
-        opacity: 0;
-    }
-} */
-
 :host .taskInnerContainer {
     display: block;
     margin-left: auto;
@@ -96,6 +78,7 @@ dialog[open]::backdrop {
 :host .editTaskDialogForm,
 :host .deleteTaskDialogForm {
     background-color: var(--Task-Preview-Background-Color);
+    cursor: auto;
     height: 100%;
     padding-bottom: 2rem;
     padding-top: 2rem;
@@ -274,6 +257,7 @@ dialog[open]::backdrop {
     background-color: var(--Task-Preview-Background-Color);
     border: 0.0625rem solid var(--Border-Color);
     color: var(--Main-Text-Color);
+    cursor: pointer;
     display: block;
     height: 2.5rem;
     padding-left: 1rem;
@@ -390,6 +374,15 @@ dialog[open]::backdrop {
 
 :host .editTaskSubtaskList li button > * {
     pointer-events: none;
+}
+
+.deleteSubtask img {
+    display: block;
+}
+
+.deleteSubtask:hover img {
+    filter: var(--Medium-Grey-To-Red-Filter-Color);
+    padding: 0;
 }
 
 /* The Edit Task Dialog Styles */

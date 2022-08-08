@@ -14,6 +14,8 @@
     --Medium-Grey: #828FA3;
     --Light-Grey-Light-BG: #F4F7FD;
     --Lines-Light: #E4EBFA;
+    /* Loss: 1.6 */
+    --Medium-Grey-To-Red-Filter-Color: invert(35%) sepia(41%) saturate(1802%) hue-rotate(324deg) brightness(111%) contrast(84%);
     --Red: #EA5555;
     --Red-Hover: #FF9898;
     --White: #FFFFFF;

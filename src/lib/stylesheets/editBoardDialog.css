@@ -200,6 +200,15 @@ dialog[open]::backdrop {
 }
 
 
+.deleteColumn img {
+    display: block;
+}
+
+.deleteColumn:hover img {
+    filter: var(--Medium-Grey-To-Red-Filter-Color);
+    padding: 0;
+}
+
 /* --------------Dialog Error On Form Validation Styling------------- */
 
 
