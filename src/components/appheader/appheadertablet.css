@@ -4,8 +4,8 @@
     }
 
     #logoContainer {
-        max-width: 16.3125rem;
-        width: 33.984375%;
+        width: 16.3125rem;
+        min-width: 16.3125rem;
     }
 
     app-logo {

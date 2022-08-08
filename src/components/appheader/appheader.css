@@ -15,8 +15,8 @@
 #logoContainer {
     border-right: 0.0625rem solid var(--Border-Color);
     height: 100%;
-    max-width: 18.75rem;
-    width: 20.833333%;
+    min-width: 18.75rem;
+    width: 18.75rem;
 }
 
 app-logo {
