@@ -43,6 +43,9 @@
     font-weight: var(--font-weight-7);
     letter-spacing: 0.15rem;
     line-height: var(--line-height-15);
+    margin: 0;
+    padding: 0;
+    margin-bottom: 1.25rem;
 }
 
 :host ul {
@@ -117,23 +120,3 @@
         opacity: 1;
     }
 }
-
-/* .rehydrate {
-    animation-name: fadeIn;
-    animation-duration: 0.2s;
-    animation-iteration-count: 1;
-    animation-fill-mode: forwards;
-    opacity: 0;
-    transform: scale(0);
-}
-
-@keyframes fadeIn {
-    0% {
-        opacity: 0;
-        transform: scale(0);
-    }
-    100% {
-        opacity: 1;
-        transform: scale(1);
-    }
-} */

@@ -16,6 +16,8 @@
 }
 
 #componentInnerContainer {
+    padding-bottom: 1rem;
+    padding-top: 1.5rem;
     white-space: nowrap;
 }
 
@@ -46,5 +48,4 @@
     display: flex;
     gap: 1.5rem;
     margin-left: 1.5rem;
-    padding-bottom: 1rem;
 }

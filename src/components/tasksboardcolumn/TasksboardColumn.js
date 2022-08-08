@@ -17,6 +17,18 @@ export default class TasksboardColumn extends HTMLElement {
         this.render();
     }
 
+    CSS() {
+        this.shadowRoot.adoptedStyleSheets = [ tasksboardColumnStyleSheet ];
+    }
+
+    HTML() {
+        let markup = /*html*/
+            `<h4 class="columnTitle"><span class="circle" data-color=${this.state.colorIndex}></span>${this.state.columnName.toUpperCase()} (${this.state.numberOfTasks})</h4>`;
+        markup += /*html*/ `<ul>${this.renderListOfPreviews()}</ul>`;
+
+        this.shadowRoot.innerHTML = markup;
+    }
+
     render() {
         this.CSS();
         this.HTML();
@@ -127,18 +139,6 @@ export default class TasksboardColumn extends HTMLElement {
     didANewTaskGetAdded() {
         console.log('New task added?:', (this.oldState.numberOfTasks + 1) === this.state.numberOfTasks)
         return (this.oldState.numberOfTasks + 1) === this.state.numberOfTasks;
-    }
-
-    CSS() {
-        this.shadowRoot.adoptedStyleSheets = [ tasksboardColumnStyleSheet ];
-    }
-
-    HTML() {
-        let markup = /*html*/
-            `<h4 class="columnTitle"><span class="circle" data-color=${this.state.colorIndex}></span>${this.state.columnName.toUpperCase()} (${this.state.numberOfTasks})</h4>`;
-        markup += /*html*/ `<ul>${this.renderListOfPreviews()}</ul>`;
-
-        this.shadowRoot.innerHTML = markup;
     }
 
     renderListOfPreviews() {
