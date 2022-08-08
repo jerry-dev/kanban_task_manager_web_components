@@ -12,8 +12,8 @@
     "start:dev": "browser-sync start --index dist/index.html --browser wslview --server --files= ./dist/bundle.js",
     "start:prod": "browser-sync start --index dist/index.html --browser wslview --server --files= dist/*.html dist/*.js",
     "build-html": "cp ./src/template.html ./dist/index.html",
-    "build:dev": "mkdir dist && npm run build-html && npm run build-stylesheet && ./node_modules/.bin/rollup --config --environment NODE_ENV:development",
-    "build:prod": "mkdir dist && npm run build-html && npm run build-stylesheet && ./node_modules/.bin/rollup --config --environment NODE_ENV:production",
+    "build:dev": "npm run build-dist && npm run build-html && npm run build-stylesheet && ./node_modules/.bin/rollup --config --environment NODE_ENV:development",
+    "build:prod": "npm run build-dist && npm run build-html && npm run build-stylesheet && ./node_modules/.bin/rollup --config --environment NODE_ENV:production",
     "build:app": "npm run build:prod"
   },
   "keywords": [],
