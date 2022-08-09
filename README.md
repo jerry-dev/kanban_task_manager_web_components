@@ -11,32 +11,32 @@
 * JavaScript
 * Custom Elements
 * Shadow DOM
-* CSS Module Scripts (import assertions)
-* Navigo.js (Router)
-* BUNDLER
-* MINIFIER
+* CSS Module Scripts
+* Navigo.js
+* Rollup
+* Terser (via Rollup Plugin)
 
 ## Description
 
-
+A web based task manager application where you can create categories (board), subcategories (columns),
+and tasks per subcategory.
 
 ## Setup/Installation Requirements
 
 * Clone this repository to your development environment
 * Navigate to the root directory of the application
-* _ONE_
-* _TWO_
-* _THREE_
-
-_{Leave nothing to chance! You want it to be easy for potential users, employers and collaborators to run your app. Do I need to run a server? How should I set up my databases? Is there other code this application depends on? We recommend deleting the project from your desktop, re-cloning the project from GitHub, and writing down all the steps necessary to get the project working again.}_
+* Execute "npm run install" to install the dependencies
+* Execute "npm run start:dev" to create the dist directory with the bundled code
+* Execute "npm run start:prod" to create the dist directory with the bundled and minified code
+* Execute "npm run start:main" to launch the unbundled unminified source code (context WSL2 with browserSync as the server)
 
 ## Known Bugs
 
-* _Any known issues_
-* _should go here_
+* Sometimes the theme toggle on the sidebar doesn't always sync with the theme toggle on the app's header
+* Sometimes changing the status of a task doesn't update unless you navigate to another board
 
 ## License
 
-_{Let people know what to do if they run into any issues or have questions, ideas or concerns.  Encourage them to contact you or make a contribution to the code.}_
+Reach out to me with any feedback or questions via my website's contact form at jerrydormetus.com
 
-Copyright (c) _date_ _author name(s)_
+Copyright (c) Jerry Dormetus
