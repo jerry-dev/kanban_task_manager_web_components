@@ -84,8 +84,6 @@ export default class AddNewTaskButton extends HTMLElement {
                 }
             }
         });
-        this.clickManagers();
-        this.submitAddNewTaskDialogFormManager();
     }
 
     getName() {
@@ -94,12 +92,6 @@ export default class AddNewTaskButton extends HTMLElement {
 
     updateOldState() {
         this.oldState = JSON.parse(JSON.stringify(this.state));
-    }
-
-    clickManagers() {
-        this.addNewSubtaskClickListener();
-        this.deleteSubtaskClickListener();
-        this.addNewTaskDialogOverlayClickListener();
     }
 
     addNewTaskDialogOverlayClickListener() {
@@ -123,6 +115,7 @@ export default class AddNewTaskButton extends HTMLElement {
         };
 
         this.state.columns = this.getCurrentBoardColumnNames();
+        this.state.isAddNewTaskDialogListenersActivated = false;
 
         this.updateOldState();
     }
@@ -164,6 +157,14 @@ export default class AddNewTaskButton extends HTMLElement {
     launchAddNewTaskDialog() {
         this.refresh();
         this.getAddNewTaskDialog().showModal();
+        if (!this.state.isAddNewTaskDialogListenersActivated) {
+            this.addNewSubtaskClickListener();
+            this.deleteSubtaskClickListener();
+            this.addNewTaskDialogOverlayClickListener();
+            this.submitAddNewTaskDialogFormManager();
+
+            this.state.isAddNewTaskDialogListenersActivated = true;
+        }
     }
 
     addNewSubtaskClickListener() {
