@@ -1,7 +1,6 @@
 import { importAssertionsPlugin } from 'rollup-plugin-import-assert';
 import { importAssertions } from 'acorn-import-assertions';
 import { terser } from 'rollup-plugin-terser';
-import replace from '@rollup/plugin-replace';
 import modify from 'rollup-plugin-modify';
 
 const devMode = (process.env.NODE_ENV === 'development');
@@ -15,13 +14,6 @@ export default [
 			include: './src/**',
 			clearScreen:  false
 		},
-		plugins: [
-			replace({
-				values: {
-					"../src/assets": "./dist/assets"
-				}
-			})
-		],
 		output: {
 			file: './dist/bundle.js',
 			format: 'es',
@@ -42,6 +34,12 @@ export default [
 			]
 		},
 		acornInjectPlugins: [ importAssertions ],
-		plugins: [ importAssertionsPlugin() ]
+		plugins: [
+			importAssertionsPlugin(),
+			modify({
+				'./src/assets/': './assets/',
+				'../../src/assets/': './assets/'
+			})
+		],
 	}
 ];
