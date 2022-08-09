@@ -9,12 +9,11 @@
     "build-stylesheet": "cp ./public/index.css ./dist/index.css",
     "build-dist": "[ ! -d ./dist ] && mkdir dist",
     "start:main": "browser-sync start --index ./public/index.html --browser wslview --server --files= ./src/main.js",
-    "start:dev": "browser-sync start --index dist/index.html --browser wslview --server --files= ./dist/bundle.js",
-    "start:prod": "browser-sync start --index dist/index.html --browser wslview --server --files= dist/*.html dist/*.js",
+    "start:dev": "npm run build:dev && browser-sync start --index dist/index.html --browser wslview --server --files= ./dist/bundle.js",
+    "start:prod": "npm run build:prod && start --index dist/index.html --browser wslview --server --files= dist/*.html dist/*.js",
     "build-html": "cp ./src/template.html ./dist/index.html",
     "build:dev": "npm run build-dist && npm run build-html && npm run build-stylesheet && ./node_modules/.bin/rollup --config --environment NODE_ENV:development",
-    "build:prod": "npm run build-dist && npm run build-html && npm run build-stylesheet && ./node_modules/.bin/rollup --config --environment NODE_ENV:production",
-    "build:app": "npm run build:prod"
+    "build:prod": "npm run build-dist && npm run build-html && npm run build-stylesheet && ./node_modules/.bin/rollup --config --environment NODE_ENV:production"
   },
   "keywords": [],
   "author": "",
