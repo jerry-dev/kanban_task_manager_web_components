@@ -148,22 +148,6 @@ export default class Tasksboard extends HTMLElement {
         this.HTML("static");
         this.FLIPanimate();
 
-        // if (this.didComponentStateChange()) {
-        //     //Triggered if task has changed columns/status
-        //     // Will handle the view updating if a subtask has changed along with the column/status change
-        //     this.HTML("static");
-        //     if (!this.didTasksGrowOrShrink()) {
-        //         // If the number of tasks grew or shrank, that
-        //         // means a task was either added or deleted
-        //         // and not just moved.
-        //         this.HTML("static");
-        //         this.FLIPanimate();
-        //     }
-        // } else {
-        //     //Triggered if ONLY the taskpreview has been changed (like changing it's subtask input)
-        //     this.HTML("static");
-        // }
-
         this.updateOldState();
     }
 
