@@ -359,7 +359,6 @@ export default class KebabMenuButton extends HTMLElement {
         })
     }
 
-    // ---------------------------------------------------------------------------
     // Invoke if the originalBoardNameStatus === "CHANGED"
     // Skip this check if the originalBoardNameStatus === "SAME"
     doesBoardNameExist(newBoardName, store) {
@@ -420,7 +419,6 @@ export default class KebabMenuButton extends HTMLElement {
         messageContainer.classList.add('error');
         messageContainer.innerText = `At least one column name you specified is too similar to an existing column name in this board. Please specify another name.`;
     }
-    // END------------------------------------------------------------------------
 
     submitEditBoardDialogFormManager() {
         let isWatchingBoardNameInput = false;
